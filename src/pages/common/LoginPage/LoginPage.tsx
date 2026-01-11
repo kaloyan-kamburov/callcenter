@@ -50,7 +50,7 @@ export default function LoginPage() {
                     const m = (data as Record<string, unknown>).message;
                     if (typeof m === "string") message = m;
                   }
-                  toast.error("Wrong email or password.");
+                  toast.error(message || "Wrong email or password.");
                 },
               }).unwrap();
               navigate("/");
