@@ -4,7 +4,7 @@ import type { LayoutGroup, RouteItem } from "./pages.config.tsx";
 
 export default function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         {pagesConfig.groups.map((group: LayoutGroup, idx: number) => (
           <Route key={idx} element={group.layout}>
