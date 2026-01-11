@@ -26,17 +26,24 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Activate pnpm 9
+        run: corepack prepare pnpm@9 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
+      - name: Determine base path
+        id: base
+        run: |
+          REPO="${{ github.event.repository.name }}"
+          if [[ "$REPO" == *.github.io ]]; then
+            echo "BASE=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "BASE=/$REPO/" >> "$GITHUB_OUTPUT"
+          fi
       - name: Build
-        run: pnpm build -- --base=/
+        run: pnpm build -- --base=${{ steps.base.outputs.BASE }}
 
       - name: Add SPA fallback and disable Jekyll
         run: |
