@@ -42,8 +42,10 @@ jobs:
           else
             echo "BASE=/$REPO/" >> "$GITHUB_OUTPUT"
           fi
+      - name: Type check
+        run: pnpm exec tsc -b
       - name: Build
-        run: pnpm build -- --base=${{ steps.base.outputs.BASE }}
+        run: pnpm exec vite build --base=${{ steps.base.outputs.BASE }}
 
       - name: Add SPA fallback and disable Jekyll
         run: |
