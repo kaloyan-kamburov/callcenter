@@ -5,6 +5,8 @@ import { Link as RouterLink } from "react-router-dom";
 import type { LinkProps as RouterLinkProps } from "react-router-dom";
 
 export const theme = createTheme({
+  cssVariables: { colorSchemeSelector: "data-toolpad-color-scheme" },
+  colorSchemes: { light: true },
   palette: {
     mode: "light",
     primary: {

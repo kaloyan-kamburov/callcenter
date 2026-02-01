@@ -8,9 +8,11 @@ import ResetPasswordPage from "@/pages/common/ResetPasswordPage/ResetPasswordPag
 import NotFoundPage from "@/pages/common/NotFoundPage/NotFoundPage";
 import { lazy, Suspense } from "react";
 import type { ReactElement } from "react";
+import LoaderComponent from "@/components/common/LoaderComponent";
+import { Box } from "@mui/material";
 
 const DashboardPage = lazy(
-  () => import("@/pages/authenticated/Dashboard/DashboardPage")
+  () => import("@/pages/authenticated/Dashboard/DashboardPage"),
 );
 
 export type RouteItem = {
@@ -49,7 +51,13 @@ export const pagesConfig: {
 export function withProtection(element: ReactElement, isProtected?: boolean) {
   if (!isProtected) return element;
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <Box sx={{ display: "grid", placeItems: "center", flex: 1 }}>
+          <LoaderComponent />
+        </Box>
+      }
+    >
       <ProtectedRoute>{element}</ProtectedRoute>
     </Suspense>
   );

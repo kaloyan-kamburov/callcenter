@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/utils/axiosBaseQuery";
 import type { RootState } from "@/store";
 import type { AxiosError } from "axios";
+import type { User } from "@/types/User";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_BASE_URL ?? "";
@@ -21,7 +22,7 @@ export const authApi = createApi({
       providesTags: ["Auth"],
     }),
     login: builder.mutation<
-      unknown,
+      { user: User; token: string },
       { email: string; password: string; onError?: (error: AxiosError) => void }
     >({
       query: ({ onError, ...payload }) => ({

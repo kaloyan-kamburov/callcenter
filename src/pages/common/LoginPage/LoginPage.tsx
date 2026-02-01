@@ -9,6 +9,7 @@ import { useLoginMutation } from "@/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function LoginPage() {
           })}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              await login({
+              const response = await login({
                 ...values,
                 onError: (err: AxiosError) => {
                   const status = err.response?.status;
@@ -53,6 +54,17 @@ export default function LoginPage() {
                   toast.error(message || "Wrong email or password.");
                 },
               }).unwrap();
+              const cookieOptions = { path: "/", sameSite: "lax" as const };
+              if (response?.token) {
+                Cookies.set("authToken", response.token, cookieOptions);
+              }
+              if (response?.user) {
+                Cookies.set(
+                  "authUser",
+                  JSON.stringify(response.user),
+                  cookieOptions
+                );
+              }
               navigate("/");
             } finally {
               setSubmitting(false);

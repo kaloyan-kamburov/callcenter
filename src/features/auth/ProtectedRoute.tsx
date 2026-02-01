@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/useAuth";
+import { Box } from "@mui/material";
 
 export default function ProtectedRoute({
   children,
@@ -12,5 +13,15 @@ export default function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return (
+    <Box
+      sx={{
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {children}
+    </Box>
+  );
 }
