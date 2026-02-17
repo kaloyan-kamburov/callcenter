@@ -1,12 +1,12 @@
-import Cookies from "js-cookie";
 import type { User } from "@/types/User";
 import { useMeQuery } from "./authApi";
 
 export function useAuth() {
-  const token = typeof window !== "undefined" ? Cookies.get("authToken") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   let user: User | null = null;
   if (typeof window !== "undefined") {
-    const rawUser = Cookies.get("authUser");
+    const rawUser = localStorage.getItem("authUser");
     if (rawUser) {
       try {
         user = JSON.parse(rawUser) as User;

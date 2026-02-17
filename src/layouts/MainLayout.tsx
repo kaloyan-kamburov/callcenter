@@ -8,9 +8,9 @@ import {
   SignOutButton,
 } from "@toolpad/core/Account";
 import { useMemo, useState } from "react";
-import Cookies from "js-cookie";
 import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
+import { getDashboardPath } from "@/features/auth/getDashboardPath";
 import { theme } from "@/theme";
 import {
   Avatar,
@@ -30,10 +30,11 @@ export default function MainLayout() {
   const { user } = useAuth();
   const [logout] = useLogoutMutation();
   const [isSignOutOpen, setIsSignOutOpen] = useState(false);
+  const dashboardPath = getDashboardPath(user?.role);
   const navigation: Navigation = [
     {
       kind: "page",
-      segment: "",
+      segment: dashboardPath.replace(/^\//, ""),
       title: "Dashboard",
       icon: <HomeIcon />,
     },
@@ -67,8 +68,8 @@ export default function MainLayout() {
     try {
       await logout().unwrap();
     } finally {
-      Cookies.remove("authToken", { path: "/" });
-      Cookies.remove("authUser", { path: "/" });
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("authUser");
       setIsSignOutOpen(false);
       navigate("/login");
     }
@@ -104,7 +105,12 @@ export default function MainLayout() {
                         {(user?.name ?? "?").slice(0, 1).toUpperCase()}
                       </Avatar>
                       <Stack direction="column" overflow="hidden">
-                        <Typography variant="body2" fontWeight="bolder" noWrap>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bolder"
+                          noWrap
+                          textAlign="right"
+                        >
                           {user?.name ?? "User"}
                         </Typography>
                         <Button

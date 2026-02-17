@@ -9,7 +9,7 @@ const VALID_CREDENTIALS = {
 
 const USER_PROFILE = {
   id: 1,
-  name: "John Doe",
+  name: "Callcenter Agent",
   email: "john.doe@example.com",
   createdAt: "2021-01-01",
   updatedAt: "2021-01-01",

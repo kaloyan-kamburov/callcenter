@@ -8,8 +8,8 @@ import Input from "@/components/form/Input";
 import { useLoginMutation } from "@/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import type { AxiosError } from "axios";
-import Cookies from "js-cookie";
+import axios from "axios";
+import { getDashboardPath } from "@/features/auth/getDashboardPath";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,49 +23,49 @@ export default function LoginPage() {
         </Typography>
 
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ username: "", password: "" }}
           validationSchema={Yup.object({
-            email: Yup.string()
-              .email("Invalid email")
-              .required("Email is required"),
+            username: Yup.string().required("Username is required"),
             password: Yup.string().required("Password is required"),
           })}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               const response = await login({
-                ...values,
-                onError: (err: AxiosError) => {
-                  const status = err.response?.status;
-                  if (status === 401) {
-                    toast.error("Invalid email or password.");
-                    return;
-                  }
-                  const data = err.response?.data as unknown;
-                  let message = err.message;
-                  if (typeof data === "string") message = data;
-                  else if (
-                    data &&
-                    typeof data === "object" &&
-                    "message" in (data as Record<string, unknown>)
-                  ) {
-                    const m = (data as Record<string, unknown>).message;
-                    if (typeof m === "string") message = m;
-                  }
-                  toast.error(message || "Wrong email or password.");
-                },
+                username: values.username,
+                password: values.password,
               }).unwrap();
-              const cookieOptions = { path: "/", sameSite: "lax" as const };
-              if (response?.token) {
-                Cookies.set("authToken", response.token, cookieOptions);
+              if (response?.accessToken) {
+                localStorage.setItem("authToken", response.accessToken);
               }
-              if (response?.user) {
-                Cookies.set(
-                  "authUser",
-                  JSON.stringify(response.user),
-                  cookieOptions
-                );
+              localStorage.setItem(
+                "authUser",
+                JSON.stringify({
+                  id: response.userId,
+                  role: response.role,
+                }),
+              );
+              navigate(getDashboardPath(response.role));
+            } catch (err: unknown) {
+              if (axios.isAxiosError(err)) {
+                const status = err.response?.status;
+                if (status === 401) {
+                  toast.error("Invalid email or password.");
+                  return;
+                }
+                const data = err.response?.data as unknown;
+                let message = err.message;
+                if (typeof data === "string") message = data;
+                else if (
+                  data &&
+                  typeof data === "object" &&
+                  "message" in (data as Record<string, unknown>)
+                ) {
+                  const m = (data as Record<string, unknown>).message;
+                  if (typeof m === "string") message = m;
+                }
+                toast.error(message);
+                return;
               }
-              navigate("/");
             } finally {
               setSubmitting(false);
             }
@@ -74,7 +74,7 @@ export default function LoginPage() {
           {({ isSubmitting }) => (
             <Form noValidate>
               <Box display="grid" gap={2}>
-                <Input name="email" label="Email" type="email" />
+                <Input name="username" label="Username" type="text" />
                 <Input
                   name="password"
                   label="Password"

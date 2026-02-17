@@ -2,15 +2,13 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/utils/axiosBaseQuery";
 import type { RootState } from "@/store";
 import type { AxiosError } from "axios";
-import type { User } from "@/types/User";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_BASE_URL ?? "";
+const TEMP_BASE_URL = "https://revolutionlab-001-site32.anytempurl.com/api";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: axiosBaseQuery({
-    baseUrl: API_BASE_URL,
+    baseUrl: TEMP_BASE_URL,
   }),
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
@@ -22,8 +20,12 @@ export const authApi = createApi({
       providesTags: ["Auth"],
     }),
     login: builder.mutation<
-      { user: User; token: string },
-      { email: string; password: string; onError?: (error: AxiosError) => void }
+      { accessToken: string; userId: number; role: string },
+      {
+        username: string;
+        password: string;
+        onError?: (error: AxiosError) => void;
+      }
     >({
       query: ({ onError, ...payload }) => ({
         url: "/auth/login",
