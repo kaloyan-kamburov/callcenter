@@ -105,7 +105,6 @@ export default function AdminsPage() {
           width: "100%",
         },
         "& > .MuiStack-root > .MuiBox-root": {
-          // flex: 1,
           minHeight: 0,
           width: "100%",
         },
