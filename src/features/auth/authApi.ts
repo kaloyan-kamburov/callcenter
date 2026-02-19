@@ -1,16 +1,8 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { axiosBaseQuery } from "@/utils/axiosBaseQuery";
+import { authBaseApi } from "@/api/authBaseApi";
 import type { RootState } from "@/store";
 import type { AxiosError } from "axios";
 
-const TEMP_BASE_URL = "https://revolutionlab-001-site32.anytempurl.com/api";
-
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: axiosBaseQuery({
-    baseUrl: TEMP_BASE_URL,
-  }),
-  tagTypes: ["Auth"],
+export const authApi = authBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     me: builder.query<unknown, void>({
       query: () => ({
@@ -80,6 +72,7 @@ export const authApi = createApi({
       invalidatesTags: ["Auth"],
     }),
   }),
+  overrideExisting: false,
 });
 
 export const {

@@ -4,12 +4,11 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Input from "@/components/form/Input";
+import Input from "@/components/form/Input/Input";
 import { useLoginMutation } from "@/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { getDashboardPath } from "@/features/auth/getDashboardPath";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -44,7 +43,7 @@ export default function LoginPage() {
                   role: response.role,
                 }),
               );
-              navigate(getDashboardPath(response.role));
+              navigate("/");
             } catch (err: unknown) {
               if (axios.isAxiosError(err)) {
                 const status = err.response?.status;

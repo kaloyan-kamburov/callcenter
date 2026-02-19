@@ -1,7 +1,6 @@
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import ProtectedRoute from "@/features/auth/ProtectedRoute";
-import RoleBasedDashboardRedirect from "@/features/auth/RoleBasedDashboardRedirect";
 import LoginPage from "@/pages/common/LoginPage/LoginPage";
 import RegisterPage from "@/pages/common/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "@/pages/common/ForgotPasswordPage/ForgotPasswordPage";
@@ -12,15 +11,11 @@ import type { ReactElement } from "react";
 import LoaderComponent from "@/components/common/LoaderComponent";
 import { Box } from "@mui/material";
 
-const AdminDashboardPage = lazy(
-  () => import("@/pages/authenticated/admin/Dashboard/DashboardPage"),
+const DashboardPage = lazy(
+  () => import("@/pages/authenticated/dashboard/DashboardPage"),
 );
-const ManagerDashboardPage = lazy(
-  () => import("@/pages/authenticated/manager/Dashboard/DashboardPage"),
-);
-
-const ClientDashboardPage = lazy(
-  () => import("@/pages/authenticated/client/Dashboard/DashboardPage"),
+const AdminsPage = lazy(
+  () => import("@/pages/authenticated/admins/AdminsPage"),
 );
 
 export type RouteItem = {
@@ -42,20 +37,14 @@ export const pagesConfig: {
     {
       layout: <MainLayout />,
       routes: [
-        { path: "/", element: <RoleBasedDashboardRedirect />, protected: true },
         {
-          path: "/admin/dashboard",
-          element: <AdminDashboardPage />,
+          path: "/",
+          element: <DashboardPage />,
           protected: true,
         },
         {
-          path: "/manager/dashboard",
-          element: <ManagerDashboardPage />,
-          protected: true,
-        },
-        {
-          path: "/client/dashboard",
-          element: <ClientDashboardPage />,
+          path: "/admins",
+          element: <AdminsPage />,
           protected: true,
         },
       ],

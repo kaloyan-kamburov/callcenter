@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Input from "@/components/form/Input";
+import Input from "@/components/form/Input/Input";
 import { isValidEmail } from "@/utils/validations/email";
 import { isStrongPassword } from "@/utils/validations/password";
 import { Link } from "@mui/material";
@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
     .test(
       "strong-password",
       "At least 8 chars, 1 uppercase, 1 lowercase, 1 number",
-      (value) => isStrongPassword(value ?? "")
+      (value) => isStrongPassword(value ?? ""),
     ),
   confirmPassword: Yup.string()
     .required("Confirm password is required")

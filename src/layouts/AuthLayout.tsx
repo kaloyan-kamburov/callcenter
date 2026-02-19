@@ -1,13 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useAuth } from "@/features/auth/useAuth";
-import { getDashboardPath } from "@/features/auth/getDashboardPath";
 
 export default function AuthLayout() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={getDashboardPath(user?.role)} replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (

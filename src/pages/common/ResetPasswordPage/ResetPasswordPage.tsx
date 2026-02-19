@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Input from "@/components/form/Input";
+import Input from "@/components/form/Input/Input";
 import { isStrongPassword } from "@/utils/validations/password";
 import { useResetPasswordMutation } from "@/features/auth/authApi";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -15,7 +15,7 @@ const validationSchema = Yup.object({
     .test(
       "strong-password",
       "At least 8 chars, 1 uppercase, 1 lowercase, 1 number",
-      (value) => isStrongPassword(value ?? "")
+      (value) => isStrongPassword(value ?? ""),
     ),
   confirmPassword: Yup.string()
     .required("Confirm password is required")
@@ -43,7 +43,10 @@ export default function ResetPasswordPage() {
                 toast.error("Reset token is missing.");
                 return;
               }
-              await resetPassword({ token, password: values.password }).unwrap();
+              await resetPassword({
+                token,
+                password: values.password,
+              }).unwrap();
               toast.success("Password updated. Please login.");
               navigate("/login");
             } finally {
@@ -66,7 +69,11 @@ export default function ResetPasswordPage() {
                   type="password"
                   showPasswordToggle
                 />
-                <Button type="submit" variant="contained" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                >
                   Submit
                 </Button>
               </Box>
@@ -77,4 +84,3 @@ export default function ResetPasswordPage() {
     </Box>
   );
 }
-

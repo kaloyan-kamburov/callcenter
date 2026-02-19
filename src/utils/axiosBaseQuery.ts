@@ -50,6 +50,16 @@ export function axiosBaseQuery(
       return { data: result.data };
     } catch (error) {
       const err = error as AxiosError;
+      const status = err.response?.status;
+
+      if (status === 401 && typeof window !== "undefined") {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
+        if (window.location.pathname !== "/login") {
+          window.location.replace("/login");
+        }
+      }
+
       // Prefer per-request error handler, then global, else default toast
       if (onError) {
         onError(err);
@@ -72,7 +82,7 @@ export function axiosBaseQuery(
       }
       return {
         error: {
-          status: err.response?.status ?? 500,
+          status: status ?? 500,
           data: err.response?.data ?? err.message,
         },
       };

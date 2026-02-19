@@ -1,5 +1,6 @@
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import {
@@ -10,10 +11,10 @@ import {
 import { useMemo, useState } from "react";
 import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
-import { getDashboardPath } from "@/features/auth/getDashboardPath";
 import { theme } from "@/theme";
 import {
   Avatar,
+  Box,
   Button,
   Divider,
   Dialog,
@@ -30,13 +31,18 @@ export default function MainLayout() {
   const { user } = useAuth();
   const [logout] = useLogoutMutation();
   const [isSignOutOpen, setIsSignOutOpen] = useState(false);
-  const dashboardPath = getDashboardPath(user?.role);
   const navigation: Navigation = [
     {
       kind: "page",
-      segment: dashboardPath.replace(/^\//, ""),
+      segment: "",
       title: "Dashboard",
       icon: <HomeIcon />,
+    },
+    {
+      kind: "page",
+      segment: "admins",
+      title: "Admins",
+      icon: <AdminPanelSettingsIcon />,
     },
   ];
   const session: Session | null = user
@@ -135,7 +141,26 @@ export default function MainLayout() {
           ),
         }}
       >
-        <Outlet />
+        <Box
+          sx={{
+            flex: 1,
+            minHeight: 0,
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            "& > *": {
+              flex: 1,
+              minHeight: 0,
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+            },
+          }}
+        >
+          <Outlet />
+        </Box>
       </DashboardLayout>
       <Dialog open={isSignOutOpen} onClose={handleCloseSignOut}>
         <DialogTitle>Sign out</DialogTitle>
