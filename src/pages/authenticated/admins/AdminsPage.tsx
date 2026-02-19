@@ -13,7 +13,8 @@ import AdminModalContent from "./AdminModal";
 import DeleteAdminModalComponent from "./DeleteAdminModal";
 
 export default function AdminsPage() {
-  const { open: openAdminModal, Modal: AdminModal } = useModal(AdminModalContent);
+  const { open: openAdminModal, Modal: AdminModal } =
+    useModal(AdminModalContent);
   const {
     open: openEditAdminModal,
     isOpen: isEditAdminModalOpen,
@@ -47,6 +48,7 @@ export default function AdminsPage() {
     {
       field: "actions",
       headerName: "Actions",
+      headerAlign: "center",
       align: "center",
       sortable: false,
       filterable: false,
