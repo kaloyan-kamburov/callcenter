@@ -16,7 +16,12 @@ import {
   useUpdateAdminMutation,
 } from "@/features/admin/adminsApi";
 import { useGetLocationsQuery } from "@/features/location/locationsApi";
-import type { Admin, AdminUpdatePayload, AdminUpsertPayload } from "@/types/Admin";
+import { useGetRolesQuery } from "@/features/role/rolesApi";
+import type {
+  Admin,
+  AdminUpdatePayload,
+  AdminUpsertPayload,
+} from "@/types/Admin";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
 import LoaderComponent from "@/components/common/LoaderComponent";
@@ -44,7 +49,7 @@ const defaultValues: AdminUpsertPayload = {
   isActive: true,
 };
 
-const selectOptions = [
+const phoneTypeOptions = [
   { label: "1", value: 1 },
   { label: "2", value: 2 },
   { label: "3", value: 3 },
@@ -60,6 +65,7 @@ export default function AdminModal({
 }: AdminModalProps) {
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [updateAdmin, { isLoading: isUpdating }] = useUpdateAdminMutation();
+  const rolesOptionsSource = useGetRolesQuery();
   const locationsOptionsSource = useGetLocationsQuery();
   const { data: adminDetails, isLoading: isLoadingDetails } = useGetAdminQuery(
     adminId as number,
@@ -153,7 +159,9 @@ export default function AdminModal({
     >
       {({ values, isSubmitting, setFieldValue }) => (
         <Form>
-          <DialogTitle>{mode === "create" ? "Add Admin" : "Edit Admin"}</DialogTitle>
+          <DialogTitle>
+            {mode === "create" ? "Add Admin" : "Edit Admin"}
+          </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -171,9 +179,14 @@ export default function AdminModal({
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="roleId"
-                  label="Role ID"
+                  label="Role"
+                  placeholder="Select Role"
                   required
-                  options={selectOptions}
+                  optionsSource={rolesOptionsSource}
+                  mapOption={(role) => ({
+                    label: role.name,
+                    value: role.id,
+                  })}
                   disabled={mode === "edit"}
                 />
               </Grid>
@@ -202,14 +215,18 @@ export default function AdminModal({
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="interfaceLanguage" label="Interface Language" required />
+                <Input
+                  name="interfaceLanguage"
+                  label="Interface Language"
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="phoneType"
                   label="Phone Type"
                   required
-                  options={selectOptions}
+                  options={phoneTypeOptions}
                 />
               </Grid>
               <Grid size={{ xs: 12 }}>
@@ -217,7 +234,9 @@ export default function AdminModal({
                   control={
                     <Switch
                       checked={values.isActive}
-                      onChange={(_, checked) => setFieldValue("isActive", checked)}
+                      onChange={(_, checked) =>
+                        setFieldValue("isActive", checked)
+                      }
                     />
                   }
                   label="Is Active"

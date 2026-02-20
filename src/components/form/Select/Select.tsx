@@ -1,4 +1,6 @@
 import { useField, useFormikContext } from "formik";
+import CircularProgress from "@mui/material/CircularProgress";
+import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import type { TextFieldProps } from "@mui/material/TextField";
@@ -61,6 +63,11 @@ export default function Select<T = unknown>(
       textFieldProps: rest,
     };
   })();
+  const loadingAdornment = isLoadingOptions ? (
+    <InputAdornment position="end">
+      <CircularProgress size={18} />
+    </InputAdornment>
+  ) : undefined;
 
   return (
     <TextField
@@ -74,19 +81,27 @@ export default function Select<T = unknown>(
           ? typeof meta.error === "string"
             ? meta.error
             : undefined
-          : isLoadingOptions
-            ? "Loading options..."
-            : helperText ?? undefined
+          : helperText ?? undefined
       }
+      InputProps={{
+        ...textFieldProps.InputProps,
+        endAdornment: loadingAdornment ?? textFieldProps.InputProps?.endAdornment,
+      }}
       size="small"
       disabled={Boolean(textFieldProps.disabled) || isLoadingOptions}
       fullWidth={textFieldProps.fullWidth ?? true}
     >
-      {options.map((option) => (
-        <MenuItem key={`${option.value}`} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
+      {isLoadingOptions
+        ? [
+            <MenuItem key="loading-placeholder" value="" disabled>
+              Loading...
+            </MenuItem>,
+          ]
+        : options.map((option) => (
+            <MenuItem key={`${option.value}`} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
     </TextField>
   );
 }

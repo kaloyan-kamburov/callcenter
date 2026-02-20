@@ -49,11 +49,13 @@ export default function AdminsPage() {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
+      disableColumnMenu: true,
       align: "center",
       sortable: false,
       filterable: false,
       flex: 0.8,
       minWidth: 100,
+      maxWidth: 100,
       renderCell: (params: GridRenderCellParams<Admin>) => (
         <Box
           sx={{

@@ -13,7 +13,8 @@ import LocationModal from "./LocationModal";
 import DeleteLocationModal from "./DeleteLocationModal";
 
 export default function LocationsPage() {
-  const { open: openLocationModal, Modal: LocationCreateModal } = useModal(LocationModal);
+  const { open: openLocationModal, Modal: LocationCreateModal } =
+    useModal(LocationModal);
   const {
     open: openEditLocationModal,
     isOpen: isEditLocationModalOpen,
@@ -22,7 +23,9 @@ export default function LocationsPage() {
   const { open: openDeleteLocationModal, Modal: LocationDeleteModal } =
     useModal(DeleteLocationModal);
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null,
+  );
 
   const columns: GridColDef<Location>[] = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -31,11 +34,13 @@ export default function LocationsPage() {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
+      disableColumnMenu: true,
       align: "center",
       sortable: false,
       filterable: false,
       flex: 0.8,
       minWidth: 100,
+      maxWidth: 100,
       renderCell: (params: GridRenderCellParams<Location>) => (
         <Box
           sx={{
