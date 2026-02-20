@@ -17,6 +17,9 @@ const DashboardPage = lazy(
 const AdminsPage = lazy(
   () => import("@/pages/authenticated/admins/AdminsPage"),
 );
+const LocationsPage = lazy(
+  () => import("@/pages/authenticated/locations/LocationsPage"),
+);
 
 export type RouteItem = {
   path: string;
@@ -45,6 +48,11 @@ export const pagesConfig: {
         {
           path: "/admins",
           element: <AdminsPage />,
+          protected: true,
+        },
+        {
+          path: "/locations",
+          element: <LocationsPage />,
           protected: true,
         },
       ],

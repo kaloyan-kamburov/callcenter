@@ -1,6 +1,7 @@
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import {
@@ -43,6 +44,12 @@ export default function MainLayout() {
       segment: "admins",
       title: "Admins",
       icon: <AdminPanelSettingsIcon />,
+    },
+    {
+      kind: "page",
+      segment: "locations",
+      title: "Locations",
+      icon: <LocationOnIcon />,
     },
   ];
   const session: Session | null = user

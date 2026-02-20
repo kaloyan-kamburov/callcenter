@@ -1,0 +1,37 @@
+---
+description: Standard pattern for CRUD pages like AdminsPage
+alwaysApply: true
+---
+
+# CRUD Page Pattern (React + MUI + RTK Query)
+
+Use this structure for new CRUD pages to keep behavior and UX consistent with `AdminsPage`.
+
+## Page Composition
+
+- Wrap the page in `PageContainer` and provide a custom `header` slot.
+- Keep list content in a full-height `Box` and render `DataGrid` inside it.
+- In the header, place a title on the left and a primary "Add <Entity>" button on the right.
+
+## Data + Types
+
+- Use typed RTK Query hooks from feature API slices (for example, `useGet<EntityPlural>Query`).
+- Define `GridColDef<Entity>[]` columns with explicit fields and sizing.
+- Always provide `getRowId` when rendering `DataGrid`.
+
+## Actions + Modals
+
+- Include an `actions` column with edit/delete icon buttons.
+- On edit/delete click: store selected row in local state, then open the matching modal.
+- Reuse one modal component for create/edit via a `mode` prop when possible.
+- Pass selected entity id/object to edit/delete modals via typed props.
+
+## API Conventions
+
+- Keep API base URLs in env vars with a safe fallback in one base API file.
+- Register clear `tagTypes` and prefer invalidation/refetch through RTK Query conventions.
+
+## Example Expectations
+
+- New pages should follow the same flow: list -> create modal -> edit modal -> delete confirmation.
+- New CRUD pages should match existing naming style for files, hooks, and components.

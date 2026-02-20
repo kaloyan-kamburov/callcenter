@@ -15,6 +15,7 @@ import {
   useGetAdminQuery,
   useUpdateAdminMutation,
 } from "@/features/admin/adminsApi";
+import { useGetLocationsQuery } from "@/features/location/locationsApi";
 import type { Admin, AdminUpdatePayload, AdminUpsertPayload } from "@/types/Admin";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
@@ -59,6 +60,7 @@ export default function AdminModal({
 }: AdminModalProps) {
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [updateAdmin, { isLoading: isUpdating }] = useUpdateAdminMutation();
+  const locationsOptionsSource = useGetLocationsQuery();
   const { data: adminDetails, isLoading: isLoadingDetails } = useGetAdminQuery(
     adminId as number,
     {
@@ -190,9 +192,13 @@ export default function AdminModal({
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="locationId"
-                  label="Location ID"
+                  label="Location"
                   required
-                  options={selectOptions}
+                  optionsSource={locationsOptionsSource}
+                  mapOption={(location) => ({
+                    label: location.name,
+                    value: location.id,
+                  })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
