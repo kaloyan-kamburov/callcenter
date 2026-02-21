@@ -2,6 +2,7 @@ import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SettingsPhoneIcon from "@mui/icons-material/SettingsPhone";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import {
@@ -53,6 +54,12 @@ export default function MainLayout() {
       segment: "locations",
       title: t("navigation.locations"),
       icon: <LocationOnIcon />,
+    },
+    {
+      kind: "page",
+      segment: "sips",
+      title: t("navigation.sips"),
+      icon: <SettingsPhoneIcon />,
     },
   ];
   const session: Session | null = user

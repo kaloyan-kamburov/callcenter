@@ -23,7 +23,8 @@
   "navigation": {
     "dashboard": "Табло",
     "admins": "Администратори",
-    "locations": "Локации"
+    "locations": "Локации",
+    "sips": "SIP-и"
   },
   "dashboard": {
     "title": "Табло"
@@ -96,6 +97,28 @@
       "title": "Изтрий локация",
       "confirmation": "Сигурни ли сте, че искате да изтриете тази локация?",
       "deletedSuccess": "Локацията е изтрита успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име"
+    }
+  },
+  "sips": {
+    "title": "SIP-и",
+    "addButton": "Добави SIP",
+    "modal": {
+      "addTitle": "Добави SIP",
+      "editTitle": "Редактирай SIP",
+      "createdSuccess": "SIP-ът е създаден успешно",
+      "updatedSuccess": "SIP-ът е обновен успешно",
+      "fields": {
+        "name": "Име"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий SIP",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този SIP?",
+      "deletedSuccess": "SIP-ът е изтрит успешно"
     },
     "columns": {
       "id": "ID",
