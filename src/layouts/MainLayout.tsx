@@ -3,6 +3,12 @@ import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingsPhoneIcon from "@mui/icons-material/SettingsPhone";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import BusinessIcon from "@mui/icons-material/Business";
+import SecurityIcon from "@mui/icons-material/Security";
+import GroupsIcon from "@mui/icons-material/Groups";
+import WorkIcon from "@mui/icons-material/Work";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import {
@@ -60,6 +66,42 @@ export default function MainLayout() {
       segment: "sips",
       title: t("navigation.sips"),
       icon: <SettingsPhoneIcon />,
+    },
+    {
+      kind: "page",
+      segment: "agents",
+      title: t("navigation.agents"),
+      icon: <SupportAgentIcon />,
+    },
+    {
+      kind: "page",
+      segment: "campaigns",
+      title: t("navigation.campaigns"),
+      icon: <CampaignIcon />,
+    },
+    {
+      kind: "page",
+      segment: "clients",
+      title: t("navigation.clients"),
+      icon: <BusinessIcon />,
+    },
+    {
+      kind: "page",
+      segment: "ip-whitelist",
+      title: t("navigation.ipWhitelist"),
+      icon: <SecurityIcon />,
+    },
+    {
+      kind: "page",
+      segment: "teams",
+      title: t("navigation.teams"),
+      icon: <GroupsIcon />,
+    },
+    {
+      kind: "page",
+      segment: "workplaces",
+      title: t("navigation.workplaces"),
+      icon: <WorkIcon />,
     },
   ];
   const session: Session | null = user

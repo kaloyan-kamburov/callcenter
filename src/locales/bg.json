@@ -24,7 +24,13 @@
     "dashboard": "Табло",
     "admins": "Администратори",
     "locations": "Локации",
-    "sips": "SIP-и"
+    "sips": "SIP-и",
+    "agents": "Агенти",
+    "campaigns": "Кампании",
+    "clients": "Клиенти",
+    "ipWhitelist": "IP списък",
+    "teams": "Екипи",
+    "workplaces": "Работни места"
   },
   "dashboard": {
     "title": "Табло"
@@ -40,6 +46,15 @@
     "create": "Създай",
     "save": "Запази",
     "delete": "Изтрий"
+  },
+  "weekdays": {
+    "0": "Понеделник",
+    "1": "Вторник",
+    "2": "Сряда",
+    "3": "Четвъртък",
+    "4": "Петък",
+    "5": "Събота",
+    "6": "Неделя"
   },
   "admins": {
     "addButton": "Добави администратор",
@@ -123,6 +138,204 @@
     "columns": {
       "id": "ID",
       "name": "Име"
+    }
+  },
+  "agents": {
+    "title": "Агенти",
+    "addButton": "Добави агент",
+    "modal": {
+      "addTitle": "Добави агент",
+      "editTitle": "Редактирай агент",
+      "createdSuccess": "Агентът е създаден успешно",
+      "updatedSuccess": "Агентът е обновен успешно",
+      "fields": {
+        "operatorName": "Име на оператор",
+        "username": "Потребителско име",
+        "password": "Парола",
+        "email": "Имейл",
+        "signature": "Подпис",
+        "timeZone": "Часова зона",
+        "location": "Локация",
+        "interfaceLanguage": "Език на интерфейса",
+        "salesCode": "Код за продажби",
+        "autoDialerDelaySeconds": "Забавяне автонабиране (секунди)",
+        "maxCallsPerAgent": "Макс. обаждания на агент",
+        "phoneType": "Тип телефон",
+        "team": "Екип",
+        "scriptId": "ID на скрипт",
+        "workplace": "Работно място",
+        "isActive": "Активен",
+        "workSchedule": "Работен график",
+        "dayOfWeek": "Ден от седмицата",
+        "startTime": "Начален час",
+        "endTime": "Краен час"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий агент",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този агент?",
+      "deletedSuccess": "Агентът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "operatorName": "Оператор",
+      "username": "Потребител",
+      "email": "Имейл",
+      "location": "Локация",
+      "team": "Екип",
+      "workplace": "Работно място",
+      "phoneType": "Тип телефон",
+      "isActive": "Активен"
+    }
+  },
+  "campaigns": {
+    "title": "Кампании",
+    "addButton": "Добави кампания",
+    "types": {
+      "1": "Входяща",
+      "2": "Изходяща",
+      "3": "Смесена"
+    },
+    "modal": {
+      "addTitle": "Добави кампания",
+      "editTitle": "Редактирай кампания",
+      "createdSuccess": "Кампанията е създадена успешно",
+      "updatedSuccess": "Кампанията е обновена успешно",
+      "fields": {
+        "name": "Име",
+        "type": "Тип",
+        "supportUrl": "Support URL",
+        "fillSurveyThreshold": "Праг за анкета",
+        "isActive": "Активна",
+        "openUrlAutomatically": "Отваряй URL автоматично",
+        "playCallTone": "Пускай тон при обаждане",
+        "removeDuplicateNumbers": "Премахвай дублирани номера",
+        "enableCallEnd": "Разреши край на разговор",
+        "enableIntegration": "Разреши интеграция",
+        "enableStopRecording": "Разреши спиране на запис"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий кампания",
+      "confirmation": "Сигурни ли сте, че искате да изтриете тази кампания?",
+      "deletedSuccess": "Кампанията е изтрита успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "type": "Тип",
+      "isActive": "Активна",
+      "enableIntegration": "Интеграция"
+    }
+  },
+  "clients": {
+    "title": "Клиенти",
+    "addButton": "Добави клиент",
+    "modal": {
+      "addTitle": "Добави клиент",
+      "editTitle": "Редактирай клиент",
+      "createdSuccess": "Клиентът е създаден успешно",
+      "updatedSuccess": "Клиентът е обновен успешно",
+      "fields": {
+        "name": "Име",
+        "username": "Потребителско име",
+        "password": "Парола",
+        "isActive": "Активен"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий клиент",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този клиент?",
+      "deletedSuccess": "Клиентът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "username": "Потребител",
+      "isActive": "Активен",
+      "createdAt": "Създаден на"
+    }
+  },
+  "ipWhitelist": {
+    "title": "IP списък",
+    "addButton": "Добави IP запис",
+    "modal": {
+      "addTitle": "Добави IP запис",
+      "editTitle": "Редактирай IP запис",
+      "createdSuccess": "IP записът е създаден успешно",
+      "updatedSuccess": "IP записът е обновен успешно",
+      "fields": {
+        "name": "Име",
+        "ipAddress": "IP адрес"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий IP запис",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този IP запис?",
+      "deletedSuccess": "IP записът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "ipAddress": "IP адрес"
+    }
+  },
+  "teams": {
+    "title": "Екипи",
+    "addButton": "Добави екип",
+    "modal": {
+      "addTitle": "Добави екип",
+      "editTitle": "Редактирай екип",
+      "createdSuccess": "Екипът е създаден успешно",
+      "updatedSuccess": "Екипът е обновен успешно",
+      "fields": {
+        "name": "Име",
+        "supervisor": "Супервайзор",
+        "isActive": "Активен",
+        "isDeleted": "Изтрит"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий екип",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този екип?",
+      "deletedSuccess": "Екипът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "supervisorName": "Супервайзор",
+      "isActive": "Активен",
+      "isDeleted": "Изтрит"
+    }
+  },
+  "workplaces": {
+    "title": "Работни места",
+    "addButton": "Добави работно място",
+    "modal": {
+      "addTitle": "Добави работно място",
+      "editTitle": "Редактирай работно място",
+      "createdSuccess": "Работното място е създадено успешно",
+      "updatedSuccess": "Работното място е обновено успешно",
+      "fields": {
+        "name": "Име",
+        "location": "Локация",
+        "sip": "SIP",
+        "isPredictive": "Предиктивно",
+        "isDeleted": "Изтрито"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий работно място",
+      "confirmation": "Сигурни ли сте, че искате да изтриете това работно място?",
+      "deletedSuccess": "Работното място е изтрито успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "locationId": "Локация",
+      "sipId": "SIP",
+      "isPredictive": "Предиктивно",
+      "isDeleted": "Изтрито"
     }
   }
 }

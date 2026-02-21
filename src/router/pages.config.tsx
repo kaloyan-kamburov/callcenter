@@ -23,6 +23,24 @@ const LocationsPage = lazy(
 const SipsPage = lazy(
   () => import("@/pages/authenticated/sips/SipsPage"),
 );
+const AgentsPage = lazy(
+  () => import("@/pages/authenticated/agents/AgentsPage"),
+);
+const CampaignsPage = lazy(
+  () => import("@/pages/authenticated/campaigns/CampaignsPage"),
+);
+const ClientsPage = lazy(
+  () => import("@/pages/authenticated/clients/ClientsPage"),
+);
+const IpWhitelistPage = lazy(
+  () => import("@/pages/authenticated/ipWhitelist/IpWhitelistPage"),
+);
+const TeamsPage = lazy(
+  () => import("@/pages/authenticated/teams/TeamsPage"),
+);
+const WorkplacesPage = lazy(
+  () => import("@/pages/authenticated/workplaces/WorkplacesPage"),
+);
 
 export type RouteItem = {
   path: string;
@@ -61,6 +79,36 @@ export const pagesConfig: {
         {
           path: "/sips",
           element: <SipsPage />,
+          protected: true,
+        },
+        {
+          path: "/agents",
+          element: <AgentsPage />,
+          protected: true,
+        },
+        {
+          path: "/campaigns",
+          element: <CampaignsPage />,
+          protected: true,
+        },
+        {
+          path: "/clients",
+          element: <ClientsPage />,
+          protected: true,
+        },
+        {
+          path: "/ip-whitelist",
+          element: <IpWhitelistPage />,
+          protected: true,
+        },
+        {
+          path: "/teams",
+          element: <TeamsPage />,
+          protected: true,
+        },
+        {
+          path: "/workplaces",
+          element: <WorkplacesPage />,
           protected: true,
         },
       ],

@@ -40,6 +40,13 @@ export const adminsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, id) => ["Admins", { type: "Admins", id }],
     }),
+    getAdminSupervisors: builder.query<Admin[], void>({
+      query: () => ({
+        url: "admin/admins/supervisors",
+        method: "GET",
+      }),
+      providesTags: ["Admins"],
+    }),
   }),
   overrideExisting: false,
 });
@@ -50,4 +57,5 @@ export const {
   useCreateAdminMutation,
   useUpdateAdminMutation,
   useDeleteAdminMutation,
+  useGetAdminSupervisorsQuery,
 } = adminsApi;
