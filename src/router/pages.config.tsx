@@ -8,7 +8,7 @@ import ResetPasswordPage from "@/pages/common/ResetPasswordPage/ResetPasswordPag
 import NotFoundPage from "@/pages/common/NotFoundPage/NotFoundPage";
 import { lazy, Suspense } from "react";
 import type { ReactElement } from "react";
-import LoaderComponent from "@/components/common/LoaderComponent";
+import Loader from "@/components/common/Loader/Loader";
 import { Box } from "@mui/material";
 
 const DashboardPage = lazy(
@@ -76,7 +76,7 @@ export function withProtection(element: ReactElement, isProtected?: boolean) {
     <Suspense
       fallback={
         <Box sx={{ display: "grid", placeItems: "center", flex: 1 }}>
-          <LoaderComponent />
+          <Loader />
         </Box>
       }
     >

@@ -1,6 +1,7 @@
 import { Button, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { toast } from "react-hot-toast";
 import { useDeleteLocationMutation } from "@/features/location/locationsApi";
+import { useTranslation } from "react-i18next";
 
 type DeleteLocationModalProps = {
   close: () => void;
@@ -11,24 +12,25 @@ export default function DeleteLocationModal({
   close,
   locationId,
 }: DeleteLocationModalProps) {
+  const { t } = useTranslation();
   const [deleteLocation, { isLoading }] = useDeleteLocationMutation();
 
   const handleDelete = async () => {
     if (!locationId) return;
     await deleteLocation(locationId).unwrap();
-    toast.success("Location deleted successfully");
+    toast.success(t("locations.deleteModal.deletedSuccess"));
     close();
   };
 
   return (
     <>
-      <DialogTitle>Delete Location</DialogTitle>
+      <DialogTitle>{t("locations.deleteModal.title")}</DialogTitle>
       <DialogContent>
-        <Typography>Are you sure you want to delete this location?</Typography>
+        <Typography>{t("locations.deleteModal.confirmation")}</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={close} disabled={isLoading}>
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button
           variant="contained"
@@ -36,7 +38,7 @@ export default function DeleteLocationModal({
           onClick={handleDelete}
           disabled={isLoading}
         >
-          Delete
+          {t("common.delete")}
         </Button>
       </DialogActions>
     </>

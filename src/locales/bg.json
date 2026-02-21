@@ -1,0 +1,105 @@
+{
+  "language": "Език",
+  "languages": {
+    "en": "Английски",
+    "bg": "Български"
+  },
+  "login": {
+    "title": "Вход",
+    "username": "Потребител",
+    "password": "Парола",
+    "submit": "Вход",
+    "registration": "Регистрация",
+    "forgotPassword": "Забравена парола",
+    "invalidCredentials": "Невалиден имейл или парола."
+  },
+  "profile": {
+    "view": "Виж профила",
+    "userFallback": "Потребител"
+  },
+  "app": {
+    "title": "Кол център"
+  },
+  "navigation": {
+    "dashboard": "Табло",
+    "admins": "Администратори",
+    "locations": "Локации"
+  },
+  "dashboard": {
+    "title": "Табло"
+  },
+  "signOut": {
+    "title": "Изход",
+    "confirmation": "Сигурни ли сте, че искате да излезете?",
+    "action": "Изход"
+  },
+  "common": {
+    "cancel": "Отказ",
+    "actions": "Действия",
+    "create": "Създай",
+    "save": "Запази",
+    "delete": "Изтрий"
+  },
+  "admins": {
+    "addButton": "Добави администратор",
+    "modal": {
+      "addTitle": "Добави администратор",
+      "editTitle": "Редактирай администратор",
+      "createdSuccess": "Администраторът е създаден успешно",
+      "updatedSuccess": "Администраторът е обновен успешно",
+      "fields": {
+        "username": "Потребителско име",
+        "password": "Парола",
+        "role": "Роля",
+        "selectRole": "Избери роля",
+        "name": "Име",
+        "email": "Имейл",
+        "signature": "Подпис",
+        "timeZone": "Часова зона",
+        "location": "Локация",
+        "interfaceLanguage": "Език на интерфейса",
+        "phoneType": "Тип телефон",
+        "isActive": "Активен"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий администратор",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този администратор?",
+      "deletedSuccess": "Администраторът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име",
+      "username": "Потребителско име",
+      "email": "Имейл",
+      "signature": "Подпис",
+      "timeZone": "Часова зона",
+      "locationId": "ID на локация",
+      "locationName": "Име на локация",
+      "language": "Език",
+      "phoneType": "Тип телефон",
+      "active": "Активен"
+    }
+  },
+  "locations": {
+    "addButton": "Добави локация",
+    "modal": {
+      "addTitle": "Добави локация",
+      "editTitle": "Редактирай локация",
+      "createdSuccess": "Локацията е създадена успешно",
+      "updatedSuccess": "Локацията е обновена успешно",
+      "fields": {
+        "name": "Име"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий локация",
+      "confirmation": "Сигурни ли сте, че искате да изтриете тази локация?",
+      "deletedSuccess": "Локацията е изтрита успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Име"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { useGetAdminsQuery } from "@/features/admin/adminsApi";
-import DataGrid from "@/components/common/DataGrid";
+import DataGrid from "@/components/common/DataGrid/DataGrid";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid/models";
@@ -11,8 +11,10 @@ import { useModal } from "@/hooks/useModal";
 import { useState } from "react";
 import AdminModalContent from "./AdminModal";
 import DeleteAdminModalComponent from "./DeleteAdminModal";
+import { useTranslation } from "react-i18next";
 
 export default function AdminsPage() {
+  const { t } = useTranslation();
   const { open: openAdminModal, Modal: AdminModal } =
     useModal(AdminModalContent);
   const {
@@ -22,32 +24,33 @@ export default function AdminsPage() {
   } = useModal(AdminModalContent);
   const { open: openDeleteAdminModal, Modal: DeleteAdminModal } = useModal(
     DeleteAdminModalComponent,
+    "xs",
   );
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const columns: GridColDef<Admin>[] = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Name", flex: 1 },
-    { field: "username", headerName: "Username", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "signature", headerName: "Signature", flex: 1 },
-    { field: "timeZone", headerName: "Time Zone", flex: 1 },
-    { field: "locationId", headerName: "Location ID", flex: 0.8 },
-    { field: "locationName", headerName: "Location Name", flex: 1 },
+    { field: "id", headerName: t("admins.columns.id"), flex: 0.5 },
+    { field: "name", headerName: t("admins.columns.name"), flex: 1 },
+    { field: "username", headerName: t("admins.columns.username"), flex: 1 },
+    { field: "email", headerName: t("admins.columns.email"), flex: 1 },
+    { field: "signature", headerName: t("admins.columns.signature"), flex: 1 },
+    { field: "timeZone", headerName: t("admins.columns.timeZone"), flex: 1 },
+    { field: "locationId", headerName: t("admins.columns.locationId"), flex: 0.8 },
+    { field: "locationName", headerName: t("admins.columns.locationName"), flex: 1 },
     {
       field: "interfaceLanguage",
-      headerName: "Language",
+      headerName: t("admins.columns.language"),
       flex: 0.8,
     },
-    { field: "phoneType", headerName: "Phone Type", flex: 0.8 },
+    { field: "phoneType", headerName: t("admins.columns.phoneType"), flex: 0.8 },
     {
       field: "isActive",
-      headerName: "Active",
+      headerName: t("admins.columns.active"),
       type: "boolean",
       flex: 0.7,
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("common.actions"),
       headerAlign: "center",
       disableColumnMenu: true,
       align: "center",
@@ -129,7 +132,7 @@ export default function AdminsPage() {
               startIcon={<AddIcon />}
               onClick={openAdminModal}
             >
-              Add Admin
+              {t("admins.addButton")}
             </Button>
           </Box>
         ),

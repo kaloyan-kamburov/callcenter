@@ -1,6 +1,7 @@
 import { Button, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { toast } from "react-hot-toast";
 import { useDeleteAdminMutation } from "@/features/admin/adminsApi";
+import { useTranslation } from "react-i18next";
 
 type DeleteAdminModalProps = {
   close: () => void;
@@ -8,24 +9,25 @@ type DeleteAdminModalProps = {
 };
 
 export default function DeleteAdminModal({ close, adminId }: DeleteAdminModalProps) {
+  const { t } = useTranslation();
   const [deleteAdmin, { isLoading }] = useDeleteAdminMutation();
 
   const handleDelete = async () => {
     if (!adminId) return;
     await deleteAdmin(adminId).unwrap();
-    toast.success("Admin deleted successfully");
+    toast.success(t("admins.deleteModal.deletedSuccess"));
     close();
   };
 
   return (
     <>
-      <DialogTitle>Delete Admin</DialogTitle>
+      <DialogTitle>{t("admins.deleteModal.title")}</DialogTitle>
       <DialogContent>
-        <Typography>Are you sure you want to delete this admin?</Typography>
+        <Typography>{t("admins.deleteModal.confirmation")}</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={close} disabled={isLoading}>
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button
           variant="contained"
@@ -33,7 +35,7 @@ export default function DeleteAdminModal({ close, adminId }: DeleteAdminModalPro
           onClick={handleDelete}
           disabled={isLoading}
         >
-          Delete
+          {t("common.delete")}
         </Button>
       </DialogActions>
     </>

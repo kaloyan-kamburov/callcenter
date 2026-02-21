@@ -6,6 +6,7 @@ import { store } from "./store";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { Toaster } from "react-hot-toast";
+import "./i18n";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

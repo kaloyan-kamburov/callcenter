@@ -24,7 +24,8 @@ import type {
 } from "@/types/Admin";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
-import LoaderComponent from "@/components/common/LoaderComponent";
+import Loader from "@/components/common/Loader/Loader";
+import { useTranslation } from "react-i18next";
 
 type AdminModalProps = {
   close: () => void;
@@ -63,6 +64,7 @@ export default function AdminModal({
   isOpen = false,
   initialValues,
 }: AdminModalProps) {
+  const { t } = useTranslation();
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [updateAdmin, { isLoading: isUpdating }] = useUpdateAdminMutation();
   const rolesOptionsSource = useGetRolesQuery();
@@ -98,14 +100,14 @@ export default function AdminModal({
   if (mode === "edit" && isLoadingDetails) {
     return (
       <>
-        <DialogTitle>Edit Admin</DialogTitle>
+        <DialogTitle>{t("admins.modal.editTitle")}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "grid", placeItems: "center", minHeight: 220 }}>
-            <LoaderComponent />
+            <Loader />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={close}>Cancel</Button>
+          <Button onClick={close}>{t("common.cancel")}</Button>
         </DialogActions>
       </>
     );
@@ -125,7 +127,7 @@ export default function AdminModal({
 
           if (mode === "create") {
             await createAdmin(payload).unwrap();
-            toast.success("Admin created successfully");
+            toast.success(t("admins.modal.createdSuccess"));
             close();
             return;
           }
@@ -149,7 +151,7 @@ export default function AdminModal({
           };
 
           await updateAdmin(updatePayload).unwrap();
-          toast.success("Admin updated successfully");
+          toast.success(t("admins.modal.updatedSuccess"));
           close();
         } finally {
           setSubmitting(false);
@@ -160,17 +162,19 @@ export default function AdminModal({
       {({ values, isSubmitting, setFieldValue }) => (
         <Form>
           <DialogTitle>
-            {mode === "create" ? "Add Admin" : "Edit Admin"}
+            {mode === "create"
+              ? t("admins.modal.addTitle")
+              : t("admins.modal.editTitle")}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="username" label="Username" required />
+                <Input name="username" label={t("admins.modal.fields.username")} required />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Input
                   name="password"
-                  label="Password"
+                  label={t("admins.modal.fields.password")}
                   type="password"
                   required={mode === "create"}
                   showPasswordToggle
@@ -179,8 +183,8 @@ export default function AdminModal({
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="roleId"
-                  label="Role"
-                  placeholder="Select Role"
+                  label={t("admins.modal.fields.role")}
+                  placeholder={t("admins.modal.fields.selectRole")}
                   required
                   optionsSource={rolesOptionsSource}
                   mapOption={(role) => ({
@@ -191,21 +195,34 @@ export default function AdminModal({
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="name" label="Name" required />
+                <Input name="name" label={t("admins.modal.fields.name")} required />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="email" label="Email" type="email" required />
+                <Input
+                  name="email"
+                  label={t("admins.modal.fields.email")}
+                  type="email"
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="signature" label="Signature" required />
+                <Input
+                  name="signature"
+                  label={t("admins.modal.fields.signature")}
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="timeZone" label="Time Zone" required />
+                <Input
+                  name="timeZone"
+                  label={t("admins.modal.fields.timeZone")}
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="locationId"
-                  label="Location"
+                  label={t("admins.modal.fields.location")}
                   required
                   optionsSource={locationsOptionsSource}
                   mapOption={(location) => ({
@@ -217,14 +234,14 @@ export default function AdminModal({
               <Grid size={{ xs: 12, md: 6 }}>
                 <Input
                   name="interfaceLanguage"
-                  label="Interface Language"
+                  label={t("admins.modal.fields.interfaceLanguage")}
                   required
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="phoneType"
-                  label="Phone Type"
+                  label={t("admins.modal.fields.phoneType")}
                   required
                   options={phoneTypeOptions}
                 />
@@ -239,21 +256,21 @@ export default function AdminModal({
                       }
                     />
                   }
-                  label="Is Active"
+                  label={t("admins.modal.fields.isActive")}
                 />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={close} disabled={isLoading || isSubmitting}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               type="submit"
               variant="contained"
               disabled={isLoading || isSubmitting}
             >
-              {mode === "create" ? "Create" : "Save"}
+              {mode === "create" ? t("common.create") : t("common.save")}
             </Button>
           </DialogActions>
         </Form>

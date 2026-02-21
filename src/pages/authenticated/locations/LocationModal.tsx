@@ -1,4 +1,10 @@
-import { Button, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+} from "@mui/material";
 import { Form, Formik } from "formik";
 import { toast } from "react-hot-toast";
 import Input from "@/components/form/Input/Input";
@@ -8,8 +14,9 @@ import {
   useUpdateLocationMutation,
 } from "@/features/location/locationsApi";
 import type { Location, LocationUpsertPayload } from "@/types/Location";
-import LoaderComponent from "@/components/common/LoaderComponent";
+import Loader from "@/components/common/Loader/Loader";
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 type LocationModalProps = {
   close: () => void;
@@ -31,15 +38,16 @@ export default function LocationModal({
   location,
   isOpen = false,
 }: LocationModalProps) {
-  const [createLocation, { isLoading: isCreating }] = useCreateLocationMutation();
-  const [updateLocation, { isLoading: isUpdating }] = useUpdateLocationMutation();
-  const { data: locationDetails, isLoading: isLoadingDetails } = useGetLocationQuery(
-    locationId as number,
-    {
+  const { t } = useTranslation();
+  const [createLocation, { isLoading: isCreating }] =
+    useCreateLocationMutation();
+  const [updateLocation, { isLoading: isUpdating }] =
+    useUpdateLocationMutation();
+  const { data: locationDetails, isLoading: isLoadingDetails } =
+    useGetLocationQuery(locationId as number, {
       skip: mode !== "edit" || !locationId || !isOpen,
       refetchOnMountOrArgChange: true,
-    },
-  );
+    });
 
   const isLoading = isCreating || isUpdating || isLoadingDetails;
   const mergedInitialValues: LocationUpsertPayload = {
@@ -60,14 +68,14 @@ export default function LocationModal({
   if (mode === "edit" && isLoadingDetails) {
     return (
       <>
-        <DialogTitle>Edit Location</DialogTitle>
+        <DialogTitle>{t("locations.modal.editTitle")}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "grid", placeItems: "center", minHeight: 160 }}>
-            <LoaderComponent />
+            <Loader />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={close}>Cancel</Button>
+          <Button onClick={close}>{t("common.cancel")}</Button>
         </DialogActions>
       </>
     );
@@ -84,7 +92,7 @@ export default function LocationModal({
               name: values.name,
             };
             await createLocation(payload).unwrap();
-            toast.success("Location created successfully");
+            toast.success(t("locations.modal.createdSuccess"));
             close();
             return;
           }
@@ -98,7 +106,7 @@ export default function LocationModal({
             name: values.name,
           };
           await updateLocation(payload).unwrap();
-          toast.success("Location updated successfully");
+          toast.success(t("locations.modal.updatedSuccess"));
           close();
         } finally {
           setSubmitting(false);
@@ -108,24 +116,28 @@ export default function LocationModal({
     >
       {({ isSubmitting }) => (
         <Form>
-          <DialogTitle>{mode === "create" ? "Add Location" : "Edit Location"}</DialogTitle>
+          <DialogTitle>
+            {mode === "create"
+              ? t("locations.modal.addTitle")
+              : t("locations.modal.editTitle")}
+          </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12 }}>
-                <Input name="name" label="Name" required />
+                <Input name="name" label={t("locations.modal.fields.name")} required />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={close} disabled={isLoading || isSubmitting}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               type="submit"
               variant="contained"
               disabled={isLoading || isSubmitting}
             >
-              {mode === "create" ? "Create" : "Save"}
+              {mode === "create" ? t("common.create") : t("common.save")}
             </Button>
           </DialogActions>
         </Form>

@@ -9,20 +9,26 @@ import { useLoginMutation } from "@/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
+  const { t } = useTranslation();
 
   return (
     <Box sx={{ display: "grid", placeItems: "center", minHeight: "100%" }}>
       <Card variant="outlined" sx={{ p: 4, width: 400 }}>
+        <Box display="flex" justifyContent="flex-end">
+          <LanguageSwitcher />
+        </Box>
         <Typography variant="h6" component="h1" gutterBottom align="center">
-          Login
+          {t("login.title")}{" "}
         </Typography>
 
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ username: "username", password: "password" }}
           validationSchema={Yup.object({
             username: Yup.string().required("Username is required"),
             password: Yup.string().required("Password is required"),
@@ -48,7 +54,7 @@ export default function LoginPage() {
               if (axios.isAxiosError(err)) {
                 const status = err.response?.status;
                 if (status === 401) {
-                  toast.error("Invalid email or password.");
+                  toast.error(t("login.invalidCredentials"));
                   return;
                 }
                 const data = err.response?.data as unknown;
@@ -73,10 +79,14 @@ export default function LoginPage() {
           {({ isSubmitting }) => (
             <Form noValidate>
               <Box display="grid" gap={2}>
-                <Input name="username" label="Username" type="text" />
+                <Input
+                  name="username"
+                  label={t("login.username")}
+                  type="text"
+                />
                 <Input
                   name="password"
-                  label="Password"
+                  label={t("login.password")}
                   type="password"
                   showPasswordToggle
                 />
@@ -84,15 +94,16 @@ export default function LoginPage() {
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
+                  loading={isSubmitting}
                 >
-                  Submit
+                  {t("login.submit")}
                 </Button>
-                <Box display="flex" justifyContent="space-between">
-                  <Link href="/register" underline="hover">
-                    registration
-                  </Link>
+                <Box display="flex" justifyContent="flex-end">
+                  {/* <Link href="/register" underline="hover">
+                    {t("login.registration")}
+                  </Link> */}
                   <Link href="/forgot-password" underline="hover">
-                    forgot password
+                    {t("login.forgotPassword")}
                   </Link>
                 </Box>
               </Box>

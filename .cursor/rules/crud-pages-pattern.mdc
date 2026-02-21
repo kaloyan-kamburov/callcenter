@@ -26,6 +26,12 @@ Use this structure for new CRUD pages to keep behavior and UX consistent with `A
 - Reuse one modal component for create/edit via a `mode` prop when possible.
 - Pass selected entity id/object to edit/delete modals via typed props.
 
+## Internationalization (i18n)
+
+- Do not hardcode visible UI strings in CRUD pages or modals; use translation keys via `t(...)`.
+- Add new keys to both `src/locales/en.json` and `src/locales/bg.json` when introducing new labels/messages.
+- Localize page headers, primary/add button text, `DataGrid` column headers, modal titles/labels/actions, confirmation text, and toast messages.
+
 ## API Conventions
 
 - Keep API base URLs in env vars with a safe fallback in one base API file.

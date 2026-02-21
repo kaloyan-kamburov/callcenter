@@ -1,5 +1,5 @@
 import { useGetLocationsQuery } from "@/features/location/locationsApi";
-import DataGrid from "@/components/common/DataGrid";
+import DataGrid from "@/components/common/DataGrid/DataGrid";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid/models";
@@ -11,28 +11,32 @@ import { useModal } from "@/hooks/useModal";
 import { useState } from "react";
 import LocationModal from "./LocationModal";
 import DeleteLocationModal from "./DeleteLocationModal";
+import { useTranslation } from "react-i18next";
 
 export default function LocationsPage() {
-  const { open: openLocationModal, Modal: LocationCreateModal } =
-    useModal(LocationModal);
+  const { t } = useTranslation();
+  const { open: openLocationModal, Modal: LocationCreateModal } = useModal(
+    LocationModal,
+    "xs",
+  );
   const {
     open: openEditLocationModal,
     isOpen: isEditLocationModalOpen,
     Modal: LocationEditModal,
-  } = useModal(LocationModal);
+  } = useModal(LocationModal, "xs");
   const { open: openDeleteLocationModal, Modal: LocationDeleteModal } =
-    useModal(DeleteLocationModal);
+    useModal(DeleteLocationModal, "xs");
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null,
   );
 
   const columns: GridColDef<Location>[] = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Name", flex: 1.5 },
+    { field: "id", headerName: t("locations.columns.id"), flex: 0.5 },
+    { field: "name", headerName: t("locations.columns.name"), flex: 1.5 },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("common.actions"),
       headerAlign: "center",
       disableColumnMenu: true,
       align: "center",
@@ -114,7 +118,7 @@ export default function LocationsPage() {
               startIcon={<AddIcon />}
               onClick={openLocationModal}
             >
-              Add Location
+              {t("locations.addButton")}
             </Button>
           </Box>
         ),
