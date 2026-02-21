@@ -13,9 +13,9 @@ createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Toaster position="bottom-right" />
+        <Toaster position="bottom-center" />
         <AppRouter />
       </ThemeProvider>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );

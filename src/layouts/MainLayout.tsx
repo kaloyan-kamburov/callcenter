@@ -11,15 +11,12 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import WorkIcon from "@mui/icons-material/Work";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
-import {
-  Account,
-  AccountPopoverFooter,
-  SignOutButton,
-} from "@toolpad/core/Account";
+import { Account, AccountPopoverFooter } from "@toolpad/core/Account";
 import { useMemo, useState } from "react";
 import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
 import { theme } from "@/theme";
+import logo from "@/logo1.svg";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 import {
   Avatar,
@@ -146,7 +143,17 @@ export default function MainLayout() {
       authentication={authentication}
       navigation={navigation}
       theme={theme}
-      branding={{ logo: false, title: t("app.title") }}
+      branding={{
+        logo: (
+          <Box
+            component="img"
+            src={logo}
+            alt={t("app.title")}
+            sx={{ height: 38 }}
+          />
+        ),
+        title: "",
+      }}
       router={{
         navigate: (path) => navigate(path),
         pathname: window.location.pathname,
@@ -170,9 +177,7 @@ export default function MainLayout() {
                         spacing={2}
                         sx={{ px: 2, py: 1 }}
                       >
-                        <Avatar alt={user?.name ?? ""}>
-                          {(user?.name ?? "?").slice(0, 1).toUpperCase()}
-                        </Avatar>
+                        <Avatar alt={user?.name ?? ""} src={""} />
                         <Stack direction="column" overflow="hidden">
                           <Typography
                             variant="body2"
@@ -195,7 +200,12 @@ export default function MainLayout() {
                       </Stack>
                       <Divider />
                       <AccountPopoverFooter>
-                        <SignOutButton />
+                        <Button
+                          fullWidth
+                          onClick={() => setIsSignOutOpen(true)}
+                        >
+                          {t("signOut.action")}
+                        </Button>
                       </AccountPopoverFooter>
                     </Stack>
                   ),
