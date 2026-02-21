@@ -124,7 +124,11 @@ export default function LocationModal({
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12 }}>
-                <Input name="name" label={t("locations.modal.fields.name")} required />
+                <Input
+                  name="name"
+                  label={t("locations.modal.fields.name")}
+                  required
+                />
               </Grid>
             </Grid>
           </DialogContent>
@@ -135,6 +139,7 @@ export default function LocationModal({
             <Button
               type="submit"
               variant="contained"
+              loading={isLoading || isSubmitting}
               disabled={isLoading || isSubmitting}
             >
               {mode === "create" ? t("common.create") : t("common.save")}

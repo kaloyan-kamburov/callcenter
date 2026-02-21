@@ -16,6 +16,58 @@ type AxiosBaseQueryOptions = {
   onError?: (error: AxiosError) => void; // optional global override
 };
 
+type ValidationErrorItem = {
+  field?: string;
+  errors?: string[];
+};
+
+function formatApiErrorMessage(responseData: unknown, fallback: string) {
+  if (typeof responseData === "string") {
+    return responseData;
+  }
+
+  if (!responseData || typeof responseData !== "object") {
+    return fallback;
+  }
+
+  const payload = responseData as Record<string, unknown>;
+  const lines: string[] = [];
+
+  if (Array.isArray(payload.errors)) {
+    (payload.errors as ValidationErrorItem[]).forEach((item) => {
+      if (!item || !Array.isArray(item.errors)) return;
+      item.errors.forEach((errorMessage) => {
+        if (typeof errorMessage === "string" && errorMessage.trim()) {
+          lines.push(errorMessage);
+        }
+      });
+    });
+  }
+
+  // Also support object-shaped validation errors: { errors: { field: ["msg1", "msg2"] } }
+  if (!lines.length && payload.errors && typeof payload.errors === "object") {
+    Object.values(payload.errors as Record<string, unknown>).forEach((value) => {
+      if (Array.isArray(value)) {
+        value.forEach((errorMessage) => {
+          if (typeof errorMessage === "string" && errorMessage.trim()) {
+            lines.push(errorMessage);
+          }
+        });
+      }
+    });
+  }
+
+  if (lines.length) {
+    return lines.join("\n");
+  }
+
+  if (typeof payload.message === "string" && payload.message.trim()) {
+    return payload.message;
+  }
+
+  return fallback;
+}
+
 export function axiosBaseQuery(
   options: AxiosBaseQueryOptions
 ): BaseQueryFn<AxiosBaseQueryArgs, unknown, unknown> {
@@ -67,18 +119,8 @@ export function axiosBaseQuery(
         globalOnError(err);
       } else {
         const respData = err.response?.data as unknown;
-        let message = err.message;
-        if (typeof respData === "string") {
-          message = respData;
-        } else if (
-          respData &&
-          typeof respData === "object" &&
-          "message" in (respData as Record<string, unknown>)
-        ) {
-          const m = (respData as Record<string, unknown>).message;
-          if (typeof m === "string") message = m;
-        }
-        toast.error(message);
+        const message = formatApiErrorMessage(respData, err.message);
+        toast.error(message, { style: { whiteSpace: "pre-line" } });
       }
       return {
         error: {

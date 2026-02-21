@@ -36,6 +36,7 @@ export default function DeleteIpWhitelistModal({
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

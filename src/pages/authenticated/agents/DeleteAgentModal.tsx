@@ -33,6 +33,7 @@ export default function DeleteAgentModal({ close, agentId }: DeleteAgentModalPro
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

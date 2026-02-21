@@ -176,7 +176,12 @@ export default function WorkplaceModal({
             <Button onClick={close} disabled={isLoading || isSubmitting}>
               {t("common.cancel")}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading || isSubmitting}>
+            <Button
+              type="submit"
+              variant="contained"
+              loading={isLoading || isSubmitting}
+              disabled={isLoading || isSubmitting}
+            >
               {mode === "create" ? t("common.create") : t("common.save")}
             </Button>
           </DialogActions>

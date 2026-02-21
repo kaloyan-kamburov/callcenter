@@ -33,6 +33,7 @@ export default function DeleteClientModal({ close, clientId }: DeleteClientModal
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

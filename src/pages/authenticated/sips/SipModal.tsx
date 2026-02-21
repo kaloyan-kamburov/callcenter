@@ -133,6 +133,7 @@ export default function SipModal({
             <Button
               type="submit"
               variant="contained"
+              loading={isLoading || isSubmitting}
               disabled={isLoading || isSubmitting}
             >
               {mode === "create" ? t("common.create") : t("common.save")}

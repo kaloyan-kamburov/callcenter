@@ -36,6 +36,7 @@ export default function DeleteCampaignModal({
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

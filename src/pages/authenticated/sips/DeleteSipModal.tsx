@@ -33,6 +33,7 @@ export default function DeleteSipModal({ close, sipId }: DeleteSipModalProps) {
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

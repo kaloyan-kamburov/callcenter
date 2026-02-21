@@ -33,6 +33,7 @@ export default function DeleteTeamModal({ close, teamId }: DeleteTeamModalProps)
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}

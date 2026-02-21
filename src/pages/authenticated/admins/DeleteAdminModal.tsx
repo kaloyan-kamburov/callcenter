@@ -33,6 +33,7 @@ export default function DeleteAdminModal({ close, adminId }: DeleteAdminModalPro
           variant="contained"
           color="error"
           onClick={handleDelete}
+          loading={isLoading}
           disabled={isLoading}
         >
           {t("common.delete")}
