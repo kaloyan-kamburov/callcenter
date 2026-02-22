@@ -34,7 +34,6 @@ type AgentModalProps = {
   isOpen?: boolean;
 };
 
-const phoneTypeOptions = [1, 2, 3];
 const weekdays = [0, 1, 2, 3, 4, 5, 6];
 
 const emptySchedule: AgentWorkSchedule[] = weekdays.map((dayOfWeek) => ({
@@ -56,7 +55,7 @@ const defaultValues: CreateAgentPayload = {
   salesCode: "",
   autoDialerDelaySeconds: null,
   maxCallsPerAgent: null,
-  phoneType: 1,
+  phoneType: 0,
   isActive: true,
   teamId: null,
   scriptId: null,
@@ -89,6 +88,11 @@ export default function AgentModal({
   isOpen = false,
 }: AgentModalProps) {
   const { t } = useTranslation();
+  const phoneTypeOptions = [
+    { value: 0, label: t("phoneTypes.0") },
+    { value: 1, label: t("phoneTypes.1") },
+    { value: 2, label: t("phoneTypes.2") },
+  ];
   const [createAgent, { isLoading: isCreating }] = useCreateAgentMutation();
   const [updateAgent, { isLoading: isUpdating }] = useUpdateAgentMutation();
   const locationsOptionsSource = useGetLocationsQuery();
@@ -260,7 +264,7 @@ export default function AgentModal({
                 <Select
                   name="phoneType"
                   label={t("agents.modal.fields.phoneType")}
-                  options={phoneTypeOptions.map((value) => ({ value, label: String(value) }))}
+                  options={phoneTypeOptions}
                   required
                 />
               </Grid>

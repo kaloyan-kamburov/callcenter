@@ -46,15 +46,9 @@ const defaultValues: AdminUpsertPayload = {
   timeZone: "",
   locationId: 0,
   interfaceLanguage: "",
-  phoneType: 1,
+  phoneType: 0,
   isActive: true,
 };
-
-const phoneTypeOptions = [
-  { label: "1", value: 1 },
-  { label: "2", value: 2 },
-  { label: "3", value: 3 },
-];
 
 export default function AdminModal({
   close,
@@ -65,6 +59,11 @@ export default function AdminModal({
   initialValues,
 }: AdminModalProps) {
   const { t } = useTranslation();
+  const phoneTypeOptions = [
+    { value: 0, label: t("phoneTypes.0") },
+    { value: 1, label: t("phoneTypes.1") },
+    { value: 2, label: t("phoneTypes.2") },
+  ];
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [updateAdmin, { isLoading: isUpdating }] = useUpdateAdminMutation();
   const rolesOptionsSource = useGetRolesQuery();

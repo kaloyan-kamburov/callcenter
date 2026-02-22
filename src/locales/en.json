@@ -58,6 +58,11 @@
     "5": "Saturday",
     "6": "Sunday"
   },
+  "phoneTypes": {
+    "0": "WebRTC",
+    "1": "SoftPhone",
+    "2": "WebRTCOld"
+  },
   "admins": {
     "addButton": "Add Admin",
     "modal": {

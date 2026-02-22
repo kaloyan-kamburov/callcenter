@@ -15,6 +15,18 @@ import { useTranslation } from "react-i18next";
 
 export default function AgentsPage() {
   const { t } = useTranslation();
+  const getPhoneTypeLabel = (value: number) => {
+    switch (value) {
+      case 0:
+        return t("phoneTypes.0");
+      case 1:
+        return t("phoneTypes.1");
+      case 2:
+        return t("phoneTypes.2");
+      default:
+        return String(value);
+    }
+  };
   const { open: openCreateModal, Modal: CreateModal } = useModal(AgentModal, "md");
   const {
     open: openEditModal,
@@ -32,7 +44,12 @@ export default function AgentsPage() {
     { field: "locationName", headerName: t("agents.columns.location"), flex: 1 },
     { field: "teamId", headerName: t("agents.columns.team"), flex: 0.7 },
     { field: "workplaceId", headerName: t("agents.columns.workplace"), flex: 0.8 },
-    { field: "phoneType", headerName: t("agents.columns.phoneType"), flex: 0.8 },
+    {
+      field: "phoneType",
+      headerName: t("agents.columns.phoneType"),
+      flex: 0.8,
+      valueGetter: (value) => getPhoneTypeLabel(Number(value)),
+    },
     { field: "isActive", headerName: t("agents.columns.isActive"), type: "boolean", flex: 0.8 },
     {
       field: "actions",

@@ -15,6 +15,18 @@ import { useTranslation } from "react-i18next";
 
 export default function AdminsPage() {
   const { t } = useTranslation();
+  const getPhoneTypeLabel = (value: number) => {
+    switch (value) {
+      case 0:
+        return t("phoneTypes.0");
+      case 1:
+        return t("phoneTypes.1");
+      case 2:
+        return t("phoneTypes.2");
+      default:
+        return String(value);
+    }
+  };
   const { open: openAdminModal, Modal: AdminModal } =
     useModal(AdminModalContent);
   const {
@@ -41,7 +53,12 @@ export default function AdminsPage() {
       headerName: t("admins.columns.language"),
       flex: 0.8,
     },
-    { field: "phoneType", headerName: t("admins.columns.phoneType"), flex: 0.8 },
+    {
+      field: "phoneType",
+      headerName: t("admins.columns.phoneType"),
+      flex: 0.8,
+      valueGetter: (value) => getPhoneTypeLabel(Number(value)),
+    },
     {
       field: "isActive",
       headerName: t("admins.columns.active"),
