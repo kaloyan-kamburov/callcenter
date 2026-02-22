@@ -16,7 +16,6 @@ import { useMemo, useState } from "react";
 import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
 import { theme } from "@/theme";
-import logo from "@/logo1.svg";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 import {
   Avatar,
@@ -147,7 +146,7 @@ export default function MainLayout() {
         logo: (
           <Box
             component="img"
-            src={logo}
+            src="/logo.svg"
             alt={t("app.title")}
             sx={{ height: 38 }}
           />

@@ -5,21 +5,21 @@ export const sipsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSips: builder.query<Sip[], void>({
       query: () => ({
-        url: "admin/Sips",
+        url: "admin/sips",
         method: "GET",
       }),
       providesTags: ["Sips"],
     }),
     getSip: builder.query<Sip, number>({
       query: (id) => ({
-        url: `admin/Sips/${id}`,
+        url: `admin/sips/${id}`,
         method: "GET",
       }),
       providesTags: (_result, _error, id) => [{ type: "Sips", id }],
     }),
     createSip: builder.mutation<Sip, SipUpsertPayload>({
       query: (body) => ({
-        url: "admin/Sips",
+        url: "admin/sips",
         method: "POST",
         data: body,
       }),
@@ -27,15 +27,18 @@ export const sipsApi = baseApi.injectEndpoints({
     }),
     updateSip: builder.mutation<Sip, SipUpsertPayload>({
       query: (body) => ({
-        url: "admin/Sips",
+        url: "admin/sips",
         method: "PUT",
         data: body,
       }),
-      invalidatesTags: (_result, _error, arg) => ["Sips", { type: "Sips", id: arg.id }],
+      invalidatesTags: (_result, _error, arg) => [
+        "Sips",
+        { type: "Sips", id: arg.id },
+      ],
     }),
     deleteSip: builder.mutation<unknown, number>({
       query: (id) => ({
-        url: `admin/Sips/${id}`,
+        url: `admin/sips/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (_result, _error, id) => ["Sips", { type: "Sips", id }],
