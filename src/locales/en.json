@@ -18,7 +18,8 @@
     "userFallback": "User"
   },
   "app": {
-    "title": "Call center"
+    "title": "Call center",
+    "pageTitle": "Call center admin panel"
   },
   "navigation": {
     "dashboard": "Dashboard",

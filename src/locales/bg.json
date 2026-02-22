@@ -18,7 +18,8 @@
     "userFallback": "Потребител"
   },
   "app": {
-    "title": "Кол център"
+    "title": "Кол център",
+    "pageTitle": "Административен панел"
   },
   "navigation": {
     "dashboard": "Табло",
