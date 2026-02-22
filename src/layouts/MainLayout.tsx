@@ -32,6 +32,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import logo from "@/assets/logo.svg";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -153,7 +154,7 @@ export default function MainLayout() {
         logo: (
           <Box
             component="img"
-            src="/logo.svg"
+            src={logo}
             alt={t("app.title")}
             sx={{ height: 38 }}
           />

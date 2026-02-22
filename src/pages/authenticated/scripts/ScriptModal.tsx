@@ -351,9 +351,11 @@ export default function ScriptModal({
                         }}
                       >
                         <Typography variant="subtitle2">
-                          {t("scripts.modal.contentBuilder.pageLabel", {
-                            index: pageIndex + 1,
-                          })}
+                          <b>
+                            {t("scripts.modal.contentBuilder.pageLabel", {
+                              index: pageIndex + 1,
+                            })}
+                          </b>
                         </Typography>
                         <Button
                           color="error"

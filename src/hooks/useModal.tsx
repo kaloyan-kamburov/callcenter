@@ -5,13 +5,19 @@ import type { Breakpoint } from "@mui/material";
 
 type ModalContentProps = {
   close: () => void;
-  size?: "sm" | "md" | "lg";
 };
 
-export function useModal<TProps extends ModalContentProps>(
-  ContentComponent: ComponentType<TProps>,
+type PropsOf<TComponent> =
+  TComponent extends ComponentType<infer TProps> ? TProps : never;
+
+export function useModal<TComponent extends ComponentType<ModalContentProps>>(
+  ContentComponent: TComponent,
   size = "md",
 ) {
+  type ContentProps = PropsOf<TComponent> & ModalContentProps;
+  type ModalProps = Omit<ContentProps, "close">;
+  const TypedContentComponent = ContentComponent as ComponentType<ContentProps>;
+
   const [isOpen, setIsOpen] = useState(false);
 
   const open = useCallback(() => {
@@ -22,8 +28,8 @@ export function useModal<TProps extends ModalContentProps>(
     setIsOpen(false);
   }, []);
 
-  const Modal: ComponentType<Omit<TProps, "close">> = useMemo(() => {
-    function ModalComponent(props: Omit<TProps, "close">) {
+  const Modal: ComponentType<ModalProps> = useMemo(() => {
+    function ModalComponent(props: ModalProps) {
       return (
         <Dialog
           open={isOpen}
@@ -67,13 +73,13 @@ export function useModal<TProps extends ModalContentProps>(
             },
           }}
         >
-          <ContentComponent {...(props as TProps)} close={close} />
+          <TypedContentComponent {...(props as ContentProps)} close={close} />
         </Dialog>
       );
     }
 
     return ModalComponent;
-  }, [ContentComponent, close, isOpen]);
+  }, [TypedContentComponent, close, isOpen, size]);
 
   return { open, close, isOpen, Modal };
 }

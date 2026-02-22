@@ -27,30 +27,53 @@ export default function AgentsPage() {
         return String(value);
     }
   };
-  const { open: openCreateModal, Modal: CreateModal } = useModal(AgentModal, "md");
+  const { open: openCreateModal, Modal: CreateModal } = useModal(
+    AgentModal,
+    "md",
+  );
   const {
     open: openEditModal,
     isOpen: isEditModalOpen,
     Modal: EditModal,
   } = useModal(AgentModal, "md");
-  const { open: openDeleteModal, Modal: DeleteModal } = useModal(DeleteAgentModal, "xs");
+  const { open: openDeleteModal, Modal: DeleteModal } = useModal(
+    DeleteAgentModal,
+    "xs",
+  );
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
   const columns: GridColDef<Agent>[] = [
     { field: "id", headerName: t("agents.columns.id"), flex: 0.5 },
-    { field: "operatorName", headerName: t("agents.columns.operatorName"), flex: 1.1 },
+    {
+      field: "operatorName",
+      headerName: t("agents.columns.operatorName"),
+      flex: 1.1,
+    },
     { field: "username", headerName: t("agents.columns.username"), flex: 1.1 },
     { field: "email", headerName: t("agents.columns.email"), flex: 1.2 },
-    { field: "locationName", headerName: t("agents.columns.location"), flex: 1 },
+    {
+      field: "locationName",
+      headerName: t("agents.columns.location"),
+      flex: 1,
+    },
     { field: "teamId", headerName: t("agents.columns.team"), flex: 0.7 },
-    { field: "workplaceId", headerName: t("agents.columns.workplace"), flex: 0.8 },
+    {
+      field: "workplaceId",
+      headerName: t("agents.columns.workplace"),
+      flex: 0.8,
+    },
     {
       field: "phoneType",
       headerName: t("agents.columns.phoneType"),
       flex: 0.8,
       valueGetter: (value) => getPhoneTypeLabel(Number(value)),
     },
-    { field: "isActive", headerName: t("agents.columns.isActive"), type: "boolean", flex: 0.8 },
+    {
+      field: "isActive",
+      headerName: t("agents.columns.isActive"),
+      type: "boolean",
+      flex: 0.8,
+    },
     {
       field: "actions",
       headerName: t("common.actions"),
