@@ -72,5 +72,32 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fff",
+        },
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fff",
+          "&:hover": {
+            backgroundColor: "#fff",
+          },
+          "&.Mui-focused": {
+            backgroundColor: "#fff",
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fff",
+        },
+      },
+    },
   },
 });

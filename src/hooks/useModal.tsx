@@ -63,7 +63,7 @@ export function useModal<TComponent extends ComponentType<ModalContentProps>>(
               scrollBehavior: "smooth",
               scrollbarGutter: "stable",
               overscrollBehavior: "contain",
-              pt: 2,
+              pt: 3,
             },
             "& .MuiDialogActions-root": {
               position: "sticky",

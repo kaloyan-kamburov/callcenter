@@ -211,9 +211,9 @@ export default function ScriptModal({
         container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
       }
 
-      const field = container?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
-        `[name="${fieldName}"]`,
-      );
+      const field = container?.querySelector<
+        HTMLInputElement | HTMLTextAreaElement
+      >(`[name="${fieldName}"]`);
       if (field) {
         field.focus();
         field.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -313,7 +313,7 @@ export default function ScriptModal({
               : t("scripts.modal.editTitle")}
           </DialogTitle>
           <DialogContent ref={dialogContentRef}>
-            <Grid container spacing={2} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
                 <Input
                   name="title"
@@ -348,7 +348,8 @@ export default function ScriptModal({
                       size="small"
                       variant="outlined"
                       onClick={() => {
-                        const nextPageIndex = values.contentBuilder.pages.length;
+                        const nextPageIndex =
+                          values.contentBuilder.pages.length;
                         const nextPages = [
                           ...values.contentBuilder.pages,
                           createEmptyPage(),
@@ -647,7 +648,7 @@ export default function ScriptModal({
                                       key={`option-${pageIndex}-${questionIndex}-${optionIndex}`}
                                       container
                                       spacing={1}
-                                      sx={{ mb: 1 }}
+                                      sx={{ mb: 3 }}
                                     >
                                       <Grid size={{ xs: 12, md: 5 }}>
                                         <Input
