@@ -65,6 +65,9 @@ export function useModal<TComponent extends ComponentType<ModalContentProps>>(
               overscrollBehavior: "contain",
               pt: 3,
             },
+            "& .MuiDialogTitle-root + .MuiDialogContent-root": {
+              pt: 3,
+            },
             "& .MuiDialogActions-root": {
               position: "sticky",
               bottom: 0,

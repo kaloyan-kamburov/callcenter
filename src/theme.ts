@@ -99,5 +99,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          paddingTop: "24px",
+          ".MuiDialogTitle-root + &": {
+            paddingTop: "24px",
+          },
+        },
+      },
+    },
   },
 });

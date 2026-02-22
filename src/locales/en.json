@@ -168,6 +168,10 @@
       "editTitle": "Edit Script",
       "createdSuccess": "Script created successfully",
       "updatedSuccess": "Script updated successfully",
+      "validation": {
+        "typeRequired": "Type is required",
+        "contentRequired": "Content is required"
+      },
       "fields": {
         "title": "Title",
         "type": "Type",

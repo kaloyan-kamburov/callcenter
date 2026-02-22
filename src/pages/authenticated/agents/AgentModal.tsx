@@ -20,7 +20,12 @@ import {
 import { useGetLocationsQuery } from "@/features/location/locationsApi";
 import { useGetTeamsQuery } from "@/features/team/teamsApi";
 import { useGetWorkplacesQuery } from "@/features/workplace/workplacesApi";
-import type { Agent, AgentWorkSchedule, CreateAgentPayload, UpdateAgentPayload } from "@/types/Agent";
+import type {
+  Agent,
+  AgentWorkSchedule,
+  CreateAgentPayload,
+  UpdateAgentPayload,
+} from "@/types/Agent";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
 import Loader from "@/components/common/Loader/Loader";
@@ -71,7 +76,9 @@ function normalizeTimeValue(value: string) {
 function mergeScheduleWithDefaults(schedule?: AgentWorkSchedule[] | null) {
   const source = schedule ?? [];
   return weekdays.map((dayOfWeek) => {
-    const existing = source.find((item) => Number(item.dayOfWeek) === dayOfWeek);
+    const existing = source.find(
+      (item) => Number(item.dayOfWeek) === dayOfWeek,
+    );
     return {
       dayOfWeek,
       startTime: existing?.startTime?.slice(0, 5) ?? "",
@@ -158,12 +165,16 @@ export default function AgentModal({
               ...values,
               locationId: values.locationId ? Number(values.locationId) : null,
               teamId: values.teamId ? Number(values.teamId) : null,
-              workplaceId: values.workplaceId ? Number(values.workplaceId) : null,
+              workplaceId: values.workplaceId
+                ? Number(values.workplaceId)
+                : null,
               scriptId: values.scriptId ? Number(values.scriptId) : null,
               autoDialerDelaySeconds: values.autoDialerDelaySeconds
                 ? Number(values.autoDialerDelaySeconds)
                 : null,
-              maxCallsPerAgent: values.maxCallsPerAgent ? Number(values.maxCallsPerAgent) : null,
+              maxCallsPerAgent: values.maxCallsPerAgent
+                ? Number(values.maxCallsPerAgent)
+                : null,
               phoneType: Number(values.phoneType),
               workSchedule,
             };
@@ -185,7 +196,9 @@ export default function AgentModal({
             autoDialerDelaySeconds: values.autoDialerDelaySeconds
               ? Number(values.autoDialerDelaySeconds)
               : null,
-            maxCallsPerAgent: values.maxCallsPerAgent ? Number(values.maxCallsPerAgent) : null,
+            maxCallsPerAgent: values.maxCallsPerAgent
+              ? Number(values.maxCallsPerAgent)
+              : null,
             phoneType: Number(values.phoneType),
             workSchedule,
           };
@@ -201,15 +214,25 @@ export default function AgentModal({
       {({ values, isSubmitting, setFieldValue }) => (
         <Form>
           <DialogTitle>
-            {mode === "create" ? t("agents.modal.addTitle") : t("agents.modal.editTitle")}
+            {mode === "create"
+              ? t("agents.modal.addTitle")
+              : t("agents.modal.editTitle")}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="operatorName" label={t("agents.modal.fields.operatorName")} required />
+                <Input
+                  name="operatorName"
+                  label={t("agents.modal.fields.operatorName")}
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="username" label={t("agents.modal.fields.username")} required />
+                <Input
+                  name="username"
+                  label={t("agents.modal.fields.username")}
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Input
@@ -221,20 +244,33 @@ export default function AgentModal({
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="email" label={t("agents.modal.fields.email")} type="email" />
+                <Input
+                  name="email"
+                  label={t("agents.modal.fields.email")}
+                  type="email"
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="signature" label={t("agents.modal.fields.signature")} />
+                <Input
+                  name="signature"
+                  label={t("agents.modal.fields.signature")}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="timeZone" label={t("agents.modal.fields.timeZone")} />
+                <Input
+                  name="timeZone"
+                  label={t("agents.modal.fields.timeZone")}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="locationId"
                   label={t("agents.modal.fields.location")}
                   optionsSource={locationsOptionsSource}
-                  mapOption={(location) => ({ label: location.name, value: location.id })}
+                  mapOption={(location) => ({
+                    label: location.name,
+                    value: location.id,
+                  })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -244,7 +280,10 @@ export default function AgentModal({
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="salesCode" label={t("agents.modal.fields.salesCode")} />
+                <Input
+                  name="salesCode"
+                  label={t("agents.modal.fields.salesCode")}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Input
@@ -273,11 +312,18 @@ export default function AgentModal({
                   name="teamId"
                   label={t("agents.modal.fields.team")}
                   optionsSource={teamsOptionsSource}
-                  mapOption={(team) => ({ label: team.name, value: team.id ?? 0 })}
+                  mapOption={(team) => ({
+                    label: team.name,
+                    value: team.id ?? 0,
+                  })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Input name="scriptId" label={t("agents.modal.fields.scriptId")} type="number" />
+                <Input
+                  name="scriptId"
+                  label={t("agents.modal.fields.scriptId")}
+                  type="number"
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
@@ -295,20 +341,22 @@ export default function AgentModal({
                   control={
                     <Switch
                       checked={values.isActive}
-                      onChange={(_, checked) => setFieldValue("isActive", checked)}
+                      onChange={(_, checked) =>
+                        setFieldValue("isActive", checked)
+                      }
                     />
                   }
                   label={t("agents.modal.fields.isActive")}
                 />
               </Grid>
-              <Grid size={{ xs: 12 }}>
-                <Divider sx={{ mb: 1 }} />
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              <Grid size={{ xs: 12 }} sx={{ mt: 1 }}>
+                <Divider sx={{ mb: 2 }} />
+                <Typography variant="subtitle2" sx={{ mb: 2 }}>
                   {t("agents.modal.fields.workSchedule")}
                 </Typography>
-                <Grid container spacing={1}>
+                <Grid container spacing={1.5}>
                   {weekdays.map((day, index) => (
-                    <Grid key={day} size={{ xs: 12 }}>
+                    <Grid key={day} size={{ xs: 12 }} sx={{ mb: 1.5 }}>
                       <Grid container spacing={1}>
                         <Grid size={{ xs: 12, md: 4 }}>
                           <Select

@@ -168,6 +168,10 @@
       "editTitle": "Редактирай скрипт",
       "createdSuccess": "Скриптът е създаден успешно",
       "updatedSuccess": "Скриптът е обновен успешно",
+      "validation": {
+        "typeRequired": "Типът е задължителен",
+        "contentRequired": "Съдържанието е задължително"
+      },
       "fields": {
         "title": "Заглавие",
         "type": "Тип",

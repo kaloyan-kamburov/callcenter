@@ -269,6 +269,21 @@ export default function ScriptModal({
   return (
     <Formik<ScriptFormValues>
       initialValues={mergedInitialValues}
+      validate={(values) => {
+        const errors: Partial<Record<keyof ScriptFormValues, string>> = {};
+
+        if (mode === "create") {
+          if (!values.type) {
+            errors.type = t("scripts.modal.validation.typeRequired");
+          }
+
+          if (values.contentBuilder.pages.length === 0) {
+            errors.content = t("scripts.modal.validation.contentRequired");
+          }
+        }
+
+        return errors;
+      }}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const serializedContent = serializeContent(values.contentBuilder);
@@ -305,7 +320,7 @@ export default function ScriptModal({
       }}
       enableReinitialize
     >
-      {({ values, isSubmitting, setFieldValue }) => (
+      {({ values, isSubmitting, setFieldValue, errors, submitCount }) => (
         <Form>
           <DialogTitle>
             {mode === "create"
@@ -370,6 +385,13 @@ export default function ScriptModal({
                       {t("scripts.modal.contentBuilder.noPages")}
                     </Typography>
                   )}
+                  {submitCount > 0 &&
+                    typeof errors.content === "string" &&
+                    errors.content && (
+                      <Typography variant="caption" color="error">
+                        {errors.content}
+                      </Typography>
+                    )}
 
                   {values.contentBuilder.pages.map((page, pageIndex) => (
                     <Box
@@ -495,12 +517,14 @@ export default function ScriptModal({
                                 }}
                               >
                                 <Typography variant="body2">
-                                  {t(
-                                    "scripts.modal.contentBuilder.questionLabel",
-                                    {
-                                      index: questionIndex + 1,
-                                    },
-                                  )}
+                                  <b>
+                                    {t(
+                                      "scripts.modal.contentBuilder.questionLabel",
+                                      {
+                                        index: questionIndex + 1,
+                                      },
+                                    )}
+                                  </b>
                                 </Typography>
                                 <Button
                                   size="small"
