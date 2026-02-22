@@ -281,7 +281,7 @@ export default function ScriptModal({
               : t("scripts.modal.editTitle")}
           </DialogTitle>
           <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 0.5 }}>
+            <Grid container spacing={2} sx={{ mt: 3 }}>
               <Grid size={{ xs: 12 }}>
                 <Input
                   name="title"
@@ -437,6 +437,7 @@ export default function ScriptModal({
                                 border: (theme) =>
                                   `1px dashed ${theme.palette.divider}`,
                                 borderRadius: 1,
+                                backgroundColor: "grey.50",
                               }}
                             >
                               <Box
