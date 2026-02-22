@@ -23,6 +23,9 @@ const LocationsPage = lazy(
 const SipsPage = lazy(
   () => import("@/pages/authenticated/sips/SipsPage"),
 );
+const ScriptsPage = lazy(
+  () => import("@/pages/authenticated/scripts/ScriptsPage"),
+);
 const AgentsPage = lazy(
   () => import("@/pages/authenticated/agents/AgentsPage"),
 );
@@ -79,6 +82,11 @@ export const pagesConfig: {
         {
           path: "/sips",
           element: <SipsPage />,
+          protected: true,
+        },
+        {
+          path: "/scripts",
+          element: <ScriptsPage />,
           protected: true,
         },
         {

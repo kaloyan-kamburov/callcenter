@@ -1209,9 +1209,8 @@
         "additionalProperties": false
       },
       "AgentPhoneType": {
-        "enum": [1, 2, 3],
-        "type": "integer",
-        "format": "int32"
+        "enum": ["WebRTC", "SoftPhone", "WebRTCOld"],
+        "type": "string"
       },
       "AgentWorkScheduleDto": {
         "type": "object",
@@ -1279,9 +1278,8 @@
         "additionalProperties": false
       },
       "CampaignType": {
-        "enum": [1, 2, 3],
-        "type": "integer",
-        "format": "int32"
+        "enum": ["IN", "OUT", "BOTH"],
+        "type": "string"
       },
       "ClientDto": {
         "type": "object",
@@ -1464,9 +1462,16 @@
         "additionalProperties": false
       },
       "DayOfWeek": {
-        "enum": [0, 1, 2, 3, 4, 5, 6],
-        "type": "integer",
-        "format": "int32"
+        "enum": [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "type": "string"
       },
       "IPWhitelistEntryDto": {
         "type": "object",
@@ -1516,14 +1521,29 @@
           },
           "type": {
             "$ref": "#/components/schemas/ScriptType"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
       "ScriptType": {
-        "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        "type": "integer",
-        "format": "int32"
+        "enum": [
+          "Community",
+          "CustomerFeedback",
+          "Demographics",
+          "Education",
+          "Events",
+          "Healthcare",
+          "HumanResources",
+          "IndustrySpecific",
+          "MarketResearch",
+          "NonProfit",
+          "Political"
+        ],
+        "type": "string"
       },
       "SipDto": {
         "type": "object",

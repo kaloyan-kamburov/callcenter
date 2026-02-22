@@ -26,6 +26,7 @@
     "admins": "Admins",
     "locations": "Locations",
     "sips": "Sips",
+    "scripts": "Scripts",
     "agents": "Agents",
     "campaigns": "Campaigns",
     "clients": "Clients",
@@ -139,6 +140,45 @@
     "columns": {
       "id": "ID",
       "name": "Name"
+    }
+  },
+  "scripts": {
+    "title": "Scripts",
+    "addButton": "Add Script",
+    "types": {
+      "Community": "Community",
+      "CustomerFeedback": "Customer Feedback",
+      "Demographics": "Demographics",
+      "Education": "Education",
+      "Events": "Events",
+      "Healthcare": "Healthcare",
+      "HumanResources": "Human Resources",
+      "IndustrySpecific": "Industry Specific",
+      "MarketResearch": "Market Research",
+      "NonProfit": "Non-profit",
+      "Political": "Political"
+    },
+    "modal": {
+      "addTitle": "Add Script",
+      "editTitle": "Edit Script",
+      "createdSuccess": "Script created successfully",
+      "updatedSuccess": "Script updated successfully",
+      "fields": {
+        "title": "Title",
+        "type": "Type",
+        "content": "Content"
+      }
+    },
+    "deleteModal": {
+      "title": "Delete Script",
+      "confirmation": "Are you sure you want to delete this script?",
+      "deletedSuccess": "Script deleted successfully"
+    },
+    "columns": {
+      "id": "ID",
+      "title": "Title",
+      "type": "Type",
+      "content": "Content"
     }
   },
   "agents": {

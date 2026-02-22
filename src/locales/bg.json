@@ -26,6 +26,7 @@
     "admins": "Администратори",
     "locations": "Локации",
     "sips": "SIP-и",
+    "scripts": "Скриптове",
     "agents": "Агенти",
     "campaigns": "Кампании",
     "clients": "Клиенти",
@@ -139,6 +140,45 @@
     "columns": {
       "id": "ID",
       "name": "Име"
+    }
+  },
+  "scripts": {
+    "title": "Скриптове",
+    "addButton": "Добави скрипт",
+    "types": {
+      "Community": "Общност",
+      "CustomerFeedback": "Клиентска обратна връзка",
+      "Demographics": "Демография",
+      "Education": "Образование",
+      "Events": "Събития",
+      "Healthcare": "Здравеопазване",
+      "HumanResources": "Човешки ресурси",
+      "IndustrySpecific": "Индустриално специфични",
+      "MarketResearch": "Пазарни проучвания",
+      "NonProfit": "Нестопански",
+      "Political": "Политически"
+    },
+    "modal": {
+      "addTitle": "Добави скрипт",
+      "editTitle": "Редактирай скрипт",
+      "createdSuccess": "Скриптът е създаден успешно",
+      "updatedSuccess": "Скриптът е обновен успешно",
+      "fields": {
+        "title": "Заглавие",
+        "type": "Тип",
+        "content": "Съдържание"
+      }
+    },
+    "deleteModal": {
+      "title": "Изтрий скрипт",
+      "confirmation": "Сигурни ли сте, че искате да изтриете този скрипт?",
+      "deletedSuccess": "Скриптът е изтрит успешно"
+    },
+    "columns": {
+      "id": "ID",
+      "title": "Заглавие",
+      "type": "Тип",
+      "content": "Съдържание"
     }
   },
   "agents": {

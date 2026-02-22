@@ -18,6 +18,7 @@ export const baseApi = createApi({
     "IpWhitelist",
     "Locations",
     "Roles",
+    "Scripts",
     "Sips",
     "Teams",
     "Workplaces",

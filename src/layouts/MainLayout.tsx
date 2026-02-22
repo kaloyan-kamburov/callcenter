@@ -3,6 +3,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingsPhoneIcon from "@mui/icons-material/SettingsPhone";
+import DescriptionIcon from "@mui/icons-material/Description";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -62,6 +63,12 @@ export default function MainLayout() {
       segment: "sips",
       title: t("navigation.sips"),
       icon: <SettingsPhoneIcon />,
+    },
+    {
+      kind: "page",
+      segment: "scripts",
+      title: t("navigation.scripts"),
+      icon: <DescriptionIcon />,
     },
     {
       kind: "page",
