@@ -41,7 +41,6 @@ export default function ScriptsPage() {
       renderCell: (params: GridRenderCellParams<Script>) =>
         t(`scripts.types.${params.row.type}`),
     },
-    { field: "content", headerName: t("scripts.columns.content"), flex: 2 },
     {
       field: "actions",
       headerName: t("common.actions"),
