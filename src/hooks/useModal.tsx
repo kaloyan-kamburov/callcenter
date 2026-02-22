@@ -60,6 +60,7 @@ export function useModal<TComponent extends ComponentType<ModalContentProps>>(
               flex: "1 1 auto",
               minHeight: 0,
               overflowY: "auto",
+              scrollBehavior: "smooth",
               scrollbarGutter: "stable",
               overscrollBehavior: "contain",
               pt: 2,

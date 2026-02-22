@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useRef } from "react";
 import { Form, Formik } from "formik";
 import { toast } from "react-hot-toast";
 import Input from "@/components/form/Input/Input";
@@ -188,6 +189,7 @@ export default function ScriptModal({
   isOpen = false,
 }: ScriptModalProps) {
   const { t } = useTranslation();
+  const dialogContentRef = useRef<HTMLDivElement | null>(null);
   const [createScript, { isLoading: isCreating }] = useCreateScriptMutation();
   const [updateScript, { isLoading: isUpdating }] = useUpdateScriptMutation();
   const { data: scriptDetails, isLoading: isLoadingDetails } =
@@ -197,6 +199,36 @@ export default function ScriptModal({
     });
 
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+
+  function scrollAndFocusField(fieldName: string, scrollToBottom = false) {
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    const tryFocus = () => {
+      const container = dialogContentRef.current;
+
+      if (scrollToBottom && container) {
+        container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+      }
+
+      const field = container?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+        `[name="${fieldName}"]`,
+      );
+      if (field) {
+        field.focus();
+        field.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      if (attempts < maxAttempts) {
+        attempts += 1;
+        requestAnimationFrame(tryFocus);
+      }
+    };
+
+    requestAnimationFrame(tryFocus);
+  }
+
   const mergedInitialValues: ScriptFormValues = {
     ...defaultValues,
     ...(mode === "edit" && scriptDetails
@@ -280,7 +312,7 @@ export default function ScriptModal({
               ? t("scripts.modal.addTitle")
               : t("scripts.modal.editTitle")}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent ref={dialogContentRef}>
             <Grid container spacing={2} sx={{ mt: 3 }}>
               <Grid size={{ xs: 12 }}>
                 <Input
@@ -316,10 +348,16 @@ export default function ScriptModal({
                       size="small"
                       variant="outlined"
                       onClick={() => {
-                        setFieldValue("contentBuilder.pages", [
+                        const nextPageIndex = values.contentBuilder.pages.length;
+                        const nextPages = [
                           ...values.contentBuilder.pages,
                           createEmptyPage(),
-                        ]);
+                        ];
+                        setFieldValue("contentBuilder.pages", nextPages);
+                        scrollAndFocusField(
+                          `contentBuilder.pages.${nextPageIndex}.title`,
+                          true,
+                        );
                       }}
                     >
                       {t("scripts.modal.contentBuilder.addPage")}
@@ -413,6 +451,8 @@ export default function ScriptModal({
                               const nextPages = [
                                 ...values.contentBuilder.pages,
                               ];
+                              const nextQuestionIndex =
+                                nextPages[pageIndex].questions.length;
                               const nextQuestions = [
                                 ...nextPages[pageIndex].questions,
                                 createEmptyQuestion(),
@@ -422,6 +462,9 @@ export default function ScriptModal({
                                 questions: nextQuestions,
                               };
                               setFieldValue("contentBuilder.pages", nextPages);
+                              scrollAndFocusField(
+                                `contentBuilder.pages.${pageIndex}.questions.${nextQuestionIndex}.title`,
+                              );
                             }}
                           >
                             {t("scripts.modal.contentBuilder.addQuestion")}
@@ -573,6 +616,8 @@ export default function ScriptModal({
                                           nextPages[pageIndex].questions[
                                             questionIndex
                                           ];
+                                        const nextOptionIndex =
+                                          nextQuestion.options.length;
                                         nextPages[pageIndex].questions[
                                           questionIndex
                                         ] = {
@@ -585,6 +630,9 @@ export default function ScriptModal({
                                         setFieldValue(
                                           "contentBuilder.pages",
                                           nextPages,
+                                        );
+                                        scrollAndFocusField(
+                                          `${questionPath}.options.${nextOptionIndex}.label`,
                                         );
                                       }}
                                     >
