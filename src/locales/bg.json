@@ -172,6 +172,33 @@
         "title": "Заглавие",
         "type": "Тип",
         "content": "Съдържание"
+      },
+      "contentBuilder": {
+        "title": "Съдържание",
+        "addPage": "Добави страница",
+        "removePage": "Премахни страница",
+        "pageLabel": "Страница {{index}}",
+        "noPages": "Все още няма добавени страници.",
+        "addQuestion": "Добави въпрос",
+        "removeQuestion": "Премахни въпрос",
+        "questionLabel": "Въпрос {{index}}",
+        "addOption": "Добави опция",
+        "removeOption": "Премахни опция",
+        "fields": {
+          "pageTitle": "Заглавие на страница",
+          "pageDescription": "Описание на страница",
+          "questions": "Въпроси",
+          "questionTitle": "Заглавие на въпрос",
+          "questionType": "Тип на въпрос",
+          "options": "Опции",
+          "optionTitle": "Заглавие на опция",
+          "optionValue": "Стойност на опция"
+        },
+        "questionTypes": {
+          "multiple": "Множествен",
+          "single": "Единичен",
+          "text": "Текст"
+        }
       }
     },
     "deleteModal": {

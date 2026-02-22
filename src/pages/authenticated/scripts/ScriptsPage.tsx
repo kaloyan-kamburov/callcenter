@@ -17,13 +17,13 @@ export default function ScriptsPage() {
   const { t } = useTranslation();
   const { open: openScriptModal, Modal: ScriptCreateModal } = useModal(
     ScriptModal,
-    "sm",
+    "md",
   );
   const {
     open: openEditScriptModal,
     isOpen: isEditScriptModalOpen,
     Modal: ScriptEditModal,
-  } = useModal(ScriptModal, "sm");
+  } = useModal(ScriptModal, "md");
   const { open: openDeleteScriptModal, Modal: ScriptDeleteModal } = useModal(
     DeleteScriptModal,
     "xs",

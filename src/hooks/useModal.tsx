@@ -30,6 +30,42 @@ export function useModal<TProps extends ModalContentProps>(
           onClose={close}
           fullWidth
           maxWidth={size as Breakpoint}
+          sx={{
+            "& .MuiDialog-paper": {
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              maxHeight: "calc(100dvh - 64px)",
+            },
+            "& .MuiDialog-paper > form": {
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+              maxHeight: "100%",
+            },
+            "& .MuiDialogTitle-root": {
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
+              backgroundColor: "background.paper",
+              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            },
+            "& .MuiDialogContent-root": {
+              flex: "1 1 auto",
+              minHeight: 0,
+              overflowY: "auto",
+              scrollbarGutter: "stable",
+              overscrollBehavior: "contain",
+              pt: 2,
+            },
+            "& .MuiDialogActions-root": {
+              position: "sticky",
+              bottom: 0,
+              zIndex: 1,
+              backgroundColor: "background.paper",
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+            },
+          }}
         >
           <ContentComponent {...(props as TProps)} close={close} />
         </Dialog>

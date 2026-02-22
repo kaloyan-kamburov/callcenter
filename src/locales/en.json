@@ -172,6 +172,33 @@
         "title": "Title",
         "type": "Type",
         "content": "Content"
+      },
+      "contentBuilder": {
+        "title": "Content",
+        "addPage": "Add Page",
+        "removePage": "Remove Page",
+        "pageLabel": "Page {{index}}",
+        "noPages": "No pages added yet.",
+        "addQuestion": "Add Question",
+        "removeQuestion": "Remove Question",
+        "questionLabel": "Question {{index}}",
+        "addOption": "Add Option",
+        "removeOption": "Remove Option",
+        "fields": {
+          "pageTitle": "Page Title",
+          "pageDescription": "Page Description",
+          "questions": "Questions",
+          "questionTitle": "Question Title",
+          "questionType": "Question Type",
+          "options": "Options",
+          "optionTitle": "Option Title",
+          "optionValue": "Option Value"
+        },
+        "questionTypes": {
+          "multiple": "Multiple",
+          "single": "Single",
+          "text": "Text"
+        }
       }
     },
     "deleteModal": {
