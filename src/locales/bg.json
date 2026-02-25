@@ -266,7 +266,8 @@
         "selectAtLeastOneDay": "Моля, изберете поне един ден.",
         "startTimeRequired": "Началният час е задължителен.",
         "endTimeRequired": "Крайният час е задължителен.",
-        "startBeforeEnd": "Началният час трябва да е преди крайния час."
+        "startBeforeEnd": "Началният час трябва да е преди крайния час.",
+        "invalidTimeZone": "Моля, въведете валидна часова зона (напр. Europe/Sofia)."
       }
     },
     "deleteModal": {

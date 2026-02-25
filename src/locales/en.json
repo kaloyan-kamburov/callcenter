@@ -266,7 +266,8 @@
         "selectAtLeastOneDay": "Please select at least one day.",
         "startTimeRequired": "Start time is required.",
         "endTimeRequired": "End time is required.",
-        "startBeforeEnd": "Start time must be before end time."
+        "startBeforeEnd": "Start time must be before end time.",
+        "invalidTimeZone": "Please enter a valid time zone (e.g. Europe/Sofia)."
       }
     },
     "deleteModal": {

@@ -108,6 +108,15 @@ function toMinutes(value: string) {
   return hours * 60 + minutes;
 }
 
+function isValidTimeZone(value: string) {
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export default function AgentModal({
   close,
   mode = "create",
@@ -136,6 +145,16 @@ export default function AgentModal({
   const validationSchema = Yup.object({
     operatorName: Yup.string().required(t("common.validation.required")),
     username: Yup.string().required(t("common.validation.required")),
+    email: Yup.string()
+      .email(t("common.validation.invalidEmail"))
+      .nullable(),
+    timeZone: Yup.string()
+      .nullable()
+      .test(
+        "valid-timezone",
+        t("agents.modal.validation.invalidTimeZone"),
+        (value) => !value || isValidTimeZone(value),
+      ),
     password:
       mode === "create"
         ? Yup.string().required(t("common.validation.required"))
