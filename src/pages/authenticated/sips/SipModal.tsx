@@ -6,6 +6,7 @@ import {
   Grid,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import Input from "@/components/form/Input/Input";
 import {
@@ -50,6 +51,9 @@ export default function SipModal({
   );
 
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t("common.validation.required")),
+  });
   const mergedInitialValues: SipUpsertPayload = {
     ...defaultValues,
     ...(mode === "edit" && sipDetails
@@ -84,6 +88,7 @@ export default function SipModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           if (mode === "create") {
@@ -115,7 +120,7 @@ export default function SipModal({
       enableReinitialize
     >
       {({ isSubmitting }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create" ? t("sips.modal.addTitle") : t("sips.modal.editTitle")}
           </DialogTitle>

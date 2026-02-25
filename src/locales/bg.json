@@ -47,7 +47,12 @@
     "actions": "Действия",
     "create": "Създай",
     "save": "Запази",
-    "delete": "Изтрий"
+    "delete": "Изтрий",
+    "validation": {
+      "required": "Полето е задължително",
+      "invalidEmail": "Моля, въведете валиден имейл адрес",
+      "nonNegativeNumber": "Стойността трябва да е 0 или по-голяма"
+    }
   },
   "weekdays": {
     "0": "Понеделник",
@@ -297,6 +302,9 @@
       "fields": {
         "name": "Име",
         "type": "Тип",
+        "clientId": "Клиент",
+        "scriptId": "Скрипт",
+        "teams": "Екипи",
         "supportUrl": "Support URL",
         "fillSurveyThreshold": "Праг за анкета",
         "isActive": "Активна",

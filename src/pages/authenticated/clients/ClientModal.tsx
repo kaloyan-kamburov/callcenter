@@ -9,6 +9,7 @@ import {
   Switch,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import {
   useCreateClientMutation,
@@ -60,6 +61,15 @@ export default function ClientModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t("common.validation.required")),
+    username: Yup.string().required(t("common.validation.required")),
+    password:
+      mode === "create"
+        ? Yup.string().required(t("common.validation.required"))
+        : Yup.string().nullable(),
+    isActive: Yup.boolean().required(),
+  });
 
   const mergedInitialValues: ClientFormValues = {
     ...defaultValues,
@@ -97,6 +107,7 @@ export default function ClientModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           if (mode === "create") {
@@ -134,7 +145,7 @@ export default function ClientModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create" ? t("clients.modal.addTitle") : t("clients.modal.editTitle")}
           </DialogTitle>

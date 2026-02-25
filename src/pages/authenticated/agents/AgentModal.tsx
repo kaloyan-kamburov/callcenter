@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import {
   useCreateAgentMutation,
@@ -132,6 +133,54 @@ export default function AgentModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    operatorName: Yup.string().required(t("common.validation.required")),
+    username: Yup.string().required(t("common.validation.required")),
+    password:
+      mode === "create"
+        ? Yup.string().required(t("common.validation.required"))
+        : Yup.string().nullable(),
+    phoneType: Yup.string().required(t("common.validation.required")),
+    selectedDays: Yup.array()
+      .of(Yup.string().oneOf([...DAY_OF_WEEK_VALUES]))
+      .min(1, t("agents.modal.validation.selectAtLeastOneDay")),
+  }).test("work-schedule-validation", "", function (values) {
+    const formValues = values as AgentFormValues | undefined;
+    if (!formValues) {
+      return true;
+    }
+
+    for (const day of formValues.selectedDays ?? []) {
+      const index = formValues.workSchedule.findIndex((item) => item.dayOfWeek === day);
+      if (index < 0) {
+        continue;
+      }
+
+      const item = formValues.workSchedule[index];
+      if (!item.startTime) {
+        return this.createError({
+          path: `workSchedule[${index}].startTime`,
+          message: t("agents.modal.validation.startTimeRequired"),
+        });
+      }
+
+      if (!item.endTime) {
+        return this.createError({
+          path: `workSchedule[${index}].endTime`,
+          message: t("agents.modal.validation.endTimeRequired"),
+        });
+      }
+
+      if (toMinutes(item.startTime) >= toMinutes(item.endTime)) {
+        return this.createError({
+          path: `workSchedule[${index}].endTime`,
+          message: t("agents.modal.validation.startBeforeEnd"),
+        });
+      }
+    }
+
+    return true;
+  });
 
   const mergedInitialValues: AgentFormValues = {
     ...defaultValues,
@@ -171,69 +220,7 @@ export default function AgentModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
-      validate={(values) => {
-        const errors: Record<string, unknown> = {};
-        const selectedDays = values.selectedDays ?? [];
-
-        if (selectedDays.length === 0) {
-          errors.selectedDays = t("agents.modal.validation.selectAtLeastOneDay");
-        }
-
-        selectedDays.forEach((day) => {
-          const index = values.workSchedule.findIndex((item) => item.dayOfWeek === day);
-          if (index < 0) {
-            return;
-          }
-
-          const item = values.workSchedule[index];
-          if (!item.startTime) {
-            errors.workSchedule = {
-              ...(typeof errors.workSchedule === "object" && errors.workSchedule
-                ? (errors.workSchedule as Record<string, unknown>)
-                : {}),
-              [index]: {
-                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
-                (errors.workSchedule as Record<string, unknown>)?.[index]
-                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
-                  : {}),
-                startTime: t("agents.modal.validation.startTimeRequired"),
-              },
-            };
-          }
-
-          if (!item.endTime) {
-            errors.workSchedule = {
-              ...(typeof errors.workSchedule === "object" && errors.workSchedule
-                ? (errors.workSchedule as Record<string, unknown>)
-                : {}),
-              [index]: {
-                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
-                (errors.workSchedule as Record<string, unknown>)?.[index]
-                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
-                  : {}),
-                endTime: t("agents.modal.validation.endTimeRequired"),
-              },
-            };
-          }
-
-          if (item.startTime && item.endTime && toMinutes(item.startTime) >= toMinutes(item.endTime)) {
-            errors.workSchedule = {
-              ...(typeof errors.workSchedule === "object" && errors.workSchedule
-                ? (errors.workSchedule as Record<string, unknown>)
-                : {}),
-              [index]: {
-                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
-                (errors.workSchedule as Record<string, unknown>)?.[index]
-                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
-                  : {}),
-                endTime: t("agents.modal.validation.startBeforeEnd"),
-              },
-            };
-          }
-        });
-
-        return errors;
-      }}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const restValues = (({
@@ -300,7 +287,7 @@ export default function AgentModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue, errors, submitCount }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create"
               ? t("agents.modal.addTitle")

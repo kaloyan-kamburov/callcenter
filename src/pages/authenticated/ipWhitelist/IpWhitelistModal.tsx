@@ -1,5 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import {
   useCreateIpWhitelistEntryMutation,
@@ -43,6 +44,10 @@ export default function IpWhitelistModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t("common.validation.required")),
+    ipAddress: Yup.string().required(t("common.validation.required")),
+  });
 
   const mergedInitialValues: IpWhitelistUpsertPayload = {
     ...defaultValues,
@@ -80,6 +85,7 @@ export default function IpWhitelistModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const payload: IpWhitelistUpsertPayload = {
@@ -105,7 +111,7 @@ export default function IpWhitelistModal({
       enableReinitialize
     >
       {({ isSubmitting }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create"
               ? t("ipWhitelist.modal.addTitle")

@@ -9,6 +9,7 @@ import {
   Switch,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import {
   useCreateWorkplaceMutation,
@@ -60,6 +61,9 @@ export default function WorkplaceModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t("common.validation.required")),
+  });
 
   const mergedInitialValues: WorkplaceUpsertPayload = {
     ...defaultValues,
@@ -89,6 +93,7 @@ export default function WorkplaceModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const payload: WorkplaceUpsertPayload = {
@@ -121,7 +126,7 @@ export default function WorkplaceModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create"
               ? t("workplaces.modal.addTitle")

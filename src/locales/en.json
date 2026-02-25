@@ -47,7 +47,12 @@
     "actions": "Actions",
     "create": "Create",
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "validation": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "nonNegativeNumber": "Value must be 0 or greater"
+    }
   },
   "weekdays": {
     "0": "Monday",
@@ -297,6 +302,9 @@
       "fields": {
         "name": "Name",
         "type": "Type",
+        "clientId": "Client",
+        "scriptId": "Script",
+        "teams": "Teams",
         "supportUrl": "Support URL",
         "fillSurveyThreshold": "Fill Survey Threshold",
         "isActive": "Is Active",

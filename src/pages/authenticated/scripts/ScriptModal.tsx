@@ -13,6 +13,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRef } from "react";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
@@ -199,6 +200,27 @@ export default function ScriptModal({
     });
 
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    title: Yup.string().required(t("common.validation.required")),
+    type: Yup.string().required(t("scripts.modal.validation.typeRequired")),
+  }).test(
+    "pages-required",
+    t("scripts.modal.validation.contentRequired"),
+    function (values) {
+      if (mode !== "create") {
+        return true;
+      }
+
+      if ((values as ScriptFormValues | undefined)?.contentBuilder?.pages?.length) {
+        return true;
+      }
+
+      return this.createError({
+        path: "content",
+        message: t("scripts.modal.validation.contentRequired"),
+      });
+    },
+  );
 
   function scrollAndFocusField(fieldName: string, scrollToBottom = false) {
     let attempts = 0;
@@ -269,21 +291,7 @@ export default function ScriptModal({
   return (
     <Formik<ScriptFormValues>
       initialValues={mergedInitialValues}
-      validate={(values) => {
-        const errors: Partial<Record<keyof ScriptFormValues, string>> = {};
-
-        if (mode === "create") {
-          if (!values.type) {
-            errors.type = t("scripts.modal.validation.typeRequired");
-          }
-
-          if (values.contentBuilder.pages.length === 0) {
-            errors.content = t("scripts.modal.validation.contentRequired");
-          }
-        }
-
-        return errors;
-      }}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const serializedContent = serializeContent(values.contentBuilder);
@@ -321,7 +329,7 @@ export default function ScriptModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue, errors, submitCount }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create"
               ? t("scripts.modal.addTitle")

@@ -9,6 +9,7 @@ import {
   Switch,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import { useCreateTeamMutation, useGetTeamQuery, useUpdateTeamMutation } from "@/features/team/teamsApi";
 import { useGetAdminSupervisorsQuery } from "@/features/admin/adminsApi";
@@ -55,6 +56,9 @@ export default function TeamModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t("common.validation.required")),
+  });
 
   const mergedInitialValues: TeamUpsertPayload = {
     ...defaultValues,
@@ -96,6 +100,7 @@ export default function TeamModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const selectedSupervisor =
@@ -131,7 +136,7 @@ export default function TeamModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create" ? t("teams.modal.addTitle") : t("teams.modal.editTitle")}
           </DialogTitle>

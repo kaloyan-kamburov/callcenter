@@ -9,6 +9,7 @@ import {
   Switch,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
 import {
   useCreateAdminMutation,
@@ -76,6 +77,26 @@ export default function AdminModal({
     },
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
+  const validationSchema = Yup.object({
+    username: Yup.string().required(t("common.validation.required")),
+    password:
+      mode === "create"
+        ? Yup.string().required(t("common.validation.required"))
+        : Yup.string().nullable(),
+    roleId: Yup.number().required(t("common.validation.required")),
+    name: Yup.string().required(t("common.validation.required")),
+    email: Yup.string()
+      .email(t("common.validation.invalidEmail"))
+      .required(t("common.validation.required")),
+    signature: Yup.string().required(t("common.validation.required")),
+    timeZone: Yup.string().required(t("common.validation.required")),
+    locationId: Yup.number()
+      .nullable()
+      .required(t("common.validation.required")),
+    interfaceLanguage: Yup.string().required(t("common.validation.required")),
+    phoneType: Yup.string().required(t("common.validation.required")),
+    isActive: Yup.boolean().required(),
+  });
 
   const mergedInitialValues: AdminUpsertPayload = {
     ...defaultValues,
@@ -115,6 +136,7 @@ export default function AdminModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const payload: AdminUpsertPayload = {
@@ -164,7 +186,7 @@ export default function AdminModal({
       enableReinitialize
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form>
+        <Form noValidate>
           <DialogTitle>
             {mode === "create"
               ? t("admins.modal.addTitle")
