@@ -1,6 +1,6 @@
 export type Workplace = {
   id: number | null;
-  name: string;
+  name: string | null;
   locationId: number | null;
   sipId: number | null;
   isPredictive: boolean;

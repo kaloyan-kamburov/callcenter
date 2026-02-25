@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Script, ScriptUpsertPayload } from "@/types/Script";
 
+type ScriptListResponse = Script[] | { data?: Script[] | null };
+
 export const scriptsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getScripts: builder.query<Script[], void>({
@@ -8,6 +10,8 @@ export const scriptsApi = baseApi.injectEndpoints({
         url: "admin/scripts",
         method: "GET",
       }),
+      transformResponse: (response: ScriptListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Scripts"],
     }),
     getScript: builder.query<Script, number>({

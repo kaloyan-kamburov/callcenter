@@ -1,7 +1,7 @@
 export type IpWhitelistEntry = {
   id: number | null;
-  ipAddress: string;
-  name: string;
+  ipAddress: string | null;
+  name: string | null;
 };
 
 export type IpWhitelistUpsertPayload = IpWhitelistEntry;

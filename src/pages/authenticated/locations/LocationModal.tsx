@@ -27,7 +27,7 @@ type LocationModalProps = {
 };
 
 const defaultValues: LocationUpsertPayload = {
-  id: 0,
+  id: null,
   name: "",
 };
 
@@ -55,12 +55,12 @@ export default function LocationModal({
     ...(mode === "edit" && locationDetails
       ? {
           id: locationDetails.id,
-          name: locationDetails.name,
+          name: locationDetails.name ?? "",
         }
       : mode === "edit" && location
         ? {
             id: location.id,
-            name: location.name,
+            name: location.name ?? "",
           }
         : {}),
   };
@@ -88,7 +88,7 @@ export default function LocationModal({
         try {
           if (mode === "create") {
             const payload: LocationUpsertPayload = {
-              id: 0,
+              id: null,
               name: values.name,
             };
             await createLocation(payload).unwrap();

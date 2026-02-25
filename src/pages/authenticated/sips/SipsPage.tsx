@@ -134,18 +134,18 @@ export default function SipsPage() {
         <DataGrid
           columns={columns}
           useQuery={useGetSipsQuery}
-          getRowId={(row) => row.id}
+          getRowId={(row) => row.id ?? 0}
           fullHeight
         />
       </Box>
       <SipCreateModal mode="create" />
       <SipEditModal
         mode="edit"
-        sipId={selectedSip?.id}
+        sipId={selectedSip?.id ?? undefined}
         sip={selectedSip ?? undefined}
         isOpen={isEditSipModalOpen}
       />
-      <SipDeleteModal sipId={selectedSip?.id} />
+      <SipDeleteModal sipId={selectedSip?.id ?? undefined} />
     </PageContainer>
   );
 }

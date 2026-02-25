@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { IpWhitelistEntry, IpWhitelistUpsertPayload } from "@/types/IpWhitelist";
 
+type IpWhitelistListResponse = IpWhitelistEntry[] | { data?: IpWhitelistEntry[] | null };
+
 export const ipWhitelistApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getIpWhitelistEntries: builder.query<IpWhitelistEntry[], void>({
@@ -8,6 +10,8 @@ export const ipWhitelistApi = baseApi.injectEndpoints({
         url: "admin/ip-whitelist",
         method: "GET",
       }),
+      transformResponse: (response: IpWhitelistListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["IpWhitelist"],
     }),
     getIpWhitelistEntry: builder.query<IpWhitelistEntry, number>({

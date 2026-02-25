@@ -56,12 +56,22 @@
     "3": "Thursday",
     "4": "Friday",
     "5": "Saturday",
-    "6": "Sunday"
+    "6": "Sunday",
+    "Sunday": "Sunday",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday"
   },
   "phoneTypes": {
     "0": "WebRTC",
     "1": "SoftPhone",
-    "2": "WebRTCOld"
+    "2": "WebRTCOld",
+    "WebRTC": "WebRTC",
+    "SoftPhone": "SoftPhone",
+    "WebRTCOld": "WebRTCOld"
   },
   "admins": {
     "addButton": "Add Admin",
@@ -246,6 +256,12 @@
         "dayOfWeek": "Day of Week",
         "startTime": "Start Time",
         "endTime": "End Time"
+      },
+      "validation": {
+        "selectAtLeastOneDay": "Please select at least one day.",
+        "startTimeRequired": "Start time is required.",
+        "endTimeRequired": "End time is required.",
+        "startBeforeEnd": "Start time must be before end time."
       }
     },
     "deleteModal": {
@@ -269,9 +285,9 @@
     "title": "Campaigns",
     "addButton": "Add Campaign",
     "types": {
-      "1": "Inbound",
-      "2": "Outbound",
-      "3": "Mixed"
+      "IN": "Inbound",
+      "OUT": "Outbound",
+      "BOTH": "Mixed"
     },
     "modal": {
       "addTitle": "Add Campaign",

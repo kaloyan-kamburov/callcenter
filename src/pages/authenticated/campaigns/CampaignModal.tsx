@@ -15,7 +15,7 @@ import {
   useGetCampaignQuery,
   useUpdateCampaignMutation,
 } from "@/features/campaign/campaignsApi";
-import type { Campaign, CampaignUpsertPayload } from "@/types/Campaign";
+import { CAMPAIGN_TYPES, type Campaign, type CampaignUpsertPayload } from "@/types/Campaign";
 import Input from "@/components/form/Input/Input";
 import Select from "@/components/form/Select/Select";
 import Loader from "@/components/common/Loader/Loader";
@@ -29,12 +29,14 @@ type CampaignModalProps = {
   isOpen?: boolean;
 };
 
-const campaignTypeOptions = [1, 2, 3];
+const campaignTypeOptions = CAMPAIGN_TYPES;
 
 const defaultValues: CampaignUpsertPayload = {
   id: null,
   name: "",
-  type: 1,
+  type: "IN",
+  scriptId: null,
+  clientId: null,
   openUrlAutomatically: false,
   supportUrl: "",
   playCallTone: false,
@@ -44,6 +46,7 @@ const defaultValues: CampaignUpsertPayload = {
   enableIntegration: false,
   fillSurveyThreshold: 0,
   enableStopRecording: false,
+  teams: null,
 };
 
 export default function CampaignModal({
@@ -65,9 +68,23 @@ export default function CampaignModal({
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
 
+  const sourceValues =
+    mode === "edit" && campaignDetails
+      ? campaignDetails
+      : mode === "edit" && campaign
+        ? campaign
+        : null;
+
   const mergedInitialValues: CampaignUpsertPayload = {
     ...defaultValues,
-    ...(mode === "edit" && campaignDetails ? campaignDetails : mode === "edit" && campaign ? campaign : {}),
+    ...(sourceValues ?? {}),
+    name: sourceValues?.name ?? "",
+    supportUrl: sourceValues?.supportUrl ?? "",
+    isActive: sourceValues?.isActive ?? true,
+    scriptId: sourceValues?.scriptId ?? null,
+    clientId: sourceValues?.clientId ?? null,
+    teams: sourceValues?.teams ?? null,
+    type: sourceValues?.type ?? "IN",
   };
 
   if (mode === "edit" && isLoadingDetails) {
@@ -94,7 +111,6 @@ export default function CampaignModal({
           const payload: CampaignUpsertPayload = {
             ...values,
             id: mode === "create" ? null : (campaignId ?? values.id ?? null),
-            type: Number(values.type),
             fillSurveyThreshold: Number(values.fillSurveyThreshold),
           };
 
@@ -151,7 +167,7 @@ export default function CampaignModal({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={values.isActive}
+                      checked={Boolean(values.isActive)}
                       onChange={(_, checked) => setFieldValue("isActive", checked)}
                     />
                   }

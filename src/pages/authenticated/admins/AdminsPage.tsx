@@ -4,6 +4,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid/models";
 import type { Admin } from "@/types/Admin";
+import type { AgentPhoneType } from "@/types/Agent";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,18 +16,7 @@ import { useTranslation } from "react-i18next";
 
 export default function AdminsPage() {
   const { t } = useTranslation();
-  const getPhoneTypeLabel = (value: number) => {
-    switch (value) {
-      case 0:
-        return t("phoneTypes.0");
-      case 1:
-        return t("phoneTypes.1");
-      case 2:
-        return t("phoneTypes.2");
-      default:
-        return String(value);
-    }
-  };
+  const getPhoneTypeLabel = (value: AgentPhoneType) => t(`phoneTypes.${value}`);
   const { open: openAdminModal, Modal: AdminModal } =
     useModal(AdminModalContent);
   const {
@@ -57,7 +47,7 @@ export default function AdminsPage() {
       field: "phoneType",
       headerName: t("admins.columns.phoneType"),
       flex: 0.8,
-      valueGetter: (value) => getPhoneTypeLabel(Number(value)),
+      valueGetter: (value) => getPhoneTypeLabel(value as AgentPhoneType),
     },
     {
       field: "isActive",

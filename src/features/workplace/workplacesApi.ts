@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Workplace, WorkplaceUpsertPayload } from "@/types/Workplace";
 
+type WorkplaceListResponse = Workplace[] | { data?: Workplace[] | null };
+
 export const workplacesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getWorkplaces: builder.query<Workplace[], void>({
@@ -8,6 +10,8 @@ export const workplacesApi = baseApi.injectEndpoints({
         url: "admin/workplaces",
         method: "GET",
       }),
+      transformResponse: (response: WorkplaceListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Workplaces"],
     }),
     getWorkplace: builder.query<Workplace, number>({

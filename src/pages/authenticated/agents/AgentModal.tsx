@@ -1,12 +1,16 @@
 import {
   Box,
   Button,
+  Checkbox,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
   FormControlLabel,
   Grid,
+  ListItemText,
+  MenuItem,
+  TextField,
   Switch,
   Typography,
 } from "@mui/material";
@@ -20,10 +24,13 @@ import {
 import { useGetLocationsQuery } from "@/features/location/locationsApi";
 import { useGetTeamsQuery } from "@/features/team/teamsApi";
 import { useGetWorkplacesQuery } from "@/features/workplace/workplacesApi";
+import { AGENT_PHONE_TYPES, DAY_OF_WEEK_VALUES } from "@/types/Agent";
 import type {
   Agent,
+  AgentPhoneType,
   AgentWorkSchedule,
   CreateAgentPayload,
+  DayOfWeek,
   UpdateAgentPayload,
 } from "@/types/Agent";
 import Input from "@/components/form/Input/Input";
@@ -39,7 +46,12 @@ type AgentModalProps = {
   isOpen?: boolean;
 };
 
-const weekdays = [0, 1, 2, 3, 4, 5, 6];
+type AgentFormValues = Omit<CreateAgentPayload, "workSchedule"> & {
+  selectedDays: DayOfWeek[];
+  workSchedule: AgentWorkSchedule[];
+};
+
+const weekdays: readonly DayOfWeek[] = DAY_OF_WEEK_VALUES;
 
 const emptySchedule: AgentWorkSchedule[] = weekdays.map((dayOfWeek) => ({
   dayOfWeek,
@@ -47,7 +59,7 @@ const emptySchedule: AgentWorkSchedule[] = weekdays.map((dayOfWeek) => ({
   endTime: "",
 }));
 
-const defaultValues: CreateAgentPayload = {
+const defaultValues: AgentFormValues = {
   operatorName: "",
   username: "",
   password: "",
@@ -55,16 +67,15 @@ const defaultValues: CreateAgentPayload = {
   signature: "",
   timeZone: "",
   locationId: null,
-  locationName: "",
   interfaceLanguage: "",
   salesCode: "",
   autoDialerDelaySeconds: null,
   maxCallsPerAgent: null,
-  phoneType: 0,
+  phoneType: "WebRTC",
   isActive: true,
   teamId: null,
-  scriptId: null,
   workplaceId: null,
+  selectedDays: [],
   workSchedule: emptySchedule,
 };
 
@@ -76,15 +87,24 @@ function normalizeTimeValue(value: string) {
 function mergeScheduleWithDefaults(schedule?: AgentWorkSchedule[] | null) {
   const source = schedule ?? [];
   return weekdays.map((dayOfWeek) => {
-    const existing = source.find(
-      (item) => Number(item.dayOfWeek) === dayOfWeek,
-    );
+    const existing = source.find((item) => item.dayOfWeek === dayOfWeek);
     return {
       dayOfWeek,
       startTime: existing?.startTime?.slice(0, 5) ?? "",
       endTime: existing?.endTime?.slice(0, 5) ?? "",
     };
   });
+}
+
+function getSelectedDays(schedule?: AgentWorkSchedule[] | null): DayOfWeek[] {
+  return (schedule ?? [])
+    .map((item) => item.dayOfWeek)
+    .filter((value): value is DayOfWeek => DAY_OF_WEEK_VALUES.includes(value));
+}
+
+function toMinutes(value: string) {
+  const [hours, minutes] = value.split(":").map(Number);
+  return hours * 60 + minutes;
 }
 
 export default function AgentModal({
@@ -95,11 +115,10 @@ export default function AgentModal({
   isOpen = false,
 }: AgentModalProps) {
   const { t } = useTranslation();
-  const phoneTypeOptions = [
-    { value: 0, label: t("phoneTypes.0") },
-    { value: 1, label: t("phoneTypes.1") },
-    { value: 2, label: t("phoneTypes.2") },
-  ];
+  const phoneTypeOptions = AGENT_PHONE_TYPES.map((value) => ({
+    value,
+    label: t(`phoneTypes.${value}`),
+  }));
   const [createAgent, { isLoading: isCreating }] = useCreateAgentMutation();
   const [updateAgent, { isLoading: isUpdating }] = useUpdateAgentMutation();
   const locationsOptionsSource = useGetLocationsQuery();
@@ -114,18 +133,20 @@ export default function AgentModal({
   );
   const isLoading = isCreating || isUpdating || isLoadingDetails;
 
-  const mergedInitialValues: CreateAgentPayload = {
+  const mergedInitialValues: AgentFormValues = {
     ...defaultValues,
     ...(mode === "edit" && agentDetails
       ? {
           ...agentDetails,
           password: "",
+        selectedDays: getSelectedDays(agentDetails.workSchedule),
           workSchedule: mergeScheduleWithDefaults(agentDetails.workSchedule),
         }
       : mode === "edit" && agent
         ? {
             ...agent,
             password: "",
+          selectedDays: getSelectedDays(agent.workSchedule),
             workSchedule: mergeScheduleWithDefaults(agent.workSchedule),
           }
         : {}),
@@ -150,32 +171,99 @@ export default function AgentModal({
   return (
     <Formik
       initialValues={mergedInitialValues}
+      validate={(values) => {
+        const errors: Record<string, unknown> = {};
+        const selectedDays = values.selectedDays ?? [];
+
+        if (selectedDays.length === 0) {
+          errors.selectedDays = t("agents.modal.validation.selectAtLeastOneDay");
+        }
+
+        selectedDays.forEach((day) => {
+          const index = values.workSchedule.findIndex((item) => item.dayOfWeek === day);
+          if (index < 0) {
+            return;
+          }
+
+          const item = values.workSchedule[index];
+          if (!item.startTime) {
+            errors.workSchedule = {
+              ...(typeof errors.workSchedule === "object" && errors.workSchedule
+                ? (errors.workSchedule as Record<string, unknown>)
+                : {}),
+              [index]: {
+                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
+                (errors.workSchedule as Record<string, unknown>)?.[index]
+                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
+                  : {}),
+                startTime: t("agents.modal.validation.startTimeRequired"),
+              },
+            };
+          }
+
+          if (!item.endTime) {
+            errors.workSchedule = {
+              ...(typeof errors.workSchedule === "object" && errors.workSchedule
+                ? (errors.workSchedule as Record<string, unknown>)
+                : {}),
+              [index]: {
+                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
+                (errors.workSchedule as Record<string, unknown>)?.[index]
+                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
+                  : {}),
+                endTime: t("agents.modal.validation.endTimeRequired"),
+              },
+            };
+          }
+
+          if (item.startTime && item.endTime && toMinutes(item.startTime) >= toMinutes(item.endTime)) {
+            errors.workSchedule = {
+              ...(typeof errors.workSchedule === "object" && errors.workSchedule
+                ? (errors.workSchedule as Record<string, unknown>)
+                : {}),
+              [index]: {
+                ...(typeof (errors.workSchedule as Record<string, unknown>)?.[index] === "object" &&
+                (errors.workSchedule as Record<string, unknown>)?.[index]
+                  ? ((errors.workSchedule as Record<string, unknown>)[index] as Record<string, unknown>)
+                  : {}),
+                endTime: t("agents.modal.validation.startBeforeEnd"),
+              },
+            };
+          }
+        });
+
+        return errors;
+      }}
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          const workSchedule = (values.workSchedule ?? [])
-            .map((item) => ({
-              dayOfWeek: Number(item.dayOfWeek),
-              startTime: normalizeTimeValue(item.startTime),
-              endTime: normalizeTimeValue(item.endTime),
-            }))
-            .filter((item) => item.startTime && item.endTime);
+          const restValues = (({
+            selectedDays: _selectedDays,
+            ...rest
+          }: AgentFormValues) => rest)(values);
+          const workSchedule = (values.selectedDays ?? []).map((day) => {
+            const item = values.workSchedule.find((scheduleItem) => scheduleItem.dayOfWeek === day);
+            return {
+              dayOfWeek: day,
+              startTime: normalizeTimeValue(item?.startTime ?? ""),
+              endTime: normalizeTimeValue(item?.endTime ?? ""),
+            };
+          });
 
           if (mode === "create") {
             const payload: CreateAgentPayload = {
-              ...values,
-              locationId: values.locationId ? Number(values.locationId) : null,
-              teamId: values.teamId ? Number(values.teamId) : null,
-              workplaceId: values.workplaceId
-                ? Number(values.workplaceId)
+              ...restValues,
+              locationId: restValues.locationId ? Number(restValues.locationId) : null,
+              teamId: restValues.teamId ? Number(restValues.teamId) : null,
+              workplaceId: restValues.workplaceId
+                ? Number(restValues.workplaceId)
                 : null,
-              scriptId: values.scriptId ? Number(values.scriptId) : null,
-              autoDialerDelaySeconds: values.autoDialerDelaySeconds
-                ? Number(values.autoDialerDelaySeconds)
+              autoDialerDelaySeconds: restValues.autoDialerDelaySeconds
+                ? Number(restValues.autoDialerDelaySeconds)
                 : null,
-              maxCallsPerAgent: values.maxCallsPerAgent
-                ? Number(values.maxCallsPerAgent)
+              maxCallsPerAgent: restValues.maxCallsPerAgent
+                ? Number(restValues.maxCallsPerAgent)
                 : null,
-              phoneType: Number(values.phoneType),
+              phoneType: restValues.phoneType as AgentPhoneType,
               workSchedule,
             };
             await createAgent(payload).unwrap();
@@ -188,18 +276,18 @@ export default function AgentModal({
 
           const payload: UpdateAgentPayload = {
             id: agentId,
-            ...values,
-            locationId: values.locationId ? Number(values.locationId) : null,
-            teamId: values.teamId ? Number(values.teamId) : null,
-            workplaceId: values.workplaceId ? Number(values.workplaceId) : null,
-            scriptId: values.scriptId ? Number(values.scriptId) : null,
-            autoDialerDelaySeconds: values.autoDialerDelaySeconds
-              ? Number(values.autoDialerDelaySeconds)
+            ...restValues,
+            locationName: agentDetails?.locationName ?? agent?.locationName ?? null,
+            locationId: restValues.locationId ? Number(restValues.locationId) : null,
+            teamId: restValues.teamId ? Number(restValues.teamId) : null,
+            workplaceId: restValues.workplaceId ? Number(restValues.workplaceId) : null,
+            autoDialerDelaySeconds: restValues.autoDialerDelaySeconds
+              ? Number(restValues.autoDialerDelaySeconds)
               : null,
-            maxCallsPerAgent: values.maxCallsPerAgent
-              ? Number(values.maxCallsPerAgent)
+            maxCallsPerAgent: restValues.maxCallsPerAgent
+              ? Number(restValues.maxCallsPerAgent)
               : null,
-            phoneType: Number(values.phoneType),
+            phoneType: restValues.phoneType as AgentPhoneType,
             workSchedule,
           };
           await updateAgent(payload).unwrap();
@@ -211,7 +299,7 @@ export default function AgentModal({
       }}
       enableReinitialize
     >
-      {({ values, isSubmitting, setFieldValue }) => (
+      {({ values, isSubmitting, setFieldValue, errors, submitCount }) => (
         <Form>
           <DialogTitle>
             {mode === "create"
@@ -268,8 +356,8 @@ export default function AgentModal({
                   label={t("agents.modal.fields.location")}
                   optionsSource={locationsOptionsSource}
                   mapOption={(location) => ({
-                    label: location.name,
-                    value: location.id,
+                    label: location.name ?? "",
+                    value: location.id ?? 0,
                   })}
                 />
               </Grid>
@@ -313,16 +401,9 @@ export default function AgentModal({
                   label={t("agents.modal.fields.team")}
                   optionsSource={teamsOptionsSource}
                   mapOption={(team) => ({
-                    label: team.name,
+                    label: team.name ?? "",
                     value: team.id ?? 0,
                   })}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Input
-                  name="scriptId"
-                  label={t("agents.modal.fields.scriptId")}
-                  type="number"
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -331,7 +412,7 @@ export default function AgentModal({
                   label={t("agents.modal.fields.workplace")}
                   optionsSource={workplacesOptionsSource}
                   mapOption={(workplace) => ({
-                    label: workplace.name,
+                    label: workplace.name ?? "",
                     value: workplace.id ?? 0,
                   })}
                 />
@@ -340,7 +421,7 @@ export default function AgentModal({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={values.isActive}
+                      checked={Boolean(values.isActive)}
                       onChange={(_, checked) =>
                         setFieldValue("isActive", checked)
                       }
@@ -354,21 +435,60 @@ export default function AgentModal({
                 <Typography variant="subtitle2" sx={{ mb: 2 }}>
                   {t("agents.modal.fields.workSchedule")}
                 </Typography>
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                  <Grid size={{ xs: 12 }}>
+                    <TextField
+                      select
+                      fullWidth
+                      size="small"
+                      label={t("agents.modal.fields.dayOfWeek")}
+                      value={values.selectedDays}
+                      onChange={(event) => {
+                        const nextValue = event.target.value;
+                        const parsed = typeof nextValue === "string"
+                          ? nextValue.split(",")
+                          : nextValue;
+                        setFieldValue("selectedDays", parsed as DayOfWeek[]);
+                      }}
+                      SelectProps={{
+                        multiple: true,
+                        renderValue: (selected) =>
+                          (selected as DayOfWeek[])
+                            .map((day) => t(`weekdays.${day}`))
+                            .join(", "),
+                      }}
+                      error={submitCount > 0 && Boolean((errors as Record<string, unknown>).selectedDays)}
+                      helperText={
+                        submitCount > 0
+                          ? ((errors as Record<string, unknown>).selectedDays as string | undefined)
+                          : undefined
+                      }
+                    >
+                      {DAY_OF_WEEK_VALUES.map((day) => (
+                        <MenuItem key={day} value={day}>
+                          <Checkbox checked={values.selectedDays.includes(day)} />
+                          <ListItemText primary={t(`weekdays.${day}`)} />
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </Grid>
                 <Grid container spacing={1.5}>
-                  {weekdays.map((day, index) => (
-                    <Grid key={day} size={{ xs: 12 }} sx={{ mb: 1.5 }}>
+                  {weekdays
+                    .filter((day) => values.selectedDays.includes(day))
+                    .map((day) => {
+                      const index = values.workSchedule.findIndex((item) => item.dayOfWeek === day);
+                      if (index < 0) {
+                        return null;
+                      }
+
+                      return (
+                        <Grid key={day} size={{ xs: 12 }} sx={{ mb: 1.5 }}>
+                          <Typography variant="body2" sx={{ mb: 1 }}>
+                            {t(`weekdays.${day}`)}
+                          </Typography>
                       <Grid container spacing={1}>
-                        <Grid size={{ xs: 12, md: 4 }}>
-                          <Select
-                            name={`workSchedule.${index}.dayOfWeek`}
-                            label={t("agents.modal.fields.dayOfWeek")}
-                            options={weekdays.map((value) => ({
-                              value,
-                              label: t(`weekdays.${value}`),
-                            }))}
-                          />
-                        </Grid>
-                        <Grid size={{ xs: 12, md: 4 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                           <Input
                             name={`workSchedule.${index}.startTime`}
                             label={t("agents.modal.fields.startTime")}
@@ -376,7 +496,7 @@ export default function AgentModal({
                             slotProps={{ inputLabel: { shrink: true } }}
                           />
                         </Grid>
-                        <Grid size={{ xs: 12, md: 4 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                           <Input
                             name={`workSchedule.${index}.endTime`}
                             label={t("agents.modal.fields.endTime")}
@@ -386,7 +506,8 @@ export default function AgentModal({
                         </Grid>
                       </Grid>
                     </Grid>
-                  ))}
+                      );
+                    })}
                 </Grid>
               </Grid>
             </Grid>

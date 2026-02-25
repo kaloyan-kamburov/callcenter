@@ -1,9 +1,9 @@
 export type Location = {
-  id: number;
-  name: string;
+  id: number | null;
+  name: string | null;
 };
 
 export type LocationUpsertPayload = {
-  id: number;
-  name: string;
+  id: number | null;
+  name: string | null;
 };

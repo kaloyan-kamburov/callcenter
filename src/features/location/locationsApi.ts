@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Location, LocationUpsertPayload } from "@/types/Location";
 
+type LocationListResponse = Location[] | { data?: Location[] | null };
+
 export const locationsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getLocations: builder.query<Location[], void>({
@@ -8,6 +10,8 @@ export const locationsApi = baseApi.injectEndpoints({
         url: "admin/locations",
         method: "GET",
       }),
+      transformResponse: (response: LocationListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Locations"],
     }),
     getLocation: builder.query<Location, number>({

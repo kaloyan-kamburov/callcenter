@@ -17,6 +17,7 @@ import {
 } from "@/features/admin/adminsApi";
 import { useGetLocationsQuery } from "@/features/location/locationsApi";
 import { useGetRolesQuery } from "@/features/role/rolesApi";
+import { AGENT_PHONE_TYPES } from "@/types/Agent";
 import type {
   Admin,
   AdminUpdatePayload,
@@ -44,9 +45,9 @@ const defaultValues: AdminUpsertPayload = {
   email: "",
   signature: "",
   timeZone: "",
-  locationId: 0,
+  locationId: null,
   interfaceLanguage: "",
-  phoneType: 0,
+  phoneType: "WebRTC",
   isActive: true,
 };
 
@@ -59,11 +60,10 @@ export default function AdminModal({
   initialValues,
 }: AdminModalProps) {
   const { t } = useTranslation();
-  const phoneTypeOptions = [
-    { value: 0, label: t("phoneTypes.0") },
-    { value: 1, label: t("phoneTypes.1") },
-    { value: 2, label: t("phoneTypes.2") },
-  ];
+  const phoneTypeOptions = AGENT_PHONE_TYPES.map((value) => ({
+    value,
+    label: t(`phoneTypes.${value}`),
+  }));
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [updateAdmin, { isLoading: isUpdating }] = useUpdateAdminMutation();
   const rolesOptionsSource = useGetRolesQuery();
@@ -82,14 +82,14 @@ export default function AdminModal({
     ...initialValues,
     ...(mode === "edit" && adminDetails
       ? {
-          username: adminDetails.username,
-          name: adminDetails.name,
-          email: adminDetails.email,
-          signature: adminDetails.signature,
-          timeZone: adminDetails.timeZone,
+          username: adminDetails.username ?? "",
+          name: adminDetails.name ?? "",
+          email: adminDetails.email ?? "",
+          signature: adminDetails.signature ?? "",
+          timeZone: adminDetails.timeZone ?? "",
           locationId: adminDetails.locationId,
-          interfaceLanguage: adminDetails.interfaceLanguage,
-          phoneType: adminDetails.phoneType,
+          interfaceLanguage: adminDetails.interfaceLanguage ?? "",
+          phoneType: adminDetails.phoneType ?? "WebRTC",
           isActive: adminDetails.isActive,
         }
       : {}),
@@ -120,8 +120,10 @@ export default function AdminModal({
           const payload: AdminUpsertPayload = {
             ...values,
             roleId: Number(values.roleId),
-            locationId: Number(values.locationId),
-            phoneType: Number(values.phoneType),
+            locationId:
+              values.locationId === null || values.locationId === undefined
+                ? null
+                : Number(values.locationId),
           };
 
           if (mode === "create") {
@@ -142,10 +144,13 @@ export default function AdminModal({
             email: values.email,
             signature: values.signature,
             timeZone: values.timeZone,
-            locationId: Number(values.locationId),
-            locationName: admin?.locationName ?? "",
+            locationId:
+              values.locationId === null || values.locationId === undefined
+                ? null
+                : Number(values.locationId),
+            locationName: adminDetails?.locationName ?? admin?.locationName ?? null,
             interfaceLanguage: values.interfaceLanguage,
-            phoneType: Number(values.phoneType),
+            phoneType: values.phoneType,
             isActive: values.isActive,
           };
 
@@ -187,7 +192,7 @@ export default function AdminModal({
                   required
                   optionsSource={rolesOptionsSource}
                   mapOption={(role) => ({
-                    label: role.name,
+                    label: role.name ?? "",
                     value: role.id,
                   })}
                   disabled={mode === "edit"}
@@ -225,8 +230,8 @@ export default function AdminModal({
                   required
                   optionsSource={locationsOptionsSource}
                   mapOption={(location) => ({
-                    label: location.name,
-                    value: location.id,
+                    label: location.name ?? "",
+                    value: location.id ?? 0,
                   })}
                 />
               </Grid>
@@ -249,7 +254,7 @@ export default function AdminModal({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={values.isActive}
+                      checked={Boolean(values.isActive)}
                       onChange={(_, checked) =>
                         setFieldValue("isActive", checked)
                       }

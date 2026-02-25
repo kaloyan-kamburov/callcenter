@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Client, CreateClientPayload, UpdateClientPayload } from "@/types/Client";
 
+type ClientListResponse = Client[] | { data?: Client[] | null };
+
 export const clientsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getClients: builder.query<Client[], void>({
@@ -8,6 +10,8 @@ export const clientsApi = baseApi.injectEndpoints({
         url: "admin/clients",
         method: "GET",
       }),
+      transformResponse: (response: ClientListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Clients"],
     }),
     getClient: builder.query<Client, number>({

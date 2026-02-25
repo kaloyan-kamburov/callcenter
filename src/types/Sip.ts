@@ -1,9 +1,9 @@
 export type Sip = {
-  id: number;
-  name: string;
+  id: number | null;
+  name: string | null;
 };
 
 export type SipUpsertPayload = {
-  id: number;
-  name: string;
+  id: number | null;
+  name: string | null;
 };

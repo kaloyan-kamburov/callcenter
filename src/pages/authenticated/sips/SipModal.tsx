@@ -27,7 +27,7 @@ type SipModalProps = {
 };
 
 const defaultValues: SipUpsertPayload = {
-  id: 0,
+  id: null,
   name: "",
 };
 
@@ -55,12 +55,12 @@ export default function SipModal({
     ...(mode === "edit" && sipDetails
       ? {
           id: sipDetails.id,
-          name: sipDetails.name,
+          name: sipDetails.name ?? "",
         }
       : mode === "edit" && sip
         ? {
             id: sip.id,
-            name: sip.name,
+            name: sip.name ?? "",
           }
         : {}),
   };
@@ -88,7 +88,7 @@ export default function SipModal({
         try {
           if (mode === "create") {
             const payload: SipUpsertPayload = {
-              id: 0,
+              id: null,
               name: values.name,
             };
             await createSip(payload).unwrap();

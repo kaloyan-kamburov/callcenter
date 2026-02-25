@@ -137,18 +137,18 @@ export default function LocationsPage() {
         <DataGrid
           columns={columns}
           useQuery={useGetLocationsQuery}
-          getRowId={(row) => row.id}
+          getRowId={(row) => row.id ?? 0}
           fullHeight
         />
       </Box>
       <LocationCreateModal mode="create" />
       <LocationEditModal
         mode="edit"
-        locationId={selectedLocation?.id}
+        locationId={selectedLocation?.id ?? undefined}
         location={selectedLocation ?? undefined}
         isOpen={isEditLocationModalOpen}
       />
-      <LocationDeleteModal locationId={selectedLocation?.id} />
+      <LocationDeleteModal locationId={selectedLocation?.id ?? undefined} />
     </PageContainer>
   );
 }

@@ -68,7 +68,7 @@ type ScriptFormValues = ScriptUpsertPayload & {
 const QUESTION_TYPES: ScriptQuestionType[] = ["multiple", "single", "text"];
 
 const defaultValues: ScriptFormValues = {
-  id: 0,
+  id: null,
   title: "",
   type: "Community",
   content: "",
@@ -290,7 +290,7 @@ export default function ScriptModal({
 
           if (mode === "create") {
             const payload: ScriptUpsertPayload = {
-              id: 0,
+              id: null,
               title: values.title,
               type: values.type as ScriptType,
               content: serializedContent,

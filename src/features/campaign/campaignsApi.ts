@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Campaign, CampaignUpsertPayload } from "@/types/Campaign";
 
+type CampaignListResponse = Campaign[] | { data?: Campaign[] | null };
+
 export const campaignsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCampaigns: builder.query<Campaign[], void>({
@@ -8,6 +10,8 @@ export const campaignsApi = baseApi.injectEndpoints({
         url: "admin/campaigns",
         method: "GET",
       }),
+      transformResponse: (response: CampaignListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Campaigns"],
     }),
     getCampaign: builder.query<Campaign, number>({

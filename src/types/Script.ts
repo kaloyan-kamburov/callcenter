@@ -15,15 +15,15 @@ export const SCRIPT_TYPES = [
 export type ScriptType = (typeof SCRIPT_TYPES)[number];
 
 export type Script = {
-  id: number;
-  title: string;
+  id: number | null;
+  title: string | null;
   type: ScriptType;
-  content: string;
+  content: string | null;
 };
 
 export type ScriptUpsertPayload = {
-  id: number;
-  title: string;
+  id: number | null;
+  title: string | null;
   type: ScriptType;
-  content: string;
+  content: string | null;
 };

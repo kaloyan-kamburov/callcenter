@@ -30,7 +30,13 @@ export default function CampaignsPage() {
   const columns: GridColDef<Campaign>[] = [
     { field: "id", headerName: t("campaigns.columns.id"), flex: 0.5 },
     { field: "name", headerName: t("campaigns.columns.name"), flex: 1.2 },
-    { field: "type", headerName: t("campaigns.columns.type"), flex: 0.8 },
+    {
+      field: "type",
+      headerName: t("campaigns.columns.type"),
+      flex: 0.8,
+      renderCell: (params: GridRenderCellParams<Campaign>) =>
+        t(`campaigns.types.${params.row.type}`),
+    },
     {
       field: "isActive",
       headerName: t("campaigns.columns.isActive"),

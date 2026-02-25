@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Sip, SipUpsertPayload } from "@/types/Sip";
 
+type SipListResponse = Sip[] | { data?: Sip[] | null };
+
 export const sipsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSips: builder.query<Sip[], void>({
@@ -8,6 +10,8 @@ export const sipsApi = baseApi.injectEndpoints({
         url: "admin/sips",
         method: "GET",
       }),
+      transformResponse: (response: SipListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Sips"],
     }),
     getSip: builder.query<Sip, number>({

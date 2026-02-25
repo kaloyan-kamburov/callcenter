@@ -137,7 +137,7 @@ export default function WorkplaceModal({
                   name="locationId"
                   label={t("workplaces.modal.fields.location")}
                   optionsSource={locationsOptionsSource}
-                  mapOption={(location) => ({ label: location.name, value: location.id })}
+                  mapOption={(location) => ({ label: location.name ?? "", value: location.id ?? 0 })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -145,7 +145,7 @@ export default function WorkplaceModal({
                   name="sipId"
                   label={t("workplaces.modal.fields.sip")}
                   optionsSource={sipsOptionsSource}
-                  mapOption={(sip) => ({ label: sip.name, value: sip.id })}
+                  mapOption={(sip) => ({ label: sip.name ?? "", value: sip.id ?? 0 })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>

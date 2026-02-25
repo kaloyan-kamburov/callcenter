@@ -2,12 +2,12 @@ import type { Agent } from "@/types/Agent";
 
 export type Team = {
   id: number | null;
-  name: string;
+  name: string | null;
   supervisorId: number | null;
-  supervisorName: string;
+  supervisorName: string | null;
   isActive: boolean;
   isDeleted: boolean;
-  agents: Agent[];
+  agents: Agent[] | null;
 };
 
 export type TeamUpsertPayload = Team;

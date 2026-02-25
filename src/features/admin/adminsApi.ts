@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Admin, AdminUpdatePayload, AdminUpsertPayload } from "@/types/Admin";
 
+type AdminListResponse = Admin[] | { data?: Admin[] | null };
+
 export const adminsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdmins: builder.query<Admin[], void>({
@@ -8,6 +10,8 @@ export const adminsApi = baseApi.injectEndpoints({
         url: "admin/admins",
         method: "GET",
       }),
+      transformResponse: (response: AdminListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Admins"],
     }),
     getAdmin: builder.query<Admin, number>({
@@ -45,6 +49,8 @@ export const adminsApi = baseApi.injectEndpoints({
         url: "admin/admins/supervisors",
         method: "GET",
       }),
+      transformResponse: (response: AdminListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Admins"],
     }),
   }),

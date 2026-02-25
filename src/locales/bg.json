@@ -56,12 +56,22 @@
     "3": "Четвъртък",
     "4": "Петък",
     "5": "Събота",
-    "6": "Неделя"
+    "6": "Неделя",
+    "Sunday": "Неделя",
+    "Monday": "Понеделник",
+    "Tuesday": "Вторник",
+    "Wednesday": "Сряда",
+    "Thursday": "Четвъртък",
+    "Friday": "Петък",
+    "Saturday": "Събота"
   },
   "phoneTypes": {
     "0": "WebRTC",
     "1": "SoftPhone",
-    "2": "WebRTCOld"
+    "2": "WebRTCOld",
+    "WebRTC": "WebRTC",
+    "SoftPhone": "SoftPhone",
+    "WebRTCOld": "WebRTCOld"
   },
   "admins": {
     "addButton": "Добави администратор",
@@ -246,6 +256,12 @@
         "dayOfWeek": "Ден от седмицата",
         "startTime": "Начален час",
         "endTime": "Краен час"
+      },
+      "validation": {
+        "selectAtLeastOneDay": "Моля, изберете поне един ден.",
+        "startTimeRequired": "Началният час е задължителен.",
+        "endTimeRequired": "Крайният час е задължителен.",
+        "startBeforeEnd": "Началният час трябва да е преди крайния час."
       }
     },
     "deleteModal": {
@@ -269,9 +285,9 @@
     "title": "Кампании",
     "addButton": "Добави кампания",
     "types": {
-      "1": "Входяща",
-      "2": "Изходяща",
-      "3": "Смесена"
+      "IN": "Входяща",
+      "OUT": "Изходяща",
+      "BOTH": "Смесена"
     },
     "modal": {
       "addTitle": "Добави кампания",

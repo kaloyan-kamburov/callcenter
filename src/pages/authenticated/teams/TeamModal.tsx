@@ -63,6 +63,18 @@ export default function TeamModal({
       : mode === "edit" && team
         ? team
         : {}),
+    name:
+      (mode === "edit" && teamDetails ? teamDetails.name : mode === "edit" && team ? team.name : null) ??
+      "",
+    supervisorName:
+      (mode === "edit" && teamDetails
+        ? teamDetails.supervisorName
+        : mode === "edit" && team
+          ? team.supervisorName
+          : null) ?? "",
+    agents:
+      (mode === "edit" && teamDetails ? teamDetails.agents : mode === "edit" && team ? team.agents : null) ??
+      [],
   };
 
   if (mode === "edit" && isLoadingDetails) {
@@ -134,7 +146,7 @@ export default function TeamModal({
                   label={t("teams.modal.fields.supervisor")}
                   optionsSource={supervisorsOptionsSource}
                   mapOption={(supervisor) => ({
-                    label: supervisor.name,
+                    label: supervisor.name ?? "",
                     value: supervisor.id,
                   })}
                 />
@@ -143,7 +155,7 @@ export default function TeamModal({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={values.isActive}
+                      checked={Boolean(values.isActive)}
                       onChange={(_, checked) => setFieldValue("isActive", checked)}
                     />
                   }
@@ -154,7 +166,7 @@ export default function TeamModal({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={values.isDeleted}
+                      checked={Boolean(values.isDeleted)}
                       onChange={(_, checked) => setFieldValue("isDeleted", checked)}
                     />
                   }

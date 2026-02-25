@@ -1,6 +1,8 @@
 import { baseApi } from "@/api/baseApi";
 import type { Team, TeamUpsertPayload } from "@/types/Team";
 
+type TeamListResponse = Team[] | { data?: Team[] | null };
+
 export const teamsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getTeams: builder.query<Team[], void>({
@@ -8,6 +10,8 @@ export const teamsApi = baseApi.injectEndpoints({
         url: "admin/teams",
         method: "GET",
       }),
+      transformResponse: (response: TeamListResponse) =>
+        Array.isArray(response) ? response : (response.data ?? []),
       providesTags: ["Teams"],
     }),
     getTeam: builder.query<Team, number>({

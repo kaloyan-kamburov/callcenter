@@ -144,18 +144,18 @@ export default function ScriptsPage() {
         <DataGrid
           columns={columns}
           useQuery={useGetScriptsQuery}
-          getRowId={(row) => row.id}
+          getRowId={(row) => row.id ?? 0}
           fullHeight
         />
       </Box>
       <ScriptCreateModal mode="create" />
       <ScriptEditModal
         mode="edit"
-        scriptId={selectedScript?.id}
+        scriptId={selectedScript?.id ?? undefined}
         script={selectedScript ?? undefined}
         isOpen={isEditScriptModalOpen}
       />
-      <ScriptDeleteModal scriptId={selectedScript?.id} />
+      <ScriptDeleteModal scriptId={selectedScript?.id ?? undefined} />
     </PageContainer>
   );
 }
