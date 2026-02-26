@@ -35,7 +35,10 @@ export const locationsApi = baseApi.injectEndpoints({
         method: "PUT",
         data: body,
       }),
-      invalidatesTags: (_result, _error, arg) => ["Locations", { type: "Locations", id: arg.id }],
+      invalidatesTags: (_result, _error, arg) => [
+        "Locations",
+        { type: "Locations", id: arg.id ?? 0 },
+      ],
     }),
     deleteLocation: builder.mutation<unknown, number>({
       query: (id) => ({

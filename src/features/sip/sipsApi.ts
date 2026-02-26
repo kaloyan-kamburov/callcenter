@@ -37,7 +37,7 @@ export const sipsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, arg) => [
         "Sips",
-        { type: "Sips", id: arg.id },
+        { type: "Sips", id: arg.id ?? 0 },
       ],
     }),
     deleteSip: builder.mutation<unknown, number>({

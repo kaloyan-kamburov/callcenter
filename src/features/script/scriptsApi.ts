@@ -37,7 +37,7 @@ export const scriptsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, arg) => [
         "Scripts",
-        { type: "Scripts", id: arg.id },
+        { type: "Scripts", id: arg.id ?? 0 },
       ],
     }),
     deleteScript: builder.mutation<unknown, number>({
