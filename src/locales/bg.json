@@ -13,6 +13,25 @@
     "forgotPassword": "Забравена парола",
     "invalidCredentials": "Невалиден имейл или парола."
   },
+  "forgotPassword": {
+    "title": "Забравена парола",
+    "emailLabel": "Имейл",
+    "submit": "Изпрати",
+    "backToLogin": "Вход",
+    "emailSent": "Ако акаунтът съществува, е изпратен линк за възстановяване."
+  },
+  "resetPassword": {
+    "title": "Смяна на парола",
+    "password": "Парола",
+    "confirmPassword": "Повтори парола",
+    "submit": "Запази",
+    "tokenMissing": "Липсва токен за смяна на парола.",
+    "passwordUpdated": "Паролата е обновена. Моля, влезте отново.",
+    "validation": {
+      "weakPassword": "Поне 8 символа, 1 главна, 1 малка буква и 1 цифра",
+      "passwordsMustMatch": "Паролите трябва да съвпадат"
+    }
+  },
   "profile": {
     "view": "Виж профила",
     "userFallback": "Потребител"

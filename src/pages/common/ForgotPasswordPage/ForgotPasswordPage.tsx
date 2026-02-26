@@ -9,22 +9,27 @@ import { Link } from "@mui/material";
 import { useForgotPasswordMutation } from "@/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .required("Email is required")
-    .test("valid-email", "Invalid email", (value) => isValidEmail(value ?? "")),
-});
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [forgotPassword] = useForgotPasswordMutation();
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .required(t("common.validation.required"))
+      .test(
+        "valid-email",
+        t("common.validation.invalidEmail"),
+        (value) => isValidEmail(value ?? ""),
+      ),
+  });
 
   return (
     <Box sx={{ display: "grid", placeItems: "center", minHeight: "100%" }}>
       <Card variant="outlined" sx={{ p: 4, width: 400 }}>
         <Typography variant="h6" component="h1" gutterBottom align="center">
-          Forgot password
+          {t("forgotPassword.title")}
         </Typography>
         <Formik
           initialValues={{ email: "" }}
@@ -32,7 +37,7 @@ export default function ForgotPasswordPage() {
           onSubmit={async (values, { setSubmitting }) => {
             try {
               await forgotPassword(values).unwrap();
-              toast.success("If an account exists, a reset link was sent.");
+              toast.success(t("forgotPassword.emailSent"));
               navigate("/login");
             } finally {
               setSubmitting(false);
@@ -42,17 +47,21 @@ export default function ForgotPasswordPage() {
           {({ isSubmitting }) => (
             <Form noValidate>
               <Box display="grid" gap={2}>
-                <Input name="email" label="Email" type="email" />
+                <Input
+                  name="email"
+                  label={t("forgotPassword.emailLabel")}
+                  type="email"
+                />
                 <Button
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
                 >
-                  Submit
+                  {t("forgotPassword.submit")}
                 </Button>
                 <Box display="flex" justifyContent="space-between">
                   <Link href="/login" underline="hover">
-                    login
+                    {t("forgotPassword.backToLogin")}
                   </Link>
                 </Box>
               </Box>

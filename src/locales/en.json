@@ -13,6 +13,25 @@
     "forgotPassword": "Forgot password",
     "invalidCredentials": "Invalid email or password."
   },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "emailLabel": "Email",
+    "submit": "Submit",
+    "backToLogin": "Login",
+    "emailSent": "If an account exists, a reset link was sent."
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "password": "Password",
+    "confirmPassword": "Repeat password",
+    "submit": "Submit",
+    "tokenMissing": "Reset token is missing.",
+    "passwordUpdated": "Password updated. Please login.",
+    "validation": {
+      "weakPassword": "At least 8 chars, 1 uppercase, 1 lowercase, 1 number",
+      "passwordsMustMatch": "Passwords must match"
+    }
+  },
   "profile": {
     "view": "View profile",
     "userFallback": "User"

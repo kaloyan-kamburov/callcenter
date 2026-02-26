@@ -8,30 +8,31 @@ import { isStrongPassword } from "@/utils/validations/password";
 import { useResetPasswordMutation } from "@/features/auth/authApi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
-const validationSchema = Yup.object({
-  password: Yup.string()
-    .required("Password is required")
-    .test(
-      "strong-password",
-      "At least 8 chars, 1 uppercase, 1 lowercase, 1 number",
-      (value) => isStrongPassword(value ?? ""),
-    ),
-  confirmPassword: Yup.string()
-    .required("Confirm password is required")
-    .oneOf([Yup.ref("password")], "Passwords must match"),
-});
+import { useTranslation } from "react-i18next";
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [resetPassword] = useResetPasswordMutation();
+  const validationSchema = Yup.object({
+    password: Yup.string()
+      .required(t("common.validation.required"))
+      .test(
+        "strong-password",
+        t("resetPassword.validation.weakPassword"),
+        (value) => isStrongPassword(value ?? ""),
+      ),
+    confirmPassword: Yup.string()
+      .required(t("common.validation.required"))
+      .oneOf([Yup.ref("password")], t("resetPassword.validation.passwordsMustMatch")),
+  });
 
   return (
     <Box sx={{ display: "grid", placeItems: "center", minHeight: "100%" }}>
       <Card variant="outlined" sx={{ p: 4, width: 400 }}>
         <Typography variant="h6" component="h1" gutterBottom align="center">
-          Reset password
+          {t("resetPassword.title")}
         </Typography>
         <Formik
           initialValues={{ password: "", confirmPassword: "" }}
@@ -40,14 +41,14 @@ export default function ResetPasswordPage() {
             try {
               const token = searchParams.get("token");
               if (!token) {
-                toast.error("Reset token is missing.");
+                toast.error(t("resetPassword.tokenMissing"));
                 return;
               }
               await resetPassword({
                 token,
                 password: values.password,
               }).unwrap();
-              toast.success("Password updated. Please login.");
+              toast.success(t("resetPassword.passwordUpdated"));
               navigate("/login");
             } finally {
               setSubmitting(false);
@@ -59,13 +60,13 @@ export default function ResetPasswordPage() {
               <Box display="grid" gap={2}>
                 <Input
                   name="password"
-                  label="Password"
+                  label={t("resetPassword.password")}
                   type="password"
                   showPasswordToggle
                 />
                 <Input
                   name="confirmPassword"
-                  label="Repeat password"
+                  label={t("resetPassword.confirmPassword")}
                   type="password"
                   showPasswordToggle
                 />
@@ -74,7 +75,7 @@ export default function ResetPasswordPage() {
                   variant="contained"
                   disabled={isSubmitting}
                 >
-                  Submit
+                  {t("resetPassword.submit")}
                 </Button>
               </Box>
             </Form>
