@@ -1,4 +1,4 @@
-import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -188,21 +188,18 @@ export default function MainLayout() {
                         <Stack direction="column" overflow="hidden">
                           <Typography
                             variant="body2"
-                            fontWeight="bolder"
+                            fontWeight={700}
                             noWrap
-                            textAlign="right"
                           >
                             {user?.name ?? t("profile.userFallback")}
                           </Typography>
-                          <Button
-                            component={RouterLink}
-                            to="/profile"
-                            size="small"
-                            variant="text"
-                            sx={{ justifyContent: "flex-start" }}
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ textTransform: "capitalize" }}
                           >
-                            {t("profile.view")}
-                          </Button>
+                            {user?.role}
+                          </Typography>
                         </Stack>
                       </Stack>
                       <Divider />
