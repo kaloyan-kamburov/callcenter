@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Admin, AdminUpdatePayload, AdminUpsertPayload } from "@/types/Admin";
-
-type AdminListResponse = Admin[] | { data?: Admin[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const adminsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAdmins: builder.query<Admin[], void>({
-      query: () => ({
+    getAdmins: builder.query<ServerGridResult<Admin>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/admins",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: AdminListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Admin>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Admins"],
     }),
     getAdmin: builder.query<Admin, number>({
@@ -49,8 +50,8 @@ export const adminsApi = baseApi.injectEndpoints({
         url: "admin/admins/supervisors",
         method: "GET",
       }),
-      transformResponse: (response: AdminListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Admin>) =>
+        normalizeServerGridResponse(response).data,
       providesTags: ["Admins"],
     }),
   }),

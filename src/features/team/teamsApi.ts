@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Team, TeamUpsertPayload } from "@/types/Team";
-
-type TeamListResponse = Team[] | { data?: Team[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const teamsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTeams: builder.query<Team[], void>({
-      query: () => ({
+    getTeams: builder.query<ServerGridResult<Team>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/teams",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: TeamListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Team>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Teams"],
     }),
     getTeam: builder.query<Team, number>({

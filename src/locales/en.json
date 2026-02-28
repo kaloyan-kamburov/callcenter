@@ -73,6 +73,38 @@
       "nonNegativeNumber": "Value must be 0 or greater"
     }
   },
+  "dataGrid": {
+    "search": {
+      "placeholder": "Search..."
+    },
+    "pagination": {
+      "rowsPerPage": "Rows per page:",
+      "of": "of",
+      "moreThan": "more than"
+    },
+    "filters": {
+      "button": "Filter",
+      "title": "Filters",
+      "operator": "Operator",
+      "value": "{{field}} value",
+      "valueIn": "{{field}} values (comma separated)",
+      "apply": "Apply",
+      "clear": "Clear",
+      "noColumns": "No filterable columns are available.",
+      "emptyValue": "Any",
+      "boolean": {
+        "true": "True",
+        "false": "False"
+      },
+      "operators": {
+        "ct": "Contains",
+        "eq": "Equals",
+        "in": "In",
+        "gte": "Greater than or equal to",
+        "lte": "Less than or equal to"
+      }
+    }
+  },
   "weekdays": {
     "0": "Monday",
     "1": "Tuesday",

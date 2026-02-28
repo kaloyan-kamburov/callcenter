@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Sip, SipUpsertPayload } from "@/types/Sip";
-
-type SipListResponse = Sip[] | { data?: Sip[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const sipsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSips: builder.query<Sip[], void>({
-      query: () => ({
+    getSips: builder.query<ServerGridResult<Sip>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/sips",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: SipListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Sip>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Sips"],
     }),
     getSip: builder.query<Sip, number>({

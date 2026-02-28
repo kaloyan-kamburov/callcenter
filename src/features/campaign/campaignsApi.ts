@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Campaign, CampaignUpsertPayload } from "@/types/Campaign";
-
-type CampaignListResponse = Campaign[] | { data?: Campaign[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const campaignsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCampaigns: builder.query<Campaign[], void>({
-      query: () => ({
+    getCampaigns: builder.query<ServerGridResult<Campaign>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/campaigns",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: CampaignListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Campaign>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Campaigns"],
     }),
     getCampaign: builder.query<Campaign, number>({

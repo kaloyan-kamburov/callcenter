@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Workplace, WorkplaceUpsertPayload } from "@/types/Workplace";
-
-type WorkplaceListResponse = Workplace[] | { data?: Workplace[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const workplacesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getWorkplaces: builder.query<Workplace[], void>({
-      query: () => ({
+    getWorkplaces: builder.query<ServerGridResult<Workplace>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/workplaces",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: WorkplaceListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Workplace>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Workplaces"],
     }),
     getWorkplace: builder.query<Workplace, number>({

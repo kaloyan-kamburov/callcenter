@@ -1,17 +1,21 @@
 import { baseApi } from "@/api/baseApi";
 import type { IpWhitelistEntry, IpWhitelistUpsertPayload } from "@/types/IpWhitelist";
-
-type IpWhitelistListResponse = IpWhitelistEntry[] | { data?: IpWhitelistEntry[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const ipWhitelistApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getIpWhitelistEntries: builder.query<IpWhitelistEntry[], void>({
-      query: () => ({
+    getIpWhitelistEntries: builder.query<
+      ServerGridResult<IpWhitelistEntry>,
+      ServerGridParams | void
+    >({
+      query: (params) => ({
         url: "admin/ip-whitelist",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: IpWhitelistListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<IpWhitelistEntry>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["IpWhitelist"],
     }),
     getIpWhitelistEntry: builder.query<IpWhitelistEntry, number>({

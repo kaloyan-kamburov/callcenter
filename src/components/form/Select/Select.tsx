@@ -23,7 +23,7 @@ type StaticFormSelectProps = BaseFormSelectProps & {
 };
 
 type QueryHookResult<T> = {
-  data?: T[];
+  data?: T[] | { data?: T[] | null };
   isLoading: boolean;
 };
 
@@ -57,8 +57,11 @@ export default function Select<T = unknown>(
       helperText: _helperText,
       ...rest
     } = props;
+    const sourceData = Array.isArray(optionsSource.data)
+      ? optionsSource.data
+      : (optionsSource.data?.data ?? []);
     return {
-      options: (optionsSource.data ?? []).map((item) => mapOption(item)),
+      options: sourceData.map((item) => mapOption(item)),
       isLoadingOptions: optionsSource.isLoading,
       textFieldProps: rest,
     };

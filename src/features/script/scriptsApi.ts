@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Script, ScriptUpsertPayload } from "@/types/Script";
-
-type ScriptListResponse = Script[] | { data?: Script[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const scriptsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getScripts: builder.query<Script[], void>({
-      query: () => ({
+    getScripts: builder.query<ServerGridResult<Script>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/scripts",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: ScriptListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Script>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Scripts"],
     }),
     getScript: builder.query<Script, number>({

@@ -80,6 +80,9 @@ export default function CampaignModal({
   const clientsOptionsSource = useGetClientsQuery();
   const scriptsOptionsSource = useGetScriptsQuery();
   const teamsOptionsSource = useGetTeamsQuery();
+  const teamsData = Array.isArray(teamsOptionsSource.data)
+    ? teamsOptionsSource.data
+    : (teamsOptionsSource.data?.data ?? []);
   const { data: campaignDetails, isLoading: isLoadingDetails } = useGetCampaignQuery(
     campaignId as number,
     {
@@ -140,7 +143,7 @@ export default function CampaignModal({
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const selectedTeamsMap = new Map(
-            (teamsOptionsSource.data ?? []).map((team) => [team.id, team.name ?? null]),
+            teamsData.map((team) => [team.id, team.name ?? null]),
           );
           const teams: CampaignTeam[] = (values.selectedTeamIds ?? []).map((id) => ({
             id,
@@ -237,13 +240,13 @@ export default function CampaignModal({
                     renderValue: (selected) =>
                       (selected as number[])
                         .map((teamId) => {
-                          const team = (teamsOptionsSource.data ?? []).find((item) => item.id === teamId);
+                          const team = teamsData.find((item) => item.id === teamId);
                           return team?.name ?? `${teamId}`;
                         })
                         .join(", "),
                   }}
                 >
-                  {(teamsOptionsSource.data ?? []).map((team) => (
+                  {teamsData.map((team) => (
                     <MenuItem key={team.id ?? 0} value={team.id ?? 0}>
                       <Checkbox checked={values.selectedTeamIds.includes(team.id ?? 0)} />
                       <ListItemText primary={team.name ?? ""} />

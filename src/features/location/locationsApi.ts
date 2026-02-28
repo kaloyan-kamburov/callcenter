@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Location, LocationUpsertPayload } from "@/types/Location";
-
-type LocationListResponse = Location[] | { data?: Location[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const locationsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getLocations: builder.query<Location[], void>({
-      query: () => ({
+    getLocations: builder.query<ServerGridResult<Location>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/locations",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: LocationListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Location>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Locations"],
     }),
     getLocation: builder.query<Location, number>({

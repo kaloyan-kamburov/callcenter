@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Client, CreateClientPayload, UpdateClientPayload } from "@/types/Client";
-
-type ClientListResponse = Client[] | { data?: Client[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const clientsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClients: builder.query<Client[], void>({
-      query: () => ({
+    getClients: builder.query<ServerGridResult<Client>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/clients",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: ClientListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Client>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Clients"],
     }),
     getClient: builder.query<Client, number>({

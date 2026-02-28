@@ -1,17 +1,18 @@
 import { baseApi } from "@/api/baseApi";
 import type { Agent, CreateAgentPayload, UpdateAgentPayload } from "@/types/Agent";
-
-type AgentListResponse = Agent[] | { data?: Agent[] | null };
+import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
+import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
 
 export const agentsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAgents: builder.query<Agent[], void>({
-      query: () => ({
+    getAgents: builder.query<ServerGridResult<Agent>, ServerGridParams | void>({
+      query: (params) => ({
         url: "admin/agents",
         method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
       }),
-      transformResponse: (response: AgentListResponse) =>
-        Array.isArray(response) ? response : (response.data ?? []),
+      transformResponse: (response: ServerGridApiResponse<Agent>) =>
+        normalizeServerGridResponse(response),
       providesTags: ["Agents"],
     }),
     getAgent: builder.query<Agent, number>({
