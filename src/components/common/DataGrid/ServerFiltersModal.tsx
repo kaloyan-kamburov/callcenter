@@ -230,11 +230,7 @@ export default function ServerFiltersModal({
                     fullWidth
                     type={inputType}
                     size="small"
-                    label={
-                      draft.operator === "in"
-                        ? t("dataGrid.filters.valueIn", { field })
-                        : t("dataGrid.filters.value", { field })
-                    }
+                    label={t("dataGrid.filters.value")}
                     value={draft.value}
                     onChange={(event) => {
                       const value = event.target.value;

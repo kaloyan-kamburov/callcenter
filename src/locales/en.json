@@ -86,7 +86,7 @@
       "button": "Filter",
       "title": "Filters",
       "operator": "Operator",
-      "value": "{{field}} value",
+      "value": "Value",
       "valueIn": "{{field}} values (comma separated)",
       "apply": "Apply",
       "clear": "Clear",
