@@ -8,6 +8,7 @@ import { theme } from "./theme";
 import { Toaster } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import "./i18n";
+import "@cometchat/chat-uikit-react/css-variables.css";
 
 function PageTitleSync() {
   const { t, i18n } = useTranslation();
