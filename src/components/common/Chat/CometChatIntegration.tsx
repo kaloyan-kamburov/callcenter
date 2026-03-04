@@ -1,6 +1,7 @@
 /**
  * CometChat Integration - following https://www.cometchat.com/docs/ui-kit/react/v5/integration
  * Uses credentials from CometChat Dashboard
+ * Auto-registers user as "user-{userId}" if they don't exist in CometChat
  */
 import { useState, useEffect } from "react";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
@@ -14,25 +15,26 @@ import {
 import { Box } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
+import { useAuth } from "@/features/auth/useAuth";
 import { CometChatSelector } from "./CometChatSelector";
 import "./CometChatIntegration.css";
 
-const COMETCHAT_CONSTANTS = {
-  APP_ID: "1676088e7ef037d2a",
-  REGION: "us",
-  AUTH_KEY: "edcb0c5c4252702264ce26578212dc764239db7d",
-  UID: "cometchat-uid-1",
+const getCometChatSettings = () => {
+  const appId = import.meta.env.VITE_COMETCHAT_APP_ID ?? "";
+  const region = import.meta.env.VITE_COMETCHAT_REGION ?? "us";
+  const authKey = import.meta.env.VITE_COMETCHAT_AUTH_KEY ?? "";
+  if (!appId || !authKey) return null;
+  return new UIKitSettingsBuilder()
+    .setAppId(appId)
+    .setRegion(region)
+    .setAuthKey(authKey)
+    .subscribePresenceForAllUsers()
+    .build();
 };
-
-const uiKitSettings = new UIKitSettingsBuilder()
-  .setAppId(COMETCHAT_CONSTANTS.APP_ID)
-  .setRegion(COMETCHAT_CONSTANTS.REGION)
-  .setAuthKey(COMETCHAT_CONSTANTS.AUTH_KEY)
-  .subscribePresenceForAllUsers()
-  .build();
 
 export const CometChatIntegration = () => {
   const theme = useTheme();
+  const { user: authUser } = useAuth();
   const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
   const [selectedUser, setSelectedUser] = useState<CometChat.User | undefined>();
   const [selectedGroup, setSelectedGroup] = useState<CometChat.Group | undefined>();
@@ -43,8 +45,11 @@ export const CometChatIntegration = () => {
   useEffect(() => {
     let isMounted = true;
 
+    const uiKitSettings = getCometChatSettings();
     if (!uiKitSettings) {
-      setErrorText("Missing CometChat credentials.");
+      setErrorText(
+        "Missing CometChat credentials. Set VITE_COMETCHAT_APP_ID, VITE_COMETCHAT_REGION, VITE_COMETCHAT_AUTH_KEY in .env",
+      );
       return;
     }
 
@@ -54,17 +59,32 @@ export const CometChatIntegration = () => {
       return;
     }
 
+    const cometchatUid =
+      authUser?.id != null ? `user-${authUser.id}` : "user-anonymous";
+    const cometchatName =
+      authUser?.name ?? (authUser?.id != null ? `user-${authUser.id}` : "user-anonymous");
+
     initPromise
       .then(() => {
         console.log("CometChat initialization completed successfully");
         return CometChatUIKit.getLoggedinUser();
       })
       .then((user) => {
-        if (!isMounted) return;
-        if (!user) {
-          return CometChatUIKit.login(COMETCHAT_CONSTANTS.UID);
-        }
-        return user;
+        if (!isMounted) return user;
+        if (user) return user;
+        return CometChatUIKit.login(cometchatUid).catch(async (loginErr) => {
+          const errMsg = String(loginErr?.message ?? loginErr);
+          const isUserNotFound =
+            errMsg.includes("ERR_UID_NOT_FOUND") ||
+            errMsg.includes("not found") ||
+            errMsg.includes("does not exist");
+          if (isUserNotFound) {
+            const newUser = new CometChat.User(cometchatUid, cometchatName);
+            await CometChatUIKit.createUser(newUser);
+            return CometChatUIKit.login(cometchatUid);
+          }
+          throw loginErr;
+        });
       })
       .then((user) => {
         if (!isMounted) return;
@@ -81,7 +101,7 @@ export const CometChatIntegration = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [authUser?.id, authUser?.name]);
 
   const handleSelectorItemClicked = (activeItem: CometChat.User | CometChat.Group | CometChat.Conversation | CometChat.Call) => {
     const item = activeItem instanceof CometChat.Conversation

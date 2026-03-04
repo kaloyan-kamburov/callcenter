@@ -186,11 +186,7 @@ export default function MainLayout() {
                       >
                         <Avatar alt={user?.name ?? ""} src={""} />
                         <Stack direction="column" overflow="hidden">
-                          <Typography
-                            variant="body2"
-                            fontWeight={700}
-                            noWrap
-                          >
+                          <Typography variant="body2" fontWeight={700} noWrap>
                             {user?.name ?? t("profile.userFallback")}
                           </Typography>
                           <Typography
@@ -242,7 +238,7 @@ export default function MainLayout() {
       </DashboardLayout>
       <Dialog open={isSignOutOpen} onClose={handleCloseSignOut}>
         <DialogTitle>{t("signOut.title")}</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ pt: `0 !important` }}>
           <DialogContentText>{t("signOut.confirmation")}</DialogContentText>
         </DialogContent>
         <DialogActions>
