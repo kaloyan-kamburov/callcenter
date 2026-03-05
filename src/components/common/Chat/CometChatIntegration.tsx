@@ -20,9 +20,11 @@ import { CometChatSelector } from "./CometChatSelector";
 import "./CometChatIntegration.css";
 
 const getCometChatSettings = () => {
-  const appId = import.meta.env.VITE_COMETCHAT_APP_ID ?? "";
+  const appId = import.meta.env.VITE_COMETCHAT_APP_ID ?? "1676088e7ef037d2a";
   const region = import.meta.env.VITE_COMETCHAT_REGION ?? "us";
-  const authKey = import.meta.env.VITE_COMETCHAT_AUTH_KEY ?? "";
+  const authKey =
+    import.meta.env.VITE_COMETCHAT_AUTH_KEY ??
+    "edcb0c5c4252702264ce26578212dc764239db7d";
   if (!appId || !authKey) return null;
   return new UIKitSettingsBuilder()
     .setAppId(appId)
@@ -36,9 +38,15 @@ export const CometChatIntegration = () => {
   const theme = useTheme();
   const { user: authUser } = useAuth();
   const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
-  const [selectedUser, setSelectedUser] = useState<CometChat.User | undefined>();
-  const [selectedGroup, setSelectedGroup] = useState<CometChat.Group | undefined>();
-  const [selectedCall, setSelectedCall] = useState<CometChat.Call | undefined>();
+  const [selectedUser, setSelectedUser] = useState<
+    CometChat.User | undefined
+  >();
+  const [selectedGroup, setSelectedGroup] = useState<
+    CometChat.Group | undefined
+  >();
+  const [selectedCall, setSelectedCall] = useState<
+    CometChat.Call | undefined
+  >();
   const [isReady, setIsReady] = useState(false);
   const [errorText, setErrorText] = useState<string | null>(null);
 
@@ -62,7 +70,8 @@ export const CometChatIntegration = () => {
     const cometchatUid =
       authUser?.id != null ? `user-${authUser.id}` : "user-anonymous";
     const cometchatName =
-      authUser?.name ?? (authUser?.id != null ? `user-${authUser.id}` : "user-anonymous");
+      authUser?.name ??
+      (authUser?.id != null ? `user-${authUser.id}` : "user-anonymous");
 
     initPromise
       .then(() => {
@@ -103,10 +112,17 @@ export const CometChatIntegration = () => {
     };
   }, [authUser?.id, authUser?.name]);
 
-  const handleSelectorItemClicked = (activeItem: CometChat.User | CometChat.Group | CometChat.Conversation | CometChat.Call) => {
-    const item = activeItem instanceof CometChat.Conversation
-      ? activeItem.getConversationWith()
-      : activeItem;
+  const handleSelectorItemClicked = (
+    activeItem:
+      | CometChat.User
+      | CometChat.Group
+      | CometChat.Conversation
+      | CometChat.Call,
+  ) => {
+    const item =
+      activeItem instanceof CometChat.Conversation
+        ? activeItem.getConversationWith()
+        : activeItem;
 
     if (item instanceof CometChat.User) {
       setSelectedUser(item);
@@ -167,7 +183,10 @@ export const CometChatIntegration = () => {
             <div className="messages-list-area">
               <CometChatMessageList user={selectedUser} group={selectedGroup} />
             </div>
-            <CometChatMessageComposer user={selectedUser} group={selectedGroup} />
+            <CometChatMessageComposer
+              user={selectedUser}
+              group={selectedGroup}
+            />
           </div>
         ) : (
           <div className="empty-conversation">Select Conversation to start</div>
