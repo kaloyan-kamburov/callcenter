@@ -51,7 +51,13 @@
     "clients": "Клиенти",
     "ipWhitelist": "IP списък",
     "teams": "Екипи",
-    "workplaces": "Работни места"
+    "workplaces": "Работни места",
+    "calls": "Обаждания",
+    "tasks": "Задачи"
+  },
+  "agent": {
+    "callsPlaceholder": "Страница Обаждания – скоро.",
+    "tasksPlaceholder": "Страница Задачи – скоро."
   },
   "dashboard": {
     "title": "Табло"

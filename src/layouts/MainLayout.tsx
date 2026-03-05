@@ -10,6 +10,8 @@ import BusinessIcon from "@mui/icons-material/Business";
 import SecurityIcon from "@mui/icons-material/Security";
 import GroupsIcon from "@mui/icons-material/Groups";
 import WorkIcon from "@mui/icons-material/Work";
+import PhoneIcon from "@mui/icons-material/Phone";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import { Account, AccountPopoverFooter } from "@toolpad/core/Account";
@@ -37,77 +39,32 @@ import logo from "@/assets/logo.svg";
 export default function MainLayout() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [logout] = useLogoutMutation();
+  const [logout, { isLoading }] = useLogoutMutation();
   const [isSignOutOpen, setIsSignOutOpen] = useState(false);
   const { t } = useTranslation();
-  const navigation: Navigation = [
-    {
-      kind: "page",
-      segment: "",
-      title: t("navigation.dashboard"),
-      icon: <HomeIcon />,
-    },
-    {
-      kind: "page",
-      segment: "admins",
-      title: t("navigation.admins"),
-      icon: <AdminPanelSettingsIcon />,
-    },
-    {
-      kind: "page",
-      segment: "locations",
-      title: t("navigation.locations"),
-      icon: <LocationOnIcon />,
-    },
-    {
-      kind: "page",
-      segment: "sips",
-      title: t("navigation.sips"),
-      icon: <SettingsPhoneIcon />,
-    },
-    {
-      kind: "page",
-      segment: "scripts",
-      title: t("navigation.scripts"),
-      icon: <DescriptionIcon />,
-    },
-    {
-      kind: "page",
-      segment: "agents",
-      title: t("navigation.agents"),
-      icon: <SupportAgentIcon />,
-    },
-    {
-      kind: "page",
-      segment: "campaigns",
-      title: t("navigation.campaigns"),
-      icon: <CampaignIcon />,
-    },
-    {
-      kind: "page",
-      segment: "clients",
-      title: t("navigation.clients"),
-      icon: <BusinessIcon />,
-    },
-    {
-      kind: "page",
-      segment: "ip-whitelist",
-      title: t("navigation.ipWhitelist"),
-      icon: <SecurityIcon />,
-    },
-    {
-      kind: "page",
-      segment: "teams",
-      title: t("navigation.teams"),
-      icon: <GroupsIcon />,
-    },
-    {
-      kind: "page",
-      segment: "workplaces",
-      title: t("navigation.workplaces"),
-      icon: <WorkIcon />,
-    },
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+
+  const adminNavigation: Navigation = [
+    { kind: "page", segment: "", title: t("navigation.dashboard"), icon: <HomeIcon /> },
+    { kind: "page", segment: "admins", title: t("navigation.admins"), icon: <AdminPanelSettingsIcon /> },
+    { kind: "page", segment: "locations", title: t("navigation.locations"), icon: <LocationOnIcon /> },
+    { kind: "page", segment: "sips", title: t("navigation.sips"), icon: <SettingsPhoneIcon /> },
+    { kind: "page", segment: "scripts", title: t("navigation.scripts"), icon: <DescriptionIcon /> },
+    { kind: "page", segment: "agents", title: t("navigation.agents"), icon: <SupportAgentIcon /> },
+    { kind: "page", segment: "campaigns", title: t("navigation.campaigns"), icon: <CampaignIcon /> },
+    { kind: "page", segment: "clients", title: t("navigation.clients"), icon: <BusinessIcon /> },
+    { kind: "page", segment: "ip-whitelist", title: t("navigation.ipWhitelist"), icon: <SecurityIcon /> },
+    { kind: "page", segment: "teams", title: t("navigation.teams"), icon: <GroupsIcon /> },
+    { kind: "page", segment: "workplaces", title: t("navigation.workplaces"), icon: <WorkIcon /> },
   ];
+
+  const agentNavigation: Navigation = [
+    { kind: "page", segment: "", title: t("navigation.dashboard"), icon: <HomeIcon /> },
+    { kind: "page", segment: "calls", title: t("navigation.calls"), icon: <PhoneIcon /> },
+    { kind: "page", segment: "tasks", title: t("navigation.tasks"), icon: <TaskAltIcon /> },
+  ];
+
+  const navigation = isAdmin ? adminNavigation : agentNavigation;
   const session: Session | null = user
     ? {
         user: {
@@ -242,8 +199,15 @@ export default function MainLayout() {
           <DialogContentText>{t("signOut.confirmation")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseSignOut}>{t("common.cancel")}</Button>
-          <Button onClick={handleConfirmSignOut} variant="contained">
+          <Button onClick={handleCloseSignOut} disabled={isLoading}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleConfirmSignOut}
+            variant="contained"
+            disabled={isLoading}
+            loading={isLoading}
+          >
             {t("signOut.action")}
           </Button>
         </DialogActions>

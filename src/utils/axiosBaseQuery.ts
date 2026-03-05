@@ -46,15 +46,17 @@ function formatApiErrorMessage(responseData: unknown, fallback: string) {
 
   // Also support object-shaped validation errors: { errors: { field: ["msg1", "msg2"] } }
   if (!lines.length && payload.errors && typeof payload.errors === "object") {
-    Object.values(payload.errors as Record<string, unknown>).forEach((value) => {
-      if (Array.isArray(value)) {
-        value.forEach((errorMessage) => {
-          if (typeof errorMessage === "string" && errorMessage.trim()) {
-            lines.push(errorMessage);
-          }
-        });
-      }
-    });
+    Object.values(payload.errors as Record<string, unknown>).forEach(
+      (value) => {
+        if (Array.isArray(value)) {
+          value.forEach((errorMessage) => {
+            if (typeof errorMessage === "string" && errorMessage.trim()) {
+              lines.push(errorMessage);
+            }
+          });
+        }
+      },
+    );
   }
 
   if (lines.length) {
@@ -69,7 +71,7 @@ function formatApiErrorMessage(responseData: unknown, fallback: string) {
 }
 
 export function axiosBaseQuery(
-  options: AxiosBaseQueryOptions
+  options: AxiosBaseQueryOptions,
 ): BaseQueryFn<AxiosBaseQueryArgs, unknown, unknown> {
   const { baseUrl, onError: globalOnError } = options;
 
@@ -120,7 +122,9 @@ export function axiosBaseQuery(
       } else {
         const respData = err.response?.data as unknown;
         const message = formatApiErrorMessage(respData, err.message);
-        toast.error(message, { style: { whiteSpace: "pre-line" } });
+        toast.error(message || err.message || "An unknown error occurred", {
+          style: { whiteSpace: "pre-line" },
+        });
       }
       return {
         error: {

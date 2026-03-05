@@ -68,7 +68,7 @@ export default function LoginPage() {
                   const m = (data as Record<string, unknown>).message;
                   if (typeof m === "string") message = m;
                 }
-                toast.error(message);
+                toast.error(message || err.message);
                 return;
               }
             } finally {

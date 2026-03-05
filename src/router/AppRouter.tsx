@@ -12,7 +12,7 @@ export default function AppRouter() {
               <Route
                 key={r.path}
                 path={r.path}
-                element={withProtection(r.element, r.protected)}
+                element={withProtection(r.element, r.protected, r.adminOnly)}
               />
             ))}
           </Route>

@@ -51,7 +51,13 @@
     "clients": "Clients",
     "ipWhitelist": "IP Whitelist",
     "teams": "Teams",
-    "workplaces": "Workplaces"
+    "workplaces": "Workplaces",
+    "calls": "Calls",
+    "tasks": "Tasks"
+  },
+  "agent": {
+    "callsPlaceholder": "Calls page – coming soon.",
+    "tasksPlaceholder": "Tasks page – coming soon."
   },
   "dashboard": {
     "title": "Dashboard"
