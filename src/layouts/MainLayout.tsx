@@ -20,6 +20,7 @@ import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
 import { theme } from "@/theme";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
+import WorkplaceStatusDropdown from "@/components/header/WorkplaceStatusDropdown/WorkplaceStatusDropdown";
 import {
   Avatar,
   Box,
@@ -45,23 +46,87 @@ export default function MainLayout() {
   const isAdmin = user?.role?.toLowerCase() === "admin";
 
   const adminNavigation: Navigation = [
-    { kind: "page", segment: "", title: t("navigation.dashboard"), icon: <HomeIcon /> },
-    { kind: "page", segment: "admins", title: t("navigation.admins"), icon: <AdminPanelSettingsIcon /> },
-    { kind: "page", segment: "locations", title: t("navigation.locations"), icon: <LocationOnIcon /> },
-    { kind: "page", segment: "sips", title: t("navigation.sips"), icon: <SettingsPhoneIcon /> },
-    { kind: "page", segment: "scripts", title: t("navigation.scripts"), icon: <DescriptionIcon /> },
-    { kind: "page", segment: "agents", title: t("navigation.agents"), icon: <SupportAgentIcon /> },
-    { kind: "page", segment: "campaigns", title: t("navigation.campaigns"), icon: <CampaignIcon /> },
-    { kind: "page", segment: "clients", title: t("navigation.clients"), icon: <BusinessIcon /> },
-    { kind: "page", segment: "ip-whitelist", title: t("navigation.ipWhitelist"), icon: <SecurityIcon /> },
-    { kind: "page", segment: "teams", title: t("navigation.teams"), icon: <GroupsIcon /> },
-    { kind: "page", segment: "workplaces", title: t("navigation.workplaces"), icon: <WorkIcon /> },
+    {
+      kind: "page",
+      segment: "",
+      title: t("navigation.dashboard"),
+      icon: <HomeIcon />,
+    },
+    {
+      kind: "page",
+      segment: "admins",
+      title: t("navigation.admins"),
+      icon: <AdminPanelSettingsIcon />,
+    },
+    {
+      kind: "page",
+      segment: "locations",
+      title: t("navigation.locations"),
+      icon: <LocationOnIcon />,
+    },
+    {
+      kind: "page",
+      segment: "sips",
+      title: t("navigation.sips"),
+      icon: <SettingsPhoneIcon />,
+    },
+    {
+      kind: "page",
+      segment: "scripts",
+      title: t("navigation.scripts"),
+      icon: <DescriptionIcon />,
+    },
+    {
+      kind: "page",
+      segment: "agents",
+      title: t("navigation.agents"),
+      icon: <SupportAgentIcon />,
+    },
+    {
+      kind: "page",
+      segment: "campaigns",
+      title: t("navigation.campaigns"),
+      icon: <CampaignIcon />,
+    },
+    {
+      kind: "page",
+      segment: "clients",
+      title: t("navigation.clients"),
+      icon: <BusinessIcon />,
+    },
+    {
+      kind: "page",
+      segment: "ip-whitelist",
+      title: t("navigation.ipWhitelist"),
+      icon: <SecurityIcon />,
+    },
+    {
+      kind: "page",
+      segment: "teams",
+      title: t("navigation.teams"),
+      icon: <GroupsIcon />,
+    },
+    {
+      kind: "page",
+      segment: "workplaces",
+      title: t("navigation.workplaces"),
+      icon: <WorkIcon />,
+    },
   ];
 
   const agentNavigation: Navigation = [
-    { kind: "page", segment: "", title: t("navigation.dashboard"), icon: <HomeIcon /> },
-    { kind: "page", segment: "calls", title: t("navigation.calls"), icon: <PhoneIcon /> },
-    { kind: "page", segment: "tasks", title: t("navigation.tasks"), icon: <TaskAltIcon /> },
+    {
+      kind: "page",
+      segment: "",
+      title: t("navigation.calls"),
+      icon: <PhoneIcon />,
+    },
+    {
+      kind: "page",
+      segment: "tasks",
+      title: t("navigation.tasks"),
+      icon: <TaskAltIcon />,
+    },
   ];
 
   const navigation = isAdmin ? adminNavigation : agentNavigation;
@@ -128,6 +193,7 @@ export default function MainLayout() {
         slots={{
           toolbarActions: () => (
             <Stack direction="row" alignItems="center" spacing={1}>
+              {!isAdmin && <WorkplaceStatusDropdown />}
               <Box sx={{ my: "auto" }}>
                 <LanguageSwitcher />
               </Box>

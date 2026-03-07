@@ -22,6 +22,7 @@ export const baseApi = createApi({
     "Sips",
     "Teams",
     "Workplaces",
+    "WorkStatuses",
   ],
   endpoints: () => ({}),
 });

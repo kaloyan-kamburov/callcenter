@@ -55,9 +55,29 @@
     "calls": "Calls",
     "tasks": "Tasks"
   },
+  "header": {
+    "workplaceStatus": {
+      "workplace": "Workplace",
+      "status": "Status",
+      "selectWorkplace": "Select workplace",
+      "selectStatus": "Select status",
+      "statuses": {
+        "Ready": "Ready",
+        "TechnologicalRest": "Technological rest",
+        "PhysiologicalRest": "Physiological rest",
+        "OutForTraining": "Out for training",
+        "GoToMeeting": "Go to meeting",
+        "SystemIssue": "System issue",
+        "OutForLunch": "Out for lunch"
+      }
+    }
+  },
   "agent": {
     "callsPlaceholder": "Calls page – coming soon.",
-    "tasksPlaceholder": "Tasks page – coming soon."
+    "tasksPlaceholder": "Tasks page – coming soon.",
+    "calls": {
+      "selectWorkplaceAndStatus": "Please select workplace and status"
+    }
   },
   "dashboard": {
     "title": "Dashboard"

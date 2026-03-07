@@ -185,6 +185,33 @@
         }
       }
     },
+    "/api/agent/me": {
+      "get": {
+        "tags": ["AgentMe"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentAgentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentAgentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentAgentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/agents/{id}": {
       "get": {
         "tags": ["Agents"],
@@ -332,6 +359,42 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/agent/workplaces": {
+      "get": {
+        "tags": ["AgentWorkplaces"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentWorkplaceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentWorkplaceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentWorkplaceDto"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1159,6 +1222,176 @@
         }
       }
     },
+    "/api/agent/work-log": {
+      "get": {
+        "tags": ["LogAgentWork"],
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortField",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Filters",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/FilterEntry"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogAgentWorkDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogAgentWorkDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogAgentWorkDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["LogAgentWork"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["LogAgentWork"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogAgentWorkDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/agent/work-log/{id}": {
+      "get": {
+        "tags": ["LogAgentWork"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["LogAgentWork"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/admin/roles": {
       "get": {
         "tags": ["Roles"],
@@ -1868,6 +2101,42 @@
           }
         }
       }
+    },
+    "/api/work-statuses": {
+      "get": {
+        "tags": ["WorkStatuses"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2015,11 +2284,6 @@
             "format": "int32",
             "nullable": true
           },
-          "workplaceId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "workSchedule": {
             "type": "array",
             "items": {
@@ -2071,6 +2335,36 @@
           "endTime": {
             "type": "string",
             "format": "date-span"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentWorkStatuses": {
+        "enum": [
+          "Ready",
+          "TechnologicalRest",
+          "PhysiologicalRest",
+          "OutForTraining",
+          "GoToMeeting",
+          "SystemIssue",
+          "OutForLunch"
+        ],
+        "type": "string"
+      },
+      "AgentWorkplaceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "sipName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2345,11 +2639,6 @@
             "format": "int32",
             "nullable": true
           },
-          "workplaceId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "workSchedule": {
             "type": "array",
             "items": {
@@ -2390,6 +2679,123 @@
           },
           "isSearchable": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrentAgentCampaignDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/CampaignType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrentAgentDto": {
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "operatorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "interfaceLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "salesCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "autoDialerDelaySeconds": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "maxCallsPerAgent": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "phoneType": {
+            "$ref": "#/components/schemas/AgentPhoneType"
+          },
+          "team": {
+            "$ref": "#/components/schemas/CurrentAgentTeamDto"
+          },
+          "workplace": {
+            "$ref": "#/components/schemas/CurrentAgentWorkplaceDto"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/CurrentAgentCampaignDto"
+          },
+          "script": {
+            "$ref": "#/components/schemas/ScriptDto"
+          },
+          "workSchedules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentWorkScheduleDto"
+            },
+            "nullable": true
+          },
+          "workStatuses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrentAgentTeamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrentAgentWorkplaceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "sip": {
+            "$ref": "#/components/schemas/SipDto"
           }
         },
         "additionalProperties": false
@@ -2556,6 +2962,63 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LocationDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "filterableColumns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterableColumn"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LogAgentWorkDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "agentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "workplaceId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/AgentWorkStatuses"
+          },
+          "begin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LogAgentWorkDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogAgentWorkDto"
             },
             "nullable": true
           },

@@ -1,13 +1,36 @@
 import { baseApi } from "@/api/baseApi";
 import type { Workplace, WorkplaceUpsertPayload } from "@/types/Workplace";
-import type { ServerGridApiResponse, ServerGridParams, ServerGridResult } from "@/types/serverGrid";
-import { buildServerGridQueryParams, normalizeServerGridResponse } from "@/utils/serverGrid";
+import type {
+  ServerGridApiResponse,
+  ServerGridParams,
+  ServerGridResult,
+} from "@/types/serverGrid";
+import {
+  buildServerGridQueryParams,
+  normalizeServerGridResponse,
+} from "@/utils/serverGrid";
 
 export const workplacesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getWorkplaces: builder.query<ServerGridResult<Workplace>, ServerGridParams | void>({
+    getWorkplaces: builder.query<
+      ServerGridResult<Workplace>,
+      ServerGridParams | void
+    >({
       query: (params) => ({
         url: "admin/workplaces",
+        method: "GET",
+        params: params ? buildServerGridQueryParams(params) : undefined,
+      }),
+      transformResponse: (response: ServerGridApiResponse<Workplace>) =>
+        normalizeServerGridResponse(response),
+      providesTags: ["Workplaces"],
+    }),
+    getAgentWorkplaces: builder.query<
+      ServerGridResult<Workplace>,
+      ServerGridParams | void
+    >({
+      query: (params) => ({
+        url: "agent/workplaces",
         method: "GET",
         params: params ? buildServerGridQueryParams(params) : undefined,
       }),
@@ -46,7 +69,10 @@ export const workplacesApi = baseApi.injectEndpoints({
         url: `admin/workplaces/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, id) => ["Workplaces", { type: "Workplaces", id }],
+      invalidatesTags: (_result, _error, id) => [
+        "Workplaces",
+        { type: "Workplaces", id },
+      ],
     }),
   }),
   overrideExisting: false,
@@ -54,6 +80,7 @@ export const workplacesApi = baseApi.injectEndpoints({
 
 export const {
   useGetWorkplacesQuery,
+  useGetAgentWorkplacesQuery,
   useGetWorkplaceQuery,
   useCreateWorkplaceMutation,
   useUpdateWorkplaceMutation,

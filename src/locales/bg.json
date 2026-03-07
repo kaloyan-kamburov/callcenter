@@ -55,9 +55,29 @@
     "calls": "Обаждания",
     "tasks": "Задачи"
   },
+  "header": {
+    "workplaceStatus": {
+      "workplace": "Работно място",
+      "status": "Статус",
+      "selectWorkplace": "Избери работно място",
+      "selectStatus": "Избери статус",
+      "statuses": {
+        "Ready": "Готов",
+        "TechnologicalRest": "Технологична почивка",
+        "PhysiologicalRest": "Физиологична почивка",
+        "OutForTraining": "На обучение",
+        "GoToMeeting": "На среща",
+        "SystemIssue": "Системна грешка",
+        "OutForLunch": "Обедна почивка"
+      }
+    }
+  },
   "agent": {
     "callsPlaceholder": "Страница Обаждания – скоро.",
-    "tasksPlaceholder": "Страница Задачи – скоро."
+    "tasksPlaceholder": "Страница Задачи – скоро.",
+    "calls": {
+      "selectWorkplaceAndStatus": "Моля, изберете работно място и статус"
+    }
   },
   "dashboard": {
     "title": "Табло"

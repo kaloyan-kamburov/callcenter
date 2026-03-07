@@ -1,3 +1,13 @@
+export enum WorkStatus {
+  Ready = "Ready",
+  TechnologicalRest = "TechnologicalRest",
+  PhysiologicalRest = "PhysiologicalRest",
+  OutForTraining = "OutForTraining",
+  GoToMeeting = "GoToMeeting",
+  SystemIssue = "SystemIssue",
+  OutForLunch = "OutForLunch",
+}
+
 export const AGENT_PHONE_TYPES = ["WebRTC", "SoftPhone", "WebRTCOld"] as const;
 export const DAY_OF_WEEK_VALUES = [
   "Sunday",

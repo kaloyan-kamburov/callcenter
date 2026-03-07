@@ -12,6 +12,13 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 
+const initialValuesAgent = {
+  username: "kkdemoagent",
+  password: "password123",
+};
+
+const initialValuesAdmin = { username: "username", password: "password" };
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
@@ -28,7 +35,7 @@ export default function LoginPage() {
         </Typography>
 
         <Formik
-          initialValues={{ username: "username", password: "password" }}
+          initialValues={initialValuesAgent}
           validationSchema={Yup.object({
             username: Yup.string().required("Username is required"),
             password: Yup.string().required("Password is required"),

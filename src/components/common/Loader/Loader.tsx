@@ -1,5 +1,9 @@
 import { CircularProgress } from "@mui/material";
 
-export default function Loader() {
-  return <CircularProgress size={40} />;
+interface LoaderProps {
+  size?: number;
+}
+
+export default function Loader({ size = 40 }: LoaderProps) {
+  return <CircularProgress size={size} />;
 }

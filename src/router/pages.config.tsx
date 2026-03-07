@@ -2,6 +2,7 @@ import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import ProtectedRoute from "@/features/auth/ProtectedRoute";
 import AdminRoute from "@/features/auth/AdminRoute";
+import { useAuth } from "@/features/auth/useAuth";
 import LoginPage from "@/pages/common/LoginPage/LoginPage";
 import RegisterPage from "@/pages/common/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "@/pages/common/ForgotPasswordPage/ForgotPasswordPage";
@@ -52,6 +53,12 @@ const TasksPage = lazy(
   () => import("@/pages/authenticated/agent/tasks/TasksPage"),
 );
 
+function HomePage() {
+  const { user } = useAuth();
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+  return isAdmin ? <DashboardPage /> : <CallsPage />;
+}
+
 export type RouteItem = {
   path: string;
   element: ReactElement;
@@ -74,12 +81,7 @@ export const pagesConfig: {
       routes: [
         {
           path: "/",
-          element: <DashboardPage />,
-          protected: true,
-        },
-        {
-          path: "/calls",
-          element: <CallsPage />,
+          element: <HomePage />,
           protected: true,
         },
         {
