@@ -17,8 +17,6 @@ const initialValuesAgent = {
   password: "password123",
 };
 
-const initialValuesAdmin = { username: "username", password: "password" };
-
 export default function LoginPage() {
   const navigate = useNavigate();
   const [login] = useLoginMutation();

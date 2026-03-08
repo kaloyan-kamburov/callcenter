@@ -260,6 +260,8 @@ export default function ScriptDisplay({
                   size="small"
                   fullWidth
                   placeholder={q.title}
+                  multiline
+                  rows={3}
                   value={typeof value === "string" ? value : ""}
                   onChange={(e) =>
                     setAnswers((a) => ({ ...a, [key]: e.target.value }))

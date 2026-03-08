@@ -1,12 +1,14 @@
-export enum WorkStatus {
-  Ready = "Ready",
-  TechnologicalRest = "TechnologicalRest",
-  PhysiologicalRest = "PhysiologicalRest",
-  OutForTraining = "OutForTraining",
-  GoToMeeting = "GoToMeeting",
-  SystemIssue = "SystemIssue",
-  OutForLunch = "OutForLunch",
-}
+export const WorkStatus = {
+  Ready: "Ready",
+  TechnologicalRest: "TechnologicalRest",
+  PhysiologicalRest: "PhysiologicalRest",
+  OutForTraining: "OutForTraining",
+  GoToMeeting: "GoToMeeting",
+  SystemIssue: "SystemIssue",
+  OutForLunch: "OutForLunch",
+} as const;
+
+export type WorkStatus = (typeof WorkStatus)[keyof typeof WorkStatus];
 
 export const AGENT_PHONE_TYPES = ["WebRTC", "SoftPhone", "WebRTCOld"] as const;
 export const DAY_OF_WEEK_VALUES = [
