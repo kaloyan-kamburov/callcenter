@@ -76,7 +76,16 @@
     "callsPlaceholder": "Calls page – coming soon.",
     "tasksPlaceholder": "Tasks page – coming soon.",
     "calls": {
-      "selectWorkplaceAndStatus": "Please select workplace and status"
+      "selectWorkplaceAndStatus": "Please select workplace and status",
+      "campaign": "Campaign",
+      "script": {
+        "noContent": "No script content",
+        "previousPage": "Previous page",
+        "nextPage": "Next page",
+        "submit": "Submit",
+        "answerAllBeforeNextPage": "Answer all questions before going to next page.",
+        "answerAllToSubmit": "To submit the script, you need to fill all the questions."
+      }
     }
   },
   "dashboard": {

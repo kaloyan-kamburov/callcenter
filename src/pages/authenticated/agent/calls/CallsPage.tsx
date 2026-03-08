@@ -1,14 +1,18 @@
 import { Box, Typography } from "@mui/material";
+import ScriptDisplay from "./ScriptDisplay/ScriptDisplay";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { useTranslation } from "react-i18next";
 import { useAgentSettings } from "@/features/agent/useAgentSettings";
+import { useAgentWorkLog } from "@/features/agent/AgentWorkLogContext";
 
 export default function CallsPage() {
   const { t } = useTranslation();
-  const { workplaceId, status } = useAgentSettings();
+  const { workplaceId, status, campaign, script } = useAgentSettings();
+  const agentWorkLog = useAgentWorkLog();
 
   const hasWorkplace = Boolean(workplaceId);
   const isReady = status === "Ready";
+  const isSettingWorkLog = agentWorkLog?.isSettingWorkLog ?? false;
 
   if (!hasWorkplace || !status) {
     return (
@@ -31,10 +35,6 @@ export default function CallsPage() {
     );
   }
 
-  if (hasWorkplace && !isReady) {
-    return null;
-  }
-
   return (
     <Box
       sx={{
@@ -43,11 +43,53 @@ export default function CallsPage() {
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        overflow: "hidden",
       }}
     >
-      <Typography variant="body1">yo nigga</Typography>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        {t("agent.calls.campaign")}: {campaign?.name ?? "—"}
+      </Typography>
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          display: "flex",
+          gap: 2,
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            p: 2,
+            border: 1,
+            borderColor: "divider",
+            borderRadius: 1,
+            overflow: "auto",
+            bgcolor: "background.paper",
+          }}
+        >
+          phone
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            p: 2,
+            border: 1,
+            borderColor: "divider",
+            borderRadius: 1,
+            overflow: "auto",
+            bgcolor: "background.paper",
+          }}
+        >
+          <ScriptDisplay
+            content={script?.content}
+            disabled={!isReady || isSettingWorkLog}
+          />
+        </Box>
+      </Box>
     </Box>
   );
 }

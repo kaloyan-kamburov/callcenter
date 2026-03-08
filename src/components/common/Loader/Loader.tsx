@@ -1,9 +1,10 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, type SxProps } from "@mui/material";
 
 interface LoaderProps {
   size?: number;
+  sx?: SxProps;
 }
 
-export default function Loader({ size = 40 }: LoaderProps) {
-  return <CircularProgress size={size} />;
+export default function Loader({ size = 40, sx }: LoaderProps) {
+  return <CircularProgress size={size} sx={sx} />;
 }

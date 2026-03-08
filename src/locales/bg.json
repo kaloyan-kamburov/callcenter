@@ -76,7 +76,16 @@
     "callsPlaceholder": "Страница Обаждания – скоро.",
     "tasksPlaceholder": "Страница Задачи – скоро.",
     "calls": {
-      "selectWorkplaceAndStatus": "Моля, изберете работно място и статус"
+      "selectWorkplaceAndStatus": "Моля, изберете работно място и статус",
+      "campaign": "Кампания",
+      "script": {
+        "noContent": "Няма съдържание на скрипта",
+        "previousPage": "Предишна страница",
+        "nextPage": "Следваща страница",
+        "submit": "Изпрати",
+        "answerAllBeforeNextPage": "Отговорете на всички въпроси преди да преминете на следващата страница.",
+        "answerAllToSubmit": "За да изпратите скрипта, трябва да попълните всички въпроси."
+      }
     }
   },
   "dashboard": {

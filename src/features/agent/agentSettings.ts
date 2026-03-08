@@ -1,8 +1,15 @@
+import type {
+  CurrentAgentCampaignDto,
+  CurrentAgentScriptDto,
+} from "@/types/CurrentAgent";
+
 export const CURRENT_AGENT_SETTINGS_KEY = "currentAgentSettings";
 
 export type AgentSettings = {
   workplaceId?: number;
   status?: string;
+  campaign?: CurrentAgentCampaignDto | null;
+  script?: CurrentAgentScriptDto | null;
 };
 
 export function getAgentSettings(): AgentSettings {

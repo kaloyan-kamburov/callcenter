@@ -15,9 +15,15 @@ import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
 import type { Navigation, Session } from "@toolpad/core";
 import { Account, AccountPopoverFooter } from "@toolpad/core/Account";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/features/auth/useAuth";
 import { useLogoutMutation } from "@/features/auth/authApi";
+import { useGetAgentMeQuery } from "@/features/agent/agentApi";
+import { AgentWorkLogProvider } from "@/features/agent/AgentWorkLogContext";
+import {
+  getAgentSettings,
+  storeAgentSettings,
+} from "@/features/agent/agentSettings";
 import { theme } from "@/theme";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 import WorkplaceStatusDropdown from "@/components/header/WorkplaceStatusDropdown/WorkplaceStatusDropdown";
@@ -44,6 +50,21 @@ export default function MainLayout() {
   const [isSignOutOpen, setIsSignOutOpen] = useState(false);
   const { t } = useTranslation();
   const isAdmin = user?.role?.toLowerCase() === "admin";
+
+  const { data: agentMe } = useGetAgentMeQuery(undefined, {
+    skip: isAdmin || !user,
+  });
+
+  useEffect(() => {
+    if (agentMe) {
+      const current = getAgentSettings();
+      storeAgentSettings({
+        ...current,
+        campaign: agentMe.campaign ?? null,
+        script: agentMe.script ?? null,
+      });
+    }
+  }, [agentMe]);
 
   const adminNavigation: Navigation = [
     {
@@ -161,36 +182,40 @@ export default function MainLayout() {
     } finally {
       localStorage.removeItem("authToken");
       localStorage.removeItem("authUser");
+      const settings = getAgentSettings();
+      const { campaign, script, ...rest } = settings;
+      storeAgentSettings(rest);
       setIsSignOutOpen(false);
       navigate("/login");
     }
   };
 
   return (
-    <AppProvider
-      session={session}
-      authentication={authentication}
-      navigation={navigation}
-      theme={theme}
-      branding={{
-        logo: (
-          <Box
-            component="img"
-            src={logo}
-            alt={t("app.title")}
-            sx={{ height: 38 }}
-          />
-        ),
-        title: "",
-      }}
-      router={{
-        navigate: (path) => navigate(path),
-        pathname: window.location.pathname,
-        searchParams: new URLSearchParams(window.location.search),
-      }}
-    >
-      <DashboardLayout
-        slots={{
+    <AgentWorkLogProvider>
+      <AppProvider
+        session={session}
+        authentication={authentication}
+        navigation={navigation}
+        theme={theme}
+        branding={{
+          logo: (
+            <Box
+              component="img"
+              src={logo}
+              alt={t("app.title")}
+              sx={{ height: 38 }}
+            />
+          ),
+          title: "",
+        }}
+        router={{
+          navigate: (path) => navigate(path),
+          pathname: window.location.pathname,
+          searchParams: new URLSearchParams(window.location.search),
+        }}
+      >
+        <DashboardLayout
+          slots={{
           toolbarActions: () => (
             <Stack direction="row" alignItems="center" spacing={1}>
               {!isAdmin && <WorkplaceStatusDropdown />}
@@ -236,48 +261,49 @@ export default function MainLayout() {
               />
             </Stack>
           ),
-        }}
-      >
-        <Box
-          sx={{
-            flex: 1,
-            minHeight: 0,
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            "& > *": {
+          }}
+        >
+          <Box
+            sx={{
               flex: 1,
               minHeight: 0,
               height: "100%",
               width: "100%",
               display: "flex",
               flexDirection: "column",
-            },
-          }}
-        >
-          <Outlet />
-        </Box>
-      </DashboardLayout>
-      <Dialog open={isSignOutOpen} onClose={handleCloseSignOut}>
-        <DialogTitle>{t("signOut.title")}</DialogTitle>
-        <DialogContent sx={{ pt: `0 !important` }}>
-          <DialogContentText>{t("signOut.confirmation")}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseSignOut} disabled={isLoading}>
-            {t("common.cancel")}
-          </Button>
-          <Button
-            onClick={handleConfirmSignOut}
-            variant="contained"
-            disabled={isLoading}
-            loading={isLoading}
+              "& > *": {
+                flex: 1,
+                minHeight: 0,
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+              },
+            }}
           >
-            {t("signOut.action")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </AppProvider>
+            <Outlet />
+          </Box>
+        </DashboardLayout>
+        <Dialog open={isSignOutOpen} onClose={handleCloseSignOut}>
+          <DialogTitle>{t("signOut.title")}</DialogTitle>
+          <DialogContent sx={{ pt: `0 !important` }}>
+            <DialogContentText>{t("signOut.confirmation")}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseSignOut} disabled={isLoading}>
+              {t("common.cancel")}
+            </Button>
+            <Button
+              onClick={handleConfirmSignOut}
+              variant="contained"
+              disabled={isLoading}
+              loading={isLoading}
+            >
+              {t("signOut.action")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </AppProvider>
+    </AgentWorkLogProvider>
   );
 }

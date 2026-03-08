@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TextField, MenuItem } from "@mui/material";
+import { TextField, MenuItem, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useGetAgentWorkplacesQuery } from "@/features/workplace/workplacesApi";
 import { useGetWorkStatusesQuery } from "@/features/workStatus/workStatusesApi";
@@ -8,6 +8,7 @@ import {
   storeAgentSettings,
 } from "@/features/agent/agentSettings";
 import { useSetWorkLogMutation } from "@/features/agent/agentApi";
+import { useAgentWorkLog } from "@/features/agent/AgentWorkLogContext";
 import { WorkStatus } from "@/types/Agent";
 import Loader from "@/components/common/Loader/Loader";
 
@@ -22,6 +23,7 @@ export default function WorkplaceStatusDropdown() {
 
   useEffect(() => {
     storeAgentSettings({
+      ...getAgentSettings(),
       workplaceId: selectedWorkplaceId === "" ? undefined : selectedWorkplaceId,
       status: selectedStatus || undefined,
     });
@@ -34,6 +36,11 @@ export default function WorkplaceStatusDropdown() {
       skip: selectedWorkplaceId === "",
     });
   const [setWorkLog, { isLoading: isSettingWorkLog }] = useSetWorkLogMutation();
+  const agentWorkLog = useAgentWorkLog();
+
+  useEffect(() => {
+    agentWorkLog?.setIsSettingWorkLog(isSettingWorkLog);
+  }, [isSettingWorkLog, agentWorkLog]);
 
   const workplaces = workplacesData?.data ?? [];
   const showWorkplaceDropdown = selectedWorkplaceId === "";
@@ -65,31 +72,47 @@ export default function WorkplaceStatusDropdown() {
         </TextField>
       )}
       {showStatusDropdown && (
-        <TextField
-          select
-          size="small"
-          value={selectedStatus}
-          onChange={async (e) => {
-            const newStatus = e.target.value;
-            setSelectedStatus(newStatus);
-            if (Boolean(selectedWorkplaceId)) {
-              await setWorkLog({
-                status: WorkStatus.Ready,
-                workplaceid: selectedWorkplaceId as number,
-              });
-            }
-          }}
-          disabled={isLoadingStatuses || isSettingWorkLog}
-          label={t("header.workplaceStatus.status")}
-          sx={{ minWidth: 200 }}
-          slotProps={{}}
-        >
-          {(statuses ?? []).map((status) => (
-            <MenuItem key={status} value={status}>
-              {t(`header.workplaceStatus.statuses.${status}`, status)}
-            </MenuItem>
-          ))}
-        </TextField>
+        <>
+          <Box sx={{ position: "relative" }}>
+            {isSettingWorkLog && (
+              <Loader
+                size={20}
+                sx={{
+                  position: "absolute",
+                  top: "10px",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 10,
+                }}
+              />
+            )}
+            <TextField
+              select
+              size="small"
+              value={selectedStatus}
+              onChange={async (e) => {
+                const newStatus = e.target.value;
+                setSelectedStatus(newStatus);
+                if (Boolean(selectedWorkplaceId)) {
+                  await setWorkLog({
+                    status: WorkStatus.Ready,
+                    workplaceid: selectedWorkplaceId as number,
+                  });
+                }
+              }}
+              disabled={isLoadingStatuses || isSettingWorkLog}
+              label={t("header.workplaceStatus.status")}
+              sx={{ minWidth: 200 }}
+              slotProps={{}}
+            >
+              {(statuses ?? []).map((status) => (
+                <MenuItem key={status} value={status}>
+                  {t(`header.workplaceStatus.statuses.${status}`, status)}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+        </>
       )}
     </>
   );
