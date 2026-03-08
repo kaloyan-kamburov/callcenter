@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { ScriptContent } from "@/types/ScriptContent";
+import { OTHER_OPTION_VALUE } from "@/types/ScriptContent";
 
 type ScriptDisplayProps = {
   content: string | null | undefined;
@@ -34,7 +35,10 @@ function parseScriptContent(
 
 type AnswersState = Record<string, string | string[]>;
 
-export default function ScriptDisplay({ content, disabled = false }: ScriptDisplayProps) {
+export default function ScriptDisplay({
+  content,
+  disabled = false,
+}: ScriptDisplayProps) {
   const { t } = useTranslation();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswersState>({});
@@ -60,6 +64,10 @@ export default function ScriptDisplay({ content, disabled = false }: ScriptDispl
     const val = answers[key];
     if (Array.isArray(val)) {
       return val.length > 0;
+    }
+    if (val === OTHER_OPTION_VALUE) {
+      const otherVal = answers[`${key}_other`];
+      return typeof otherVal === "string" && otherVal.trim().length > 0;
     }
     return typeof val === "string" && val.trim().length > 0;
   };
@@ -110,6 +118,9 @@ export default function ScriptDisplay({ content, disabled = false }: ScriptDispl
         const val = answers[key];
         if (Array.isArray(val)) {
           pageAnswers.push(val);
+        } else if (val === OTHER_OPTION_VALUE) {
+          const otherVal = answers[`${key}_other`];
+          pageAnswers.push(typeof otherVal === "string" ? otherVal : "");
         } else {
           pageAnswers.push(val ?? "");
         }
@@ -176,6 +187,40 @@ export default function ScriptDisplay({ content, disabled = false }: ScriptDispl
                       label={opt.label}
                     />
                   ))}
+                  {q.hasOther && (
+                    <Box
+                      sx={{
+                        ml: 0.5,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                      }}
+                    >
+                      <FormControlLabel
+                        value={OTHER_OPTION_VALUE}
+                        control={<Radio />}
+                        label={t("agent.calls.script.otherOption")}
+                      />
+                      {value === OTHER_OPTION_VALUE && (
+                        <TextField
+                          size="small"
+                          // fullWidth
+                          placeholder={t("agent.calls.script.otherPlaceholder")}
+                          value={
+                            typeof answers[`${key}_other`] === "string"
+                              ? answers[`${key}_other`]
+                              : ""
+                          }
+                          onChange={(e) =>
+                            setAnswers((a) => ({
+                              ...a,
+                              [`${key}_other`]: e.target.value,
+                            }))
+                          }
+                        />
+                      )}
+                    </Box>
+                  )}
                 </RadioGroup>
               )}
               {q.type === "multiple" && (

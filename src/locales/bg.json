@@ -84,7 +84,9 @@
         "nextPage": "Следваща страница",
         "submit": "Изпрати",
         "answerAllBeforeNextPage": "Отговорете на всички въпроси преди да преминете на следващата страница.",
-        "answerAllToSubmit": "За да изпратите скрипта, трябва да попълните всички въпроси."
+        "answerAllToSubmit": "За да изпратите скрипта, трябва да попълните всички въпроси.",
+        "otherOption": "Друго",
+        "otherPlaceholder": "Моля, уточнете..."
       }
     }
   },
@@ -297,7 +299,8 @@
           "questionType": "Тип на въпрос",
           "options": "Опции",
           "optionTitle": "Заглавие на опция",
-          "optionValue": "Стойност на опция"
+          "optionValue": "Стойност на опция",
+          "hasOtherOption": "Включи опция \"Друго\""
         },
         "questionTypes": {
           "multiple": "Множествен",

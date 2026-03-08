@@ -84,7 +84,9 @@
         "nextPage": "Next page",
         "submit": "Submit",
         "answerAllBeforeNextPage": "Answer all questions before going to next page.",
-        "answerAllToSubmit": "To submit the script, you need to fill all the questions."
+        "answerAllToSubmit": "To submit the script, you need to fill all the questions.",
+        "otherOption": "Other",
+        "otherPlaceholder": "Please specify..."
       }
     }
   },
@@ -297,7 +299,8 @@
           "questionType": "Question Type",
           "options": "Options",
           "optionTitle": "Option Title",
-          "optionValue": "Option Value"
+          "optionValue": "Option Value",
+          "hasOtherOption": "Enable \"Other\" option"
         },
         "questionTypes": {
           "multiple": "Multiple",

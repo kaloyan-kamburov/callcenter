@@ -1,9 +1,11 @@
 import {
   Box,
   Button,
+  Checkbox,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   Grid,
   IconButton,
   MenuItem,
@@ -50,6 +52,7 @@ type ScriptQuestion = {
   title: string;
   type: ScriptQuestionType;
   options: ScriptOption[];
+  hasOther?: boolean;
 };
 
 type ScriptPage = {
@@ -89,6 +92,7 @@ function createEmptyQuestion(
     title: "",
     type,
     options: type === "text" ? [] : [createEmptyOption()],
+    hasOther: type === "single" ? false : undefined,
   };
 }
 
@@ -142,12 +146,17 @@ function normalizeContent(raw: unknown): ScriptContent {
                   })
                 : [];
 
+              const hasOther =
+                type === "single" &&
+                Boolean((questionObject as { hasOther?: unknown }).hasOther);
+
               return {
                 title: String(
                   (questionObject as { title?: unknown }).title ?? "",
                 ),
                 type,
                 options: type === "text" ? [] : options,
+                hasOther: type === "single" ? hasOther : undefined,
               };
             })
           : [];
@@ -602,6 +611,10 @@ export default function ScriptModal({
                                             : currentQuestion.options.length > 0
                                               ? currentQuestion.options
                                               : [createEmptyOption()],
+                                        hasOther:
+                                          nextType === "single"
+                                            ? currentQuestion.hasOther ?? false
+                                            : undefined,
                                       };
                                       setFieldValue(
                                         "contentBuilder.pages",
@@ -622,12 +635,46 @@ export default function ScriptModal({
 
                               {question.type !== "text" && (
                                 <Box sx={{ mt: 1.5 }}>
+                                  {question.type === "single" && (
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={
+                                            question.hasOther ?? false
+                                          }
+                                          onChange={(e) => {
+                                            const nextPages = [
+                                              ...values.contentBuilder.pages,
+                                            ];
+                                            const currentQuestion =
+                                              nextPages[pageIndex].questions[
+                                                questionIndex
+                                              ];
+                                            nextPages[pageIndex].questions[
+                                              questionIndex
+                                            ] = {
+                                              ...currentQuestion,
+                                              hasOther: e.target.checked,
+                                            };
+                                            setFieldValue(
+                                              "contentBuilder.pages",
+                                              nextPages,
+                                            );
+                                          }}
+                                        />
+                                      }
+                                      label={t(
+                                        "scripts.modal.contentBuilder.fields.hasOtherOption",
+                                      )}
+                                    />
+                                  )}
                                   <Box
                                     sx={{
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "space-between",
                                       mb: 1,
+                                      mt: question.type === "single" ? 1 : 0,
                                     }}
                                   >
                                     <Typography
