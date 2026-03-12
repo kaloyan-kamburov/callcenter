@@ -9,11 +9,13 @@ import {
 } from "@/features/agent/agentSettings";
 import { useSetWorkLogMutation } from "@/features/agent/agentApi";
 import { useAgentWorkLog } from "@/features/agent/AgentWorkLogContext";
+import { useWorkStatus } from "@/features/agent/WorkStatusContext";
 import { WorkStatus } from "@/types/Agent";
 import Loader from "@/components/common/Loader/Loader";
 
 export default function WorkplaceStatusDropdown() {
   const { t } = useTranslation();
+  const workStatus = useWorkStatus();
   const [selectedWorkplaceId, setSelectedWorkplaceId] = useState<number | "">(
     () => getAgentSettings().workplaceId ?? "",
   );
@@ -21,32 +23,36 @@ export default function WorkplaceStatusDropdown() {
     () => getAgentSettings().status ?? "",
   );
 
-  useEffect(() => {
-    storeAgentSettings({
-      ...getAgentSettings(),
-      workplaceId: selectedWorkplaceId === "" ? undefined : selectedWorkplaceId,
-      status: selectedStatus || undefined,
-    });
-  }, [selectedWorkplaceId, selectedStatus]);
-
+  const [setWorkLog, { isLoading: isSettingWorkLog }] = useSetWorkLogMutation();
   const { data: workplacesData, isLoading: isLoadingWorkplaces } =
     useGetAgentWorkplacesQuery({ page: 0, pageSize: 999999999 });
   const { data: statuses, isLoading: isLoadingStatuses } =
     useGetWorkStatusesQuery(undefined, {
       skip: selectedWorkplaceId === "",
     });
-  const [setWorkLog, { isLoading: isSettingWorkLog }] = useSetWorkLogMutation();
   const agentWorkLog = useAgentWorkLog();
 
   useEffect(() => {
     agentWorkLog?.setIsSettingWorkLog(isSettingWorkLog);
   }, [isSettingWorkLog, agentWorkLog]);
 
+  useEffect(() => {
+    const statusValue = selectedStatus || undefined;
+    storeAgentSettings({
+      ...getAgentSettings(),
+      workplaceId: selectedWorkplaceId === "" ? undefined : selectedWorkplaceId,
+      status: statusValue,
+    });
+    if (!isSettingWorkLog) {
+      workStatus?.setStatus(statusValue);
+    }
+  }, [selectedWorkplaceId, selectedStatus, workStatus?.setStatus, isSettingWorkLog]);
+
   const workplaces = workplacesData?.data ?? [];
   const showWorkplaceDropdown = selectedWorkplaceId === "";
   const showStatusDropdown = selectedWorkplaceId !== "";
 
-  return isLoadingWorkplaces || isLoadingStatuses ? (
+  return (isLoadingWorkplaces || isLoadingStatuses) && !isSettingWorkLog ? (
     <Loader size={25} />
   ) : (
     <>
@@ -90,15 +96,15 @@ export default function WorkplaceStatusDropdown() {
               select
               size="small"
               value={selectedStatus}
-              onChange={async (e) => {
+              onChange={(e) => {
                 const newStatus = e.target.value;
-                setSelectedStatus(newStatus);
                 if (Boolean(selectedWorkplaceId)) {
-                  await setWorkLog({
-                    status: WorkStatus.Ready,
+                  setWorkLog({
+                    status: (newStatus as WorkStatus) ?? WorkStatus.Ready,
                     workplaceid: selectedWorkplaceId as number,
                   });
                 }
+                setSelectedStatus(newStatus);
               }}
               disabled={isLoadingStatuses || isSettingWorkLog}
               label={t("header.workplaceStatus.status")}

@@ -41,6 +41,7 @@
     "pageTitle": "Административен панел"
   },
   "navigation": {
+    "chat": "Чат",
     "dashboard": "Табло",
     "admins": "Администратори",
     "locations": "Локации",
@@ -71,6 +72,11 @@
         "OutForLunch": "Обедна почивка"
       }
     }
+  },
+  "chat": {
+    "title": "Чат",
+    "close": "Затвори чата",
+    "placeholder": "Съдържанието на чата скоро."
   },
   "agent": {
     "callsPlaceholder": "Страница Обаждания – скоро.",

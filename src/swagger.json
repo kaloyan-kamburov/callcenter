@@ -399,6 +399,35 @@
         }
       }
     },
+    "/api/agent/call-records": {
+      "post": {
+        "tags": ["CallRecord"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCallRecordDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCallRecordDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCallRecordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/admin/campaigns/{id}": {
       "get": {
         "tags": ["Campaigns"],
@@ -1392,6 +1421,70 @@
         }
       }
     },
+    "/api/admin/reports/agent-work": {
+      "get": {
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "name": "PeriodBegin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PeriodEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "AgentIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "TeamId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentWorkReportResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentWorkReportResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentWorkReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/roles": {
       "get": {
         "tags": ["Roles"],
@@ -2322,6 +2415,92 @@
         "enum": ["WebRTC", "SoftPhone", "WebRTCOld"],
         "type": "string"
       },
+      "AgentWorkReportAgentDto": {
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "agentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teamName": {
+            "type": "string",
+            "nullable": true
+          },
+          "byDate": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentWorkReportByDateDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentWorkReportByDateDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "nullable": true
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentWorkReportEntryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentWorkReportEntryDto": {
+        "type": "object",
+        "properties": {
+          "begin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "workplaceName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentWorkReportResponse": {
+        "type": "object",
+        "properties": {
+          "periodBegin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentWorkReportAgentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AgentWorkScheduleDto": {
         "type": "object",
         "properties": {
@@ -2644,6 +2823,28 @@
             "items": {
               "$ref": "#/components/schemas/AgentWorkScheduleDto"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateCallRecordDto": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scriptId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scriptAnswers": {
+            "type": "string",
+            "nullable": true
+          },
+          "dialedNumber": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -3054,6 +3255,9 @@
           "content": {
             "type": "string",
             "nullable": true
+          },
+          "isLocked": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

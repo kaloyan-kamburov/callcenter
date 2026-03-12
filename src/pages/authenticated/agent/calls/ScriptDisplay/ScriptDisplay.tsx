@@ -129,7 +129,7 @@ export default function ScriptDisplay({
       answersByPage.push(pageAnswers);
     });
     const payload = { answers: answersByPage };
-    console.log(JSON.stringify(payload));
+    console.log(payload);
   };
 
   if (!script || script.pages.length === 0) {
@@ -185,12 +185,12 @@ export default function ScriptDisplay({
                       value={opt.value}
                       control={<Radio />}
                       label={opt.label}
+                      sx={{ m: 0 }}
                     />
                   ))}
                   {q.hasOther && (
                     <Box
                       sx={{
-                        ml: 0.5,
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
@@ -200,6 +200,7 @@ export default function ScriptDisplay({
                         value={OTHER_OPTION_VALUE}
                         control={<Radio />}
                         label={t("agent.calls.script.otherOption")}
+                        sx={{ m: 0 }}
                       />
                       {value === OTHER_OPTION_VALUE && (
                         <TextField

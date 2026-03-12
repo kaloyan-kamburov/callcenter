@@ -12,8 +12,10 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import WorkIcon from "@mui/icons-material/Work";
 import PhoneIcon from "@mui/icons-material/Phone";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import ChatIcon from "@mui/icons-material/Chat";
 import { AppProvider, DashboardLayout } from "@toolpad/core";
-import type { Navigation, Session } from "@toolpad/core";
+import { DashboardSidebarPageItem } from "@toolpad/core/DashboardLayout";
+import type { Navigation, NavigationPageItem, Session } from "@toolpad/core";
 import { Account, AccountPopoverFooter } from "@toolpad/core/Account";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/features/auth/useAuth";
@@ -24,6 +26,7 @@ import {
   getAgentSettings,
   storeAgentSettings,
 } from "@/features/agent/agentSettings";
+import { useWorkStatus } from "@/features/agent/WorkStatusContext";
 import { theme } from "@/theme";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher/LanguageSwitcher";
 import WorkplaceStatusDropdown from "@/components/header/WorkplaceStatusDropdown/WorkplaceStatusDropdown";
@@ -37,11 +40,18 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Stack,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo.svg";
+import { ChatProvider, useChat } from "@/features/chat/ChatContext";
+import { ChatWindow } from "@/features/chat/ChatWindow";
+import { WorkStatusProvider } from "@/features/agent/WorkStatusContext";
+import { OnCallProvider, useOnCall } from "@/features/agent/OnCallContext";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -191,6 +201,60 @@ export default function MainLayout() {
   };
 
   return (
+    <WorkStatusProvider>
+      <ChatProvider>
+        <OnCallProvider>
+          <MainLayoutContent
+        isAdmin={isAdmin}
+        user={user}
+        navigation={navigation}
+        session={session}
+        authentication={authentication}
+        isSignOutOpen={isSignOutOpen}
+        setIsSignOutOpen={setIsSignOutOpen}
+        handleCloseSignOut={handleCloseSignOut}
+        handleConfirmSignOut={handleConfirmSignOut}
+        isLoading={isLoading}
+        t={t}
+      />
+        </OnCallProvider>
+      </ChatProvider>
+    </WorkStatusProvider>
+  );
+}
+
+function MainLayoutContent({
+  isAdmin,
+  user,
+  navigation,
+  session,
+  authentication,
+  isSignOutOpen,
+  setIsSignOutOpen,
+  handleCloseSignOut,
+  handleConfirmSignOut,
+  isLoading,
+  t,
+}: {
+  isAdmin: boolean;
+  user: { name?: string; email?: string; role?: string } | null;
+  navigation: Navigation;
+  session: Session | null;
+  authentication: { signIn: () => void; signOut: () => void };
+  isSignOutOpen: boolean;
+  setIsSignOutOpen: (v: boolean) => void;
+  handleCloseSignOut: () => void;
+  handleConfirmSignOut: () => Promise<void>;
+  isLoading: boolean;
+  t: (key: string) => string;
+}) {
+  const navigate = useNavigate();
+  const chat = useChat();
+  const workStatus = useWorkStatus();
+  const onCall = useOnCall();
+  const isNavDisabled = !isAdmin && workStatus?.status !== "Ready";
+
+  return (
     <AgentWorkLogProvider>
       <AppProvider
         session={session}
@@ -209,20 +273,100 @@ export default function MainLayout() {
           title: "",
         }}
         router={{
-          navigate: (path) => navigate(path),
+          navigate: (path: string | URL) =>
+            navigate(typeof path === "string" ? path : path.pathname),
           pathname: window.location.pathname,
           searchParams: new URLSearchParams(window.location.search),
         }}
       >
         <DashboardLayout
+          renderPageItem={
+            !isAdmin
+              ? (item: NavigationPageItem) => {
+                  const isCalls = item.segment === "";
+                  const isTasks = item.segment === "tasks";
+                  const disabledCallsOrTasks =
+                    (isCalls || isTasks) &&
+                    (Boolean(chat?.isChatOpen) || isNavDisabled);
+                  const disabledTasksWhenOnCall =
+                    isTasks && Boolean(onCall?.isOnCall);
+                  const disabled =
+                    disabledCallsOrTasks || disabledTasksWhenOnCall;
+                  return (
+                    <DashboardSidebarPageItem
+                      key={item.segment ?? "calls"}
+                      item={item}
+                      disabled={disabled}
+                    />
+                  );
+                }
+              : undefined
+          }
           slots={{
-          toolbarActions: () => (
+            sidebarFooter:
+              !isAdmin && chat
+                ? ({ mini }) => (
+                    <Box sx={{ mt: "auto", pt: 1 }}>
+                      <ListItemButton
+                        onClick={chat.toggleChat}
+                        selected={chat.isChatOpen}
+                        sx={{
+                          minHeight: 48,
+                          mx: 1,
+                          mb: 1,
+                          borderRadius: 1,
+                          flexDirection: mini ? "column" : "row",
+                          justifyContent: mini ? "center" : "flex-start",
+                          alignItems: "center",
+                          gap: mini ? 0.5 : 0,
+                        }}
+                      >
+                        <ListItemIcon
+                          sx={{
+                            minWidth: mini ? 0 : 40,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <ChatIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={t("navigation.chat")}
+                          sx={{
+                            m: 0,
+                            "& .MuiListItemText-primary": {
+                              fontSize: mini ? "0.75rem" : undefined,
+                              textAlign: mini ? "center" : "left",
+                            },
+                          }}
+                        />
+                      </ListItemButton>
+                    </Box>
+                  )
+                : undefined,
+            toolbarActions: () => (
             <Stack direction="row" alignItems="center" spacing={1}>
-              {!isAdmin && <WorkplaceStatusDropdown />}
+              {!isAdmin && (
+                <Box
+                  sx={
+                    onCall?.isOnCall
+                      ? { pointerEvents: "none", opacity: 0.5 }
+                      : {}
+                  }
+                >
+                  <WorkplaceStatusDropdown />
+                </Box>
+              )}
               <Box sx={{ my: "auto" }}>
                 <LanguageSwitcher />
               </Box>
-              <Account
+              <Box
+                sx={
+                  onCall?.isOnCall
+                    ? { pointerEvents: "none", opacity: 0.5 }
+                    : {}
+                }
+              >
+                <Account
                 slots={{
                   popoverContent: () => (
                     <Stack direction="column">
@@ -259,6 +403,7 @@ export default function MainLayout() {
                   ),
                 }}
               />
+              </Box>
             </Stack>
           ),
           }}
@@ -271,6 +416,7 @@ export default function MainLayout() {
               width: "100%",
               display: "flex",
               flexDirection: "column",
+              position: "relative",
               "& > *": {
                 flex: 1,
                 minHeight: 0,
@@ -282,6 +428,7 @@ export default function MainLayout() {
             }}
           >
             <Outlet />
+            <ChatWindow />
           </Box>
         </DashboardLayout>
         <Dialog open={isSignOutOpen} onClose={handleCloseSignOut}>

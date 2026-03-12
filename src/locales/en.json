@@ -41,6 +41,7 @@
     "pageTitle": "Call center admin panel"
   },
   "navigation": {
+    "chat": "Chat",
     "dashboard": "Dashboard",
     "admins": "Admins",
     "locations": "Locations",
@@ -71,6 +72,11 @@
         "OutForLunch": "Out for lunch"
       }
     }
+  },
+  "chat": {
+    "title": "Chat",
+    "close": "Close chat",
+    "placeholder": "Chat content coming soon."
   },
   "agent": {
     "callsPlaceholder": "Calls page – coming soon.",
