@@ -12,12 +12,16 @@ import {
   TextField,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-hot-toast";
 import type { ScriptContent } from "@/types/ScriptContent";
 import { OTHER_OPTION_VALUE } from "@/types/ScriptContent";
+import { useCreateCallRecordMutation } from "@/features/agent/agentApi";
 
 type ScriptDisplayProps = {
   content: string | null | undefined;
   disabled?: boolean;
+  campaignId?: number;
+  scriptId?: number | null;
 };
 
 function parseScriptContent(
@@ -38,13 +42,18 @@ type AnswersState = Record<string, string | string[]>;
 export default function ScriptDisplay({
   content,
   disabled = false,
+  campaignId,
+  scriptId,
 }: ScriptDisplayProps) {
   const { t } = useTranslation();
+  const [createCallRecord, { isLoading: isSubmitting }] =
+    useCreateCallRecordMutation();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswersState>({});
   const [validationErrorKey, setValidationErrorKey] = useState<string | null>(
     null,
   );
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const script = useMemo(() => parseScriptContent(content), [content]);
 
@@ -102,7 +111,7 @@ export default function ScriptDisplay({
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setValidationErrorKey(null);
     if (!isAllPagesComplete()) {
       setValidationErrorKey("answerAllToSubmit");
@@ -128,8 +137,28 @@ export default function ScriptDisplay({
       });
       answersByPage.push(pageAnswers);
     });
-    const payload = { answers: answersByPage };
-    console.log(payload);
+
+    const payload = {
+      campaignId,
+      scriptId: scriptId ?? undefined,
+      scriptAnswers: JSON.stringify(answersByPage),
+      dialedNumber: "0000000000",
+    };
+
+    try {
+      await createCallRecord(payload).unwrap();
+      toast.success(t("agent.calls.script.callRecordedSuccess"));
+      setIsSubmitted(true);
+    } catch {
+      // Error handled by baseApi / axios interceptor
+    }
+  };
+
+  const handleStartOver = () => {
+    setIsSubmitted(false);
+    setCurrentPageIndex(0);
+    setAnswers({});
+    setValidationErrorKey(null);
   };
 
   if (!script || script.pages.length === 0) {
@@ -137,6 +166,28 @@ export default function ScriptDisplay({
       <Typography variant="body2" color="text.secondary">
         {t("agent.calls.script.noContent")}
       </Typography>
+    );
+  }
+
+  if (isSubmitted) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <Typography variant="h6">
+          {t("agent.calls.script.callRecordedSuccess")}
+        </Typography>
+        <Button variant="contained" onClick={handleStartOver}>
+          {t("agent.calls.script.startOver")}
+        </Button>
+      </Box>
     );
   }
 
@@ -293,7 +344,11 @@ export default function ScriptDisplay({
           {t("agent.calls.script.previousPage")}
         </Button>
         {isLastPage ? (
-          <Button variant="contained" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
             {t("agent.calls.script.submit")}
           </Button>
         ) : (

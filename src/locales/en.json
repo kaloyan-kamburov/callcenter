@@ -86,6 +86,8 @@
       "campaign": "Campaign",
       "script": {
         "noContent": "No script content",
+        "callRecordedSuccess": "Call recorded successfully",
+        "startOver": "Start over",
         "previousPage": "Previous page",
         "nextPage": "Next page",
         "submit": "Submit",

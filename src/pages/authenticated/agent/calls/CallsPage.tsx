@@ -77,6 +77,7 @@ export default function CallsPage() {
             variant={onCall?.isOnCall ? "contained" : "outlined"}
             color={onCall?.isOnCall ? "error" : "primary"}
             onClick={() => onCall?.toggleOnCall()}
+            disabled={!isReady || isSettingWorkLog}
             fullWidth
           >
             {onCall?.isOnCall ? "end call" : "start call"}
@@ -97,6 +98,8 @@ export default function CallsPage() {
           <ScriptDisplay
             content={script?.content}
             disabled={!isReady || isSettingWorkLog}
+            campaignId={campaign?.id}
+            scriptId={script?.id ?? undefined}
           />
         </Box>
       </Box>

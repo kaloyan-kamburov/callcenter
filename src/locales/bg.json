@@ -86,6 +86,8 @@
       "campaign": "Кампания",
       "script": {
         "noContent": "Няма съдържание на скрипта",
+        "callRecordedSuccess": "Обаждането е записано успешно",
+        "startOver": "Започни отначало",
         "previousPage": "Предишна страница",
         "nextPage": "Следваща страница",
         "submit": "Изпрати",

@@ -7,6 +7,13 @@ export type WorkLogPayload = {
   workplaceid: number;
 };
 
+export type CreateCallRecordPayload = {
+  campaignId?: number;
+  scriptId?: number | null;
+  scriptAnswers?: string | null;
+  dialedNumber?: string | null;
+};
+
 export const agentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAgentMe: builder.query<CurrentAgentDto, void>({
@@ -22,8 +29,19 @@ export const agentApi = baseApi.injectEndpoints({
         data: body,
       }),
     }),
+    createCallRecord: builder.mutation<void, CreateCallRecordPayload>({
+      query: (body) => ({
+        url: "agent/call-records",
+        method: "POST",
+        data: body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAgentMeQuery, useSetWorkLogMutation } = agentApi;
+export const {
+  useGetAgentMeQuery,
+  useSetWorkLogMutation,
+  useCreateCallRecordMutation,
+} = agentApi;
