@@ -10,7 +10,15 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import type { ScriptContent } from "@/types/ScriptContent";
@@ -54,6 +62,7 @@ export default function ScriptDisplay({
     null,
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isStartOverDialogOpen, setIsStartOverDialogOpen] = useState(false);
 
   const script = useMemo(() => parseScriptContent(content), [content]);
 
@@ -159,7 +168,10 @@ export default function ScriptDisplay({
     setCurrentPageIndex(0);
     setAnswers({});
     setValidationErrorKey(null);
+    setIsStartOverDialogOpen(false);
   };
+
+  const handleStartOverClick = () => setIsStartOverDialogOpen(true);
 
   if (!script || script.pages.length === 0) {
     return (
@@ -334,29 +346,63 @@ export default function ScriptDisplay({
         direction="row"
         spacing={1}
         justifyContent="space-between"
+        alignItems="center"
         sx={{ mt: "auto" }}
       >
         <Button
           variant="outlined"
-          disabled={isFirstPage}
-          onClick={() => setCurrentPageIndex((i) => i - 1)}
+          color="primary"
+          onClick={handleStartOverClick}
         >
-          {t("agent.calls.script.previousPage")}
+          {t("agent.calls.script.startOver")}
         </Button>
-        {isLastPage ? (
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
+        <Stack direction="row" spacing={0.5}>
+          <IconButton
+            disabled={isFirstPage}
+            onClick={() => setCurrentPageIndex((i) => i - 1)}
+            aria-label={t("agent.calls.script.previousPage")}
           >
-            {t("agent.calls.script.submit")}
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={handleNextPage}>
-            {t("agent.calls.script.nextPage")}
-          </Button>
-        )}
+            <ChevronLeftIcon />
+          </IconButton>
+          {isLastPage ? (
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {t("agent.calls.script.submit")}
+            </Button>
+          ) : (
+            <IconButton
+              onClick={handleNextPage}
+              aria-label={t("agent.calls.script.nextPage")}
+            >
+              <ChevronRightIcon />
+            </IconButton>
+          )}
+        </Stack>
       </Stack>
+      <Dialog
+        open={isStartOverDialogOpen}
+        onClose={() => setIsStartOverDialogOpen(false)}
+      >
+        <DialogTitle>
+          {t("agent.calls.script.startOverConfirmTitle")}
+        </DialogTitle>
+        <DialogContent sx={{ pt: `0 !important` }}>
+          <DialogContentText>
+            {t("agent.calls.script.startOverConfirmMessage")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsStartOverDialogOpen(false)}>
+            {t("agent.calls.script.startOverNo")}
+          </Button>
+          <Button onClick={handleStartOver} variant="contained">
+            {t("agent.calls.script.startOverYes")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
