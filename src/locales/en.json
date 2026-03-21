@@ -84,6 +84,10 @@
     "calls": {
       "selectWorkplaceAndStatus": "Please select workplace and status",
       "campaign": "Campaign",
+      "phone": {
+        "loading": "Loading soft phone...",
+        "loadError": "The soft phone could not be loaded."
+      },
       "script": {
         "noContent": "No script content",
         "callRecordedSuccess": "Call recorded successfully",

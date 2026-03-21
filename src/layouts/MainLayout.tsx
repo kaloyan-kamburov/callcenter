@@ -51,7 +51,6 @@ import logo from "@/assets/logo.svg";
 import { ChatProvider, useChat } from "@/features/chat/ChatContext";
 import { ChatWindow } from "@/features/chat/ChatWindow";
 import { WorkStatusProvider } from "@/features/agent/WorkStatusContext";
-import { OnCallProvider, useOnCall } from "@/features/agent/OnCallContext";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -203,21 +202,19 @@ export default function MainLayout() {
   return (
     <WorkStatusProvider>
       <ChatProvider>
-        <OnCallProvider>
-          <MainLayoutContent
-        isAdmin={isAdmin}
-        user={user}
-        navigation={navigation}
-        session={session}
-        authentication={authentication}
-        isSignOutOpen={isSignOutOpen}
-        setIsSignOutOpen={setIsSignOutOpen}
-        handleCloseSignOut={handleCloseSignOut}
-        handleConfirmSignOut={handleConfirmSignOut}
-        isLoading={isLoading}
-        t={t}
-      />
-        </OnCallProvider>
+        <MainLayoutContent
+          isAdmin={isAdmin}
+          user={user}
+          navigation={navigation}
+          session={session}
+          authentication={authentication}
+          isSignOutOpen={isSignOutOpen}
+          setIsSignOutOpen={setIsSignOutOpen}
+          handleCloseSignOut={handleCloseSignOut}
+          handleConfirmSignOut={handleConfirmSignOut}
+          isLoading={isLoading}
+          t={t}
+        />
       </ChatProvider>
     </WorkStatusProvider>
   );
@@ -251,7 +248,6 @@ function MainLayoutContent({
   const navigate = useNavigate();
   const chat = useChat();
   const workStatus = useWorkStatus();
-  const onCall = useOnCall();
   const isNavDisabled = !isAdmin && workStatus?.status !== "Ready";
 
   return (
@@ -285,13 +281,9 @@ function MainLayoutContent({
               ? (item: NavigationPageItem) => {
                   const isCalls = item.segment === "";
                   const isTasks = item.segment === "tasks";
-                  const disabledCallsOrTasks =
+                  const disabled =
                     (isCalls || isTasks) &&
                     (Boolean(chat?.isChatOpen) || isNavDisabled);
-                  const disabledTasksWhenOnCall =
-                    isTasks && Boolean(onCall?.isOnCall);
-                  const disabled =
-                    disabledCallsOrTasks || disabledTasksWhenOnCall;
                   return (
                     <DashboardSidebarPageItem
                       key={item.segment ?? "calls"}
@@ -344,29 +336,13 @@ function MainLayoutContent({
                   )
                 : undefined,
             toolbarActions: () => (
-            <Stack direction="row" alignItems="center" spacing={1}>
-              {!isAdmin && (
-                <Box
-                  sx={
-                    onCall?.isOnCall
-                      ? { pointerEvents: "none", opacity: 0.5 }
-                      : {}
-                  }
-                >
-                  <WorkplaceStatusDropdown />
+              <Stack direction="row" alignItems="center" spacing={1}>
+                {!isAdmin && <WorkplaceStatusDropdown />}
+                <Box sx={{ my: "auto" }}>
+                  <LanguageSwitcher />
                 </Box>
-              )}
-              <Box sx={{ my: "auto" }}>
-                <LanguageSwitcher />
-              </Box>
-              <Box
-                sx={
-                  onCall?.isOnCall
-                    ? { pointerEvents: "none", opacity: 0.5 }
-                    : {}
-                }
-              >
-                <Account
+                <Box>
+                  <Account
                 slots={{
                   popoverContent: () => (
                     <Stack direction="column">

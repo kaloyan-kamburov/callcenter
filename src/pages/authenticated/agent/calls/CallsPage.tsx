@@ -1,16 +1,15 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ScriptDisplay from "./ScriptDisplay/ScriptDisplay";
+import Phone from "./Phone";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { useTranslation } from "react-i18next";
 import { useAgentSettings } from "@/features/agent/useAgentSettings";
 import { useAgentWorkLog } from "@/features/agent/AgentWorkLogContext";
-import { useOnCall } from "@/features/agent/OnCallContext";
 
 export default function CallsPage() {
   const { t } = useTranslation();
   const { workplaceId, status, campaign, script } = useAgentSettings();
   const agentWorkLog = useAgentWorkLog();
-  const onCall = useOnCall();
 
   const hasWorkplace = Boolean(workplaceId);
   const isReady = status === "Ready";
@@ -56,32 +55,20 @@ export default function CallsPage() {
           flex: 1,
           minHeight: 0,
           display: "flex",
+          flexDirection: { sm: "column", md: "row" },
           gap: 2,
           overflow: "hidden",
         }}
       >
         <Box
           sx={{
-            flex: 1,
-            maxWidth: "300px",
+            flex: { xs: "0 0 420px", xl: "0 0 420px" },
+            minHeight: { xs: 420, xl: 0 },
             minWidth: 0,
-            p: 2,
-            border: 1,
-            borderColor: "divider",
-            borderRadius: 1,
-            overflow: "auto",
-            bgcolor: "background.paper",
+            overflow: "hidden",
           }}
         >
-          <Button
-            variant={onCall?.isOnCall ? "contained" : "outlined"}
-            color={onCall?.isOnCall ? "error" : "primary"}
-            onClick={() => onCall?.toggleOnCall()}
-            disabled={!isReady || isSettingWorkLog}
-            fullWidth
-          >
-            {onCall?.isOnCall ? "end call" : "start call"}
-          </Button>
+          <Phone />
         </Box>
         <Box
           sx={{

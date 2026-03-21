@@ -84,6 +84,10 @@
     "calls": {
       "selectWorkplaceAndStatus": "Моля, изберете работно място и статус",
       "campaign": "Кампания",
+      "phone": {
+        "loading": "Зареждане на софтфон...",
+        "loadError": "Софтфонът не можа да бъде зареден."
+      },
       "script": {
         "noContent": "Няма съдържание на скрипта",
         "callRecordedSuccess": "Обаждането е записано успешно",

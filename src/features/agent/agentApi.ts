@@ -1,5 +1,9 @@
 import { baseApi } from "@/api/baseApi";
 import type { WorkStatus } from "@/types/Agent";
+import {
+  fallbackBrowserPhoneConfig,
+  type BrowserPhoneConfig,
+} from "@/types/BrowserPhoneConfig";
 import type { CurrentAgentDto } from "@/types/CurrentAgent";
 
 export type WorkLogPayload = {
@@ -22,6 +26,17 @@ export const agentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getBrowserPhoneConfig: builder.query<BrowserPhoneConfig, void>({
+      query: () => ({
+        url: "config-phone",
+        method: "GET",
+        onError: () => {},
+      }),
+      transformResponse: (response: Partial<BrowserPhoneConfig>) => ({
+        ...fallbackBrowserPhoneConfig,
+        ...response,
+      }),
+    }),
     setWorkLog: builder.mutation<unknown, WorkLogPayload>({
       query: (body) => ({
         url: "agent/work-log",
@@ -42,6 +57,7 @@ export const agentApi = baseApi.injectEndpoints({
 
 export const {
   useGetAgentMeQuery,
+  useGetBrowserPhoneConfigQuery,
   useSetWorkLogMutation,
   useCreateCallRecordMutation,
 } = agentApi;
