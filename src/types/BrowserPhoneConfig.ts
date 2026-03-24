@@ -1,7 +1,7 @@
 export interface BrowserPhoneConfig {
-  loadAlternateLang: boolean;
-  VoiceMailSubscribe: boolean;
-  EnableTextMessaging: boolean;
+  loadAlternateLang: boolean | string;
+  VoiceMailSubscribe: boolean | string;
+  EnableTextMessaging: boolean | string;
   ChatEngine: string;
   WelcomeScreenAccept: string;
   profileName: string;
@@ -14,16 +14,16 @@ export interface BrowserPhoneConfig {
 }
 
 export const fallbackBrowserPhoneConfig: BrowserPhoneConfig = {
-  loadAlternateLang: true,
-  VoiceMailSubscribe: false,
-  EnableTextMessaging: false,
-  ChatEngine: "SIMPLE",
-  WelcomeScreenAccept: "yes",
-  profileName: "",
-  wssServer: "",
-  WebSocketPort: "",
-  ServerPath: "",
-  SipDomain: "",
-  SipUsername: "",
-  SipPassword: "",
+  loadAlternateLang: "",
+  VoiceMailSubscribe: "",
+  EnableTextMessaging: "",
+  ChatEngine: "",
+  WelcomeScreenAccept: "",
+  profileName: "Nekvo ime",
+  wssServer: "vmi2987095.contaboserver.net",
+  WebSocketPort: "8089",
+  ServerPath: "/ws",
+  SipDomain: "vmi2987095.contaboserver.net",
+  SipUsername: "3001",
+  SipPassword: "764e51430635d6152e38db5303795f2a",
 };

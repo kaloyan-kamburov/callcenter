@@ -49,17 +49,17 @@ export default function WorkplaceModal({
   isOpen = false,
 }: WorkplaceModalProps) {
   const { t } = useTranslation();
-  const [createWorkplace, { isLoading: isCreating }] = useCreateWorkplaceMutation();
-  const [updateWorkplace, { isLoading: isUpdating }] = useUpdateWorkplaceMutation();
+  const [createWorkplace, { isLoading: isCreating }] =
+    useCreateWorkplaceMutation();
+  const [updateWorkplace, { isLoading: isUpdating }] =
+    useUpdateWorkplaceMutation();
   const locationsOptionsSource = useGetLocationsQuery();
   const sipsOptionsSource = useGetSipsQuery();
-  const { data: workplaceDetails, isLoading: isLoadingDetails } = useGetWorkplaceQuery(
-    workplaceId as number,
-    {
+  const { data: workplaceDetails, isLoading: isLoadingDetails } =
+    useGetWorkplaceQuery(workplaceId as number, {
       skip: mode !== "edit" || !workplaceId || !isOpen,
       refetchOnMountOrArgChange: true,
-    },
-  );
+    });
   const isLoading = isCreating || isUpdating || isLoadingDetails;
   const validationSchema = Yup.object({
     name: Yup.string().required(t("common.validation.required")),
@@ -135,14 +135,21 @@ export default function WorkplaceModal({
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 0.5 }}>
               <Grid size={{ xs: 12 }}>
-                <Input name="name" label={t("workplaces.modal.fields.name")} required />
+                <Input
+                  name="name"
+                  label={t("workplaces.modal.fields.name")}
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   name="locationId"
                   label={t("workplaces.modal.fields.location")}
                   optionsSource={locationsOptionsSource}
-                  mapOption={(location) => ({ label: location.name ?? "", value: location.id ?? 0 })}
+                  mapOption={(location) => ({
+                    label: location.name ?? "",
+                    value: location.id ?? 0,
+                  })}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -150,29 +157,10 @@ export default function WorkplaceModal({
                   name="sipId"
                   label={t("workplaces.modal.fields.sip")}
                   optionsSource={sipsOptionsSource}
-                  mapOption={(sip) => ({ label: sip.name ?? "", value: sip.id ?? 0 })}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={values.isPredictive}
-                      onChange={(_, checked) => setFieldValue("isPredictive", checked)}
-                    />
-                  }
-                  label={t("workplaces.modal.fields.isPredictive")}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={values.isDeleted}
-                      onChange={(_, checked) => setFieldValue("isDeleted", checked)}
-                    />
-                  }
-                  label={t("workplaces.modal.fields.isDeleted")}
+                  mapOption={(sip) => ({
+                    label: sip.name ?? "",
+                    value: sip.id ?? 0,
+                  })}
                 />
               </Grid>
             </Grid>
